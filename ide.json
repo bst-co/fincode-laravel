@@ -1,0 +1,19 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "eloquentFields",
+            "condition": [
+                {
+                    "place": "arrayValue",
+                    "classFqn": [
+                        "\\LaravelFincode\\Concerns\\HasRejectDuplicates"
+                    ],
+                    "methodNames": [
+                        "duplicates"
+                    ]
+                }
+            ]
+        }
+    ]
+}
