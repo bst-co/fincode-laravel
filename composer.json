@@ -1,0 +1,57 @@
+{
+    "name": "bst-co/laravel-fincode",
+    "type": "project",
+    "keywords": [
+        "laravel",
+        "ficode",
+        "api"
+    ],
+    "authors": [
+        {
+            "name": "t-ueno",
+            "email": "t-ueno@bstinc.co.jp"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "ext-curl": "*",
+        "fakerphp/faker": "^1.24",
+        "laravel/framework": "^9.10.0|^10.10.1|^11.0",
+        "ueno-bst/fincode-php-client": "~20241017.1.4"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10",
+        "phpunit/phpunit": "^11.0.1"
+    },
+    "repositories": {
+        "ueno-bst/fincode-php-client": {
+            "type": "vcs",
+            "url": "git@github.com:ueno-bst/fincode-php-client.git"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Fincode\\Laravel\\": "src/",
+            "Fincode\\Laravel\\Database\\Factories\\": "database/factories/",
+            "Fincode\\Laravel\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fincode\\Laravel\\Test\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fincode\\Laravel\\LaravelFincodeServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

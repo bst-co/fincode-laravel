@@ -11,6 +11,10 @@
                     ],
                     "methodNames": [
                         "duplicates"
+                    ],
+                    "parameterNames": [
+                        "group",
+                        "unique"
                     ]
                 }
             ]
