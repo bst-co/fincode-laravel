@@ -13,11 +13,9 @@ return new class extends Migration
                 ->primary()
                 ->comment('#ID');
 
-            $table->foreignUlid('payment_id', 30)
-                ->constrained('fin_payments')
-                ->restrictOnDelete();
+            $table->foreignUlid('payment_id', 30);
 
-            $table->ulidMorphs('payment_method');
+            $table->ulidMorphs('method');
 
             $table->datetime('updated', 3);
         });

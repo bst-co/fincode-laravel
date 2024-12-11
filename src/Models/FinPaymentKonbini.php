@@ -1,17 +1,16 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
+use Fincode\Laravel\Concerns\HasMilliDateTime;
+use Fincode\Laravel\Concerns\HasRejectDuplicates;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use LaravelFincode\Concerns\HasMilliDateTime;
-use LaravelFincode\Concerns\HasRejectDuplicates;
 use OpenAPI\Fincode;
 
-class FinPaymentKonbini extends Model implements FinPaymentMethodInterface
+class FinPaymentKonbini extends FinPaymentModel
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasMilliDateTime, HasRejectDuplicates, HasUlids;
 
     /**
      * {@inheritdoc}
@@ -36,6 +35,6 @@ class FinPaymentKonbini extends Model implements FinPaymentMethodInterface
      */
     protected static function booted(): void
     {
-        static::duplicates(['payment_id', 'updated']);
+        static::duplicates(['payment_id'], ['updated']);
     }
 }

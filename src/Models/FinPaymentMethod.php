@@ -1,8 +1,11 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Fincode\Laravel\Observers\FinPaymentMethodObserver;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -11,25 +14,54 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  */
 class FinPaymentMethod extends Pivot
 {
+    use HasUlids;
+
+    /**
+     * {@inheritdoc}
+     */
     public $timestamps = false;
 
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'updated' => 'datetime',
     ];
 
     /**
-     * 決済への連携
+     * {@inheritdoc}
      */
-    public function payment(): BelongsTo|FinPayment
+    protected static function boot(): void
     {
-        return $this->belongsTo(FinPayment::class);
+        parent::boot();
+
+        static::observe(FinPaymentMethodObserver::class);
+    }
+
+    /**
+     * 最新の決済情報を取得 (論理削除された値は含まない)
+     */
+    public function payment(): HasOne|FinPayment
+    {
+        return $this->hasOne(FinPayment::class, 'payment_id', 'payment_id')
+            ->withoutTrashed()
+            ->latestOfMany('updated');
+    }
+
+    /**
+     * 決済リストを取得する (論理削除された値も含む)
+     */
+    public function payments(): HasMany|FinPayment
+    {
+        return $this->hasmany(FinPayment::class, 'payment_id', 'payment_id')
+            ->withTrashed();
     }
 
     /**
      * 決済方法への連携
      */
-    public function method(): MorphTo|FinPaymentApplePay|FinPaymentCard|FinPaymentKonbini
+    public function method(): MorphTo|FinPaymentModel
     {
-        return $this->morphTo('payment_method', 'method_type', 'method_id', 'id');
+        return $this->morphTo(__FUNCTION__);
     }
 }

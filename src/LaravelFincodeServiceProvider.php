@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelFincode;
+namespace Fincode\Laravel;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelFincode\Console\Commands\PublishCommand;
+use Fincode\Laravel\Console\Commands\PublishCommand;
 
 /**
  * @noinspection PhpUnused
@@ -28,6 +28,8 @@ class LaravelFincodeServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configurePublishes();
+
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     /**

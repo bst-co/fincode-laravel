@@ -1,19 +1,22 @@
 <?php
 
-namespace LaravelFincode\Concerns;
+namespace Fincode\Laravel\Concerns;
 
+use Fincode\Laravel\Jobs\RejectDuplicateJob;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @mixin Model
+ * @mixin Model&HasRejectDuplicates
  */
 trait HasRejectDuplicates
 {
     /**
      * 重複検証項目
+     *
+     * @var array{"group":string[], "unique":string[]}
      */
-    private static array $duplicates = [];
+    private static array $duplicates = ['group' => [], 'unique' => []];
 
     /**
      * Initializes the model event callback to prevent the creation of duplicate entries.
@@ -23,10 +26,10 @@ trait HasRejectDuplicates
      * record is updated with a timestamp to reflect the touch operation, and the
      * creation of the new model instance is prevented.
      */
-    public function bootHasRejectDuplicates(): void
+    public static function bootHasRejectDuplicates(): void
     {
         static::creating(function (Model $model): bool {
-            if ($parent = self::duplicate($model)->first()) {
+            if ($parent = static::duplicate($model, true)->first()) {
                 $parent->touchQuietly();
 
                 return false;
@@ -36,30 +39,47 @@ trait HasRejectDuplicates
         });
 
         static::created(function (Model $model): void {
-            if (method_exists($model, 'getDeletedAtColumn')) {
-                self::duplicate($model)
-                    ->withoutTrashed()
-                    ->update([$model->getDeletedAtColumn() => now()]);
-            }
+            RejectDuplicateJob::dispatch($model);
         });
     }
 
-    protected static function duplicates(array $fields): void
+    /**
+     * @param  array  $group  同一グループとみなす項目名リスト
+     * @param  array  $unique  同一データとみなす項目名リスト
+     */
+    protected static function duplicates(array $group, array $unique = []): void
     {
-        static::$duplicates = $fields;
+        static::$duplicates = [
+            'group' => $group,
+            'unique' => array_unique([...$group, ...$unique]),
+        ];
     }
 
-    public function scopeDuplicate(Builder $builder, self $base): Builder
+    private static function getDuplicateFields(bool $unique = false)
     {
-        $duplicates = static::$duplicates;
+        return $unique ? static::$duplicates['unique'] : static::$duplicates['group'];
+    }
 
-        if (empty($duplicates)) {
-            return $builder;
+    /**
+     * 重複行のみ抽出する
+     */
+    public function getDuplicateAttributes(bool $unique = false): array
+    {
+        $fields = static::getDuplicateFields($unique);
+        $attributes = [];
+
+        foreach ($fields as $field) {
+            $attributes[$field] = $this->{$field};
         }
 
-        foreach ($duplicates as $field) {
-            $value = $base->{$field};
+        return $attributes;
+    }
 
+    public function scopeDuplicate(Builder $builder, Model $base, bool $unique = false): Builder
+    {
+        $fields = $base->getDuplicateAttributes($unique);
+
+        foreach ($fields as $field => $value) {
             if ($value instanceof \DateTimeInterface) {
                 $value = $value->format($base->getDateFormat());
             }

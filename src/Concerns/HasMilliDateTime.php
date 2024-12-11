@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelFincode\Concerns;
+namespace Fincode\Laravel\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +16,6 @@ trait HasMilliDateTime
      */
     public function getDateFormat(): string
     {
-        return 'Y-m-d H:i:s.u';
+        return 'Y-m-d H:i:s.v';
     }
 }

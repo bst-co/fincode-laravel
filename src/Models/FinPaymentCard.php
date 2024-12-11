@@ -1,17 +1,18 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
+use Fincode\Laravel\Concerns\HasMilliDateTime;
+use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Database\Factories\FinPaymentCardFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use LaravelFincode\Concerns\HasMilliDateTime;
-use LaravelFincode\Concerns\HasRejectDuplicates;
 use OpenAPI\Fincode;
 
-class FinPaymentCard extends Model implements FinPaymentMethodInterface
+class FinPaymentCard extends FinPaymentModel
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -37,8 +38,16 @@ class FinPaymentCard extends Model implements FinPaymentMethodInterface
     /**
      * {@inheritdoc}
      */
+    protected static function newFactory(): FinPaymentCardFactory
+    {
+        return new FinPaymentCardFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected static function booted(): void
     {
-        static::duplicates(['payment_id', 'updated']);
+        static::duplicates(['payment_id'], ['updated']);
     }
 }

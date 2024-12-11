@@ -1,19 +1,20 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Fincode\Laravel\Concerns\HasMilliDateTime;
+use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Database\Factories\FinPlatformFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use LaravelFincode\Concerns\HasMilliDateTime;
-use LaravelFincode\Concerns\HasRejectDuplicates;
 use OpenAPI\Fincode;
 
 class FinPlatform extends Model
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -23,8 +24,6 @@ class FinPlatform extends Model
         'shared_customer_flag' => 'boolean',
         'api_key_display_flag' => 'boolean',
         'platform_rate_list' => 'array',
-        'expire_to' => 'datetime',
-        'expired_at' => 'datetime',
         'created' => 'datetime',
         'updated' => 'datetime',
     ];
@@ -32,9 +31,17 @@ class FinPlatform extends Model
     /**
      * {@inheritdoc}
      */
+    protected static function newFactory(): FinPlatformFactory
+    {
+        return new FinPlatformFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected static function booted(): void
     {
-        static::duplicates(['shop_id', 'shop_type', 'updates']);
+        static::duplicates(['shop_id', 'shop_type'], ['updated']);
     }
 
     /**
@@ -43,15 +50,5 @@ class FinPlatform extends Model
     public function siblings(): HasMany|FinPlatform
     {
         return $this->hasMany(FinPlatform::class, 'shop_id', 'shop_id')->latest('updated');
-    }
-
-    /**
-     * 使用可能なモデルを取得する
-     *
-     * @noinspection PhpUnused
-     */
-    protected function scopeWhereValidity(Builder|FinPlatform $query): Builder|FinPlatform
-    {
-        return $query->whereNotNull('expired_at');
     }
 }

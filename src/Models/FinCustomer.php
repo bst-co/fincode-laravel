@@ -1,19 +1,21 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
 use Carbon\Carbon;
+use Fincode\Laravel\Concerns\HasMilliDateTime;
+use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Database\Factories\FinCustomerFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use LaravelFincode\Concerns\HasMilliDateTime;
-use LaravelFincode\Concerns\HasRejectDuplicates;
 use OpenAPI\Fincode;
 
 class FinCustomer extends Model
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -33,6 +35,22 @@ class FinCustomer extends Model
         'created',
         'updated',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function newFactory(): FinCustomerFactory
+    {
+        return new FinCustomerFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function booted(): void
+    {
+        static::duplicates(['customer_id'], ['updated']);
+    }
 
     /**
      * カード情報

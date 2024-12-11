@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelFincode\Console\Commands;
+namespace Fincode\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;

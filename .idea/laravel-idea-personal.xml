@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LaravelIdeaPersonalSettings">
+    <option name="flags">
+      <map>
+        <entry key="LaravelIdeaSettings.switchedToSrcFolder" value="true" />
+      </map>
+    </option>
+    <option name="generationStringOptionValues">
+      <map>
+        <entry key="createObserver.method_creating" value="1" />
+        <entry key="createObserver.method_deleting" value="1" />
+        <entry key="createObserver.method_forceDeleted" value="1" />
+        <entry key="createObserver.method_forceDeleting" value="1" />
+        <entry key="createObserver.method_replicating" value="1" />
+        <entry key="createObserver.method_restoring" value="1" />
+        <entry key="createObserver.method_retrieved" value="1" />
+        <entry key="createObserver.method_saved" value="1" />
+        <entry key="createObserver.method_saving" value="1" />
+        <entry key="createObserver.method_updating" value="1" />
+      </map>
+    </option>
+    <option name="lastContentRoot" value="$PROJECT_DIR$" />
+  </component>
+</project>

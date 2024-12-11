@@ -1,22 +1,27 @@
 <?php
 
-namespace LaravelFincode\Models;
+namespace Fincode\Laravel\Models;
 
+use Fincode\Laravel\Concerns\HasMilliDateTime;
+use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Database\Factories\FinCardFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use LaravelFincode\Concerns\HasMilliDateTime;
-use LaravelFincode\Concerns\HasRejectDuplicates;
 use OpenAPI\Fincode;
 
 class FinCard extends Model
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
      */
-    public const UPDATED_AT = null;
+    protected static function newFactory(): FinCardFactory
+    {
+        return new FinCardFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -34,6 +39,6 @@ class FinCard extends Model
      */
     protected static function booted(): void
     {
-        static::duplicates(['card_id', 'updated']);
+        static::duplicates(['card_id'], ['updated']);
     }
 }

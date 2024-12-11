@@ -18,9 +18,7 @@ return new class extends Migration
                 ->comment('Card ID (c_**)');
 
             $table->foreignUlid('customer_id')
-                ->comment('Customer ID(cs_**)')
-                ->constrained('fin_customers')
-                ->cascadeOnDelete();
+                ->comment('Customer ID(cs_**)');
 
             $table->boolean('default_flag')
                 ->default(false)
