@@ -19,7 +19,8 @@ class FinPaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'payment_id' => $this->getIdentify(30, 'o_'),
+            'id' => $this->getIdentify(30, 'o_'),
+            'shop_id' => $this->getIdentify(13, 's_'),
             'pay_type' => $this->faker->randomElement(PayType::cases()),
             'job_code' => $this->faker->randomElement(CardPaymentJobCode::cases()),
             'status' => $this->faker->randomElement(PaymentStatus::cases()),

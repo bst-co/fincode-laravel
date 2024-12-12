@@ -11,16 +11,18 @@ return new class extends Migration
         Schema::create('fin_payments', function (Blueprint $table) {
             $table->comment('Fincode決済データ');
 
-            $table->ulid('id')
+            $table->char('id', 30)
                 ->primary()
-                ->comment('#ID');
+                ->comment('#オーダーID (o_***)');
 
-            $table->string('payment_id', 30)
+            $table->char('shop_id', 13)
                 ->index()
-                ->comment('オーダーID');
+                ->comment('#ショップID (s_***)');
 
             $table->string('pay_type', 32)
                 ->comment('決済種別');
+
+            $table->ulidMorphs('pay_method');
 
             $table->string('job_code', 16)
                 ->comment('取引種別');
@@ -29,7 +31,6 @@ return new class extends Migration
                 ->comment('決済ステータス');
 
             $table->string('access_id', 24)
-                ->index()
                 ->comment('アクセスID');
 
             $table->integer('amount')
@@ -80,7 +81,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('更新日');
 
-            $table->datetime('created_at', 3);
+            $table->datetimes(3);
 
             $table->softDeletesDatetime('deleted_at', 3);
         });

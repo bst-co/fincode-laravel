@@ -15,10 +15,6 @@ return new class extends Migration
                 ->primary()
                 ->comment('#ID');
 
-            $table->string('payment_id', 30)
-                ->index()
-                ->comment('#オーダーID');
-
             $table->bigInteger('payment_term_day')
                 ->unsigned()
                 ->nullable()
@@ -108,7 +104,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('更新日');
 
-            $table->dateTime('created_at', 3);
+            $table->datetimes(3);
 
             $table->softDeletesDatetime('deleted_at', 3);
         });

@@ -2,28 +2,24 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Concerns\HasMilliDateTime;
-use Fincode\Laravel\Concerns\HasRejectDuplicates;
 use Fincode\Laravel\Database\Factories\FinPaymentFactory;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Fincode\Laravel\Eloquent\HasHistories;
+use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
 class FinPayment extends Model
 {
-    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasHistories, HasMilliDateTime,  SoftDeletes;
 
     /**
      * {@inheritdoc}
      */
-    public const UPDATED_AT = null;
+    public $incrementing = false;
 
     /**
      * {@inheritdoc}
@@ -40,14 +36,6 @@ class FinPayment extends Model
     /**
      * {@inheritdoc}
      */
-    protected $hidden = [
-        'payments',
-        'payment',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
     protected static function newFactory(): FinPaymentFactory
     {
         return new FinPaymentFactory;
@@ -56,65 +44,29 @@ class FinPayment extends Model
     /**
      * {@inheritdoc}
      */
-    protected static function booted(): void
+    protected static function booted(): void {}
+
+    /**
+     * 販売したショップ情報を取得
+     */
+    public function platform(): BelongsTo|FinPlatform
     {
-        static::duplicates(['payment_id'], ['updated']);
+        return $this->belongsTo(FinPlatform::class, 'shop_id', 'id');
     }
 
     /**
-     * 兄弟要素を取得する
-     *
-     * @noinspection PhpUnused
+     * 決済を行った得意先情報を取得する
      */
-    public function siblings(): HasMany|FinPayment
+    public function customer(): BelongsTo|FinCustomer
     {
-        return $this->hasMany(FinPayment::class, 'payment_id', 'payment_id')->latest('updated');
+        return $this->belongsTo(FinCustomer::class, 'customer_id', 'id');
     }
 
     /**
-     * 決済情報の中間テーブル取得
+     * 決済情報データと紐づける
      */
-    public function payments(): HasMany|FinPaymentMethod
+    public function pay_method(): MorphTo|FinPaymentModel
     {
-        return $this->hasMany(FinPaymentMethod::class, 'payment_id', 'payment_id')
-            ->with(['method' => fn (MorphTo|FinPaymentModel $query) => $query->withTrashed()])
-            ->latest('updated');
-    }
-
-    public function payment(): HasOne|FinPaymentMethod
-    {
-        return $this->hasOne(FinPaymentMethod::class, 'payment_id', 'payment_id')
-            ->whereHas('method', fn (Builder|FinPaymentModel $query) => $query->withoutTrashed())
-            ->with('method')
-            ->latestOfMany('updated');
-    }
-
-    /**
-     * 登録されているすべての決済手段を返却する
-     *
-     * @return Attribute<FinPaymentModel[]>
-     */
-    protected function methods(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this
-                ->payments()
-                ->with('method', fn (MorphTo|FinPaymentModel $query) => $query->withTrashed())->get()->map(fn (FinPaymentMethod $v) => $v->method),
-        );
-    }
-
-    /**
-     * 最新の決済手段を返却する
-     *
-     * @return Attribute<FinPaymentModel>
-     */
-    protected function method(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this
-                ->loadMissing('payment.method')
-                ->payment
-                ?->method,
-        );
+        return $this->morphTo(__FUNCTION__);
     }
 }

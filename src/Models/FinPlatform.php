@@ -2,19 +2,29 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Concerns\HasMilliDateTime;
-use Fincode\Laravel\Concerns\HasRejectDuplicates;
 use Fincode\Laravel\Database\Factories\FinPlatformFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Fincode\Laravel\Eloquent\HasHistories;
+use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
+use OpenAPI\Fincode\Model\ShopType;
 
+/**
+ * @property-read Collection<FinPlatform>|null $siblings
+ */
 class FinPlatform extends Model
 {
-    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 
     /**
      * {@inheritdoc}
@@ -39,16 +49,23 @@ class FinPlatform extends Model
     /**
      * {@inheritdoc}
      */
-    protected static function booted(): void
+    protected static function booted(): void {}
+
+    /**
+     * ショップの通信トークンを取得する
+     */
+    public function token(): HasOne|FinPlatformToken
     {
-        static::duplicates(['shop_id', 'shop_type'], ['updated']);
+        return $this->hasOne(FinPlatformToken::class, 'id', 'id');
     }
 
     /**
-     * 同一のShopIDを有する、兄弟要素を取得する
+     * 顧客情報を共有しないプラットフォームであるかを判定する
      */
-    public function siblings(): HasMany|FinPlatform
+    protected function isPrivateShop(): Attribute
     {
-        return $this->hasMany(FinPlatform::class, 'shop_id', 'shop_id')->latest('updated');
+        return Attribute::make(
+            fn () => ! $this->shared_customer_flag && $this->shop_type === ShopType::PLATFORM,
+        );
     }
 }

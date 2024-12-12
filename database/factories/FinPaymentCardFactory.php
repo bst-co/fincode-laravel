@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use OpenAPI\Fincode\Model\CardBrand;
 use OpenAPI\Fincode\Model\CardPayMethod;
 use OpenAPI\Fincode\Model\CardPayTimes;
-use OpenAPI\Fincode\Model\Tds2Status;
 use OpenAPI\Fincode\Model\Tds2Type;
 use OpenAPI\Fincode\Model\TdsType;
 use OpenAPI\Fincode\Model\ThreeDSecure2Status;
@@ -24,10 +23,9 @@ class FinPaymentCardFactory extends Factory
     public function definition(): array
     {
         return [
-            'payment_id' => $this->getIdentify(30, 'o_'),
             'card_id' => $this->getIdentify(25, 'c_'),
             'brand' => $this->faker->randomElement(CardBrand::cases()),
-            'card_no' => $this->faker->creditCardNumber(),
+            'card_no' => $this->faker->numerify('***********####'),
             'expire' => $this->faker->date(),
             'holder_name' => $this->faker->name(),
             'card_no_hash' => Str::substr($this->faker->sha256(), 1, 64),

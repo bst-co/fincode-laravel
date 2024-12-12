@@ -21,7 +21,7 @@ class FinPlatformFactory extends Factory
     public function definition(): array
     {
         return [
-            'shop_id' => $this->getIdentify(13, 's_'),
+            'id' => $this->getIdentify(13, 's_'),
             'shop_name' => Str::substr($this->faker->company(), 0, 20),
             'shop_type' => $this->faker->randomElement(ShopType::cases()),
             'platform_id' => $this->getIdentify(13, 'p_'),

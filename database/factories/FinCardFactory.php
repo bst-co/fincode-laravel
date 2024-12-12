@@ -3,7 +3,6 @@
 namespace Fincode\Laravel\Database\Factories;
 
 use Carbon\Carbon;
-use DateTimeInterface;
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinCard;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,10 +24,10 @@ class FinCardFactory extends Factory
     public function definition(): array
     {
         return [
-            'card_id' => $this->getIdentify(25, 'c_'),
+            'id' => $this->getIdentify(25, 'c_'),
             'customer_id' => $this->getIdentify(26, 'cs_'),
             'default_flag' => $this->faker->boolean,
-            'card_no' => $this->faker->creditCardNumber,
+            'card_no' => $this->faker->numerify('***********####'),
             'expire' => $this->faker->date(),
             'holder_name' => $this->faker->name(),
             'brand' => $this->faker->randomElement(CardBrand::cases()),

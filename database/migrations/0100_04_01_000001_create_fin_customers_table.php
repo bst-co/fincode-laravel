@@ -9,13 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_customers', function (Blueprint $table) {
-            $table->ulid('id')
+            $table->string('id', 60)
                 ->primary()
-                ->comment('#ID');
-
-            $table->string('customer_id', 60)
-                ->index()
-                ->comment('顧客ID');
+                ->comment('#顧客ID');
 
             $table->string('name', 384)
                 ->nullable()

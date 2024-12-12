@@ -3,16 +3,14 @@
 namespace Fincode\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 abstract class FinPaymentModel extends Model
 {
     use SoftDeletes;
 
-    protected function parents(): MorphMany|FinPaymentMethod
+    public function payment(): \Illuminate\Database\Eloquent\Relations\BelongsTo|FinPayment
     {
-        return $this->morphMany(FinPaymentMethod::class, 'method');
+        return $this->belongsTo(FinPayment::class, 'id', 'id');
     }
 }

@@ -11,12 +11,8 @@ return new class extends Migration
         Schema::create('fin_platforms', function (Blueprint $table) {
             $table->comment('プラットフォーム情報');
 
-            $table->ulid('id')
+            $table->char('id', 13)
                 ->primary()
-                ->comment('#ID');
-
-            $table->string('shop_id', 13)
-                ->index()
                 ->comment('ショップID');
 
             $table->string('shop_name', 20)
@@ -73,7 +69,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('プラットフォーム上の更新日時');
 
-            $table->timestamps(3);
+            $table->datetimes(3);
 
             $table->softDeletesDatetime('deleted_at', 3);
         });

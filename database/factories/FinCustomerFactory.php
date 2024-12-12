@@ -3,7 +3,6 @@
 namespace Fincode\Laravel\Database\Factories;
 
 use Carbon\Carbon;
-use DateTimeInterface;
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinCustomer;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,7 +19,7 @@ class FinCustomerFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => $this->getIdentify(60, 'cs_'),
+            'id' => $this->getIdentify(60, 'cs_'),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone_cc' => $this->faker->numberBetween(1, 999),

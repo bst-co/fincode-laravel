@@ -3,10 +3,9 @@
 namespace Fincode\Laravel\Models;
 
 use Carbon\Carbon;
-use Fincode\Laravel\Concerns\HasMilliDateTime;
-use Fincode\Laravel\Concerns\HasRejectDuplicates;
 use Fincode\Laravel\Database\Factories\FinCustomerFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Fincode\Laravel\Eloquent\HasHistories;
+use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +14,15 @@ use OpenAPI\Fincode;
 
 class FinCustomer extends Model
 {
-    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
+    /**
+     * @use HasFactory<FinCustomerFactory>
+     */
+    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 
     /**
      * {@inheritdoc}
@@ -30,15 +37,6 @@ class FinCustomer extends Model
     /**
      * {@inheritdoc}
      */
-    protected $hidden = [
-        'id',
-        'created',
-        'updated',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
     protected static function newFactory(): FinCustomerFactory
     {
         return new FinCustomerFactory;
@@ -47,17 +45,14 @@ class FinCustomer extends Model
     /**
      * {@inheritdoc}
      */
-    protected static function booted(): void
-    {
-        static::duplicates(['customer_id'], ['updated']);
-    }
+    protected static function booted(): void {}
 
     /**
      * カード情報
      */
     public function cards(): HasMany|FinCard
     {
-        return $this->hasMany(FinCard::class, 'customer_id', 'customer_id');
+        return $this->hasMany(FinCard::class, 'customer_id', 'id');
     }
 
     public function fillFinCode(

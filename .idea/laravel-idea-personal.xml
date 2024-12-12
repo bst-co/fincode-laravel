@@ -8,17 +8,15 @@
     </option>
     <option name="generationStringOptionValues">
       <map>
-        <entry key="createObserver.method_creating" value="1" />
-        <entry key="createObserver.method_deleting" value="1" />
+        <entry key="createHttpException.code" value="123" />
         <entry key="createObserver.method_forceDeleted" value="1" />
-        <entry key="createObserver.method_forceDeleting" value="1" />
-        <entry key="createObserver.method_replicating" value="1" />
-        <entry key="createObserver.method_restoring" value="1" />
-        <entry key="createObserver.method_retrieved" value="1" />
         <entry key="createObserver.method_saved" value="1" />
-        <entry key="createObserver.method_saving" value="1" />
-        <entry key="createObserver.method_updating" value="1" />
       </map>
+    </option>
+    <option name="helperCode">
+      <LaravelHelperCodeSettings>
+        <option name="modelsCreateHighOrderCollectionProxies" value="true" />
+      </LaravelHelperCodeSettings>
     </option>
     <option name="lastContentRoot" value="$PROJECT_DIR$" />
   </component>

@@ -2,20 +2,15 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Concerns\HasMilliDateTime;
-use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Eloquent\HasHistories;
+use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
 class FinPaymentKonbini extends FinPaymentModel
 {
-    use HasMilliDateTime, HasRejectDuplicates, HasUlids;
-
-    /**
-     * {@inheritdoc}
-     */
-    public const UPDATED_AT = null;
+    use HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -33,8 +28,5 @@ class FinPaymentKonbini extends FinPaymentModel
     /**
      * {@inheritdoc}
      */
-    protected static function booted(): void
-    {
-        static::duplicates(['payment_id'], ['updated']);
-    }
+    protected static function booted(): void {}
 }

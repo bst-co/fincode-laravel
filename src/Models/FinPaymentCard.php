@@ -2,29 +2,26 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Concerns\HasMilliDateTime;
-use Fincode\Laravel\Concerns\HasRejectDuplicates;
+use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Database\Factories\FinPaymentCardFactory;
+use Fincode\Laravel\Eloquent\HasHistories;
+use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
 class FinPaymentCard extends FinPaymentModel
 {
-    use HasFactory, HasMilliDateTime, HasRejectDuplicates, HasUlids, SoftDeletes;
-
-    /**
-     * {@inheritdoc}
-     */
-    public const UPDATED_AT = null;
+    use HasFactory, HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}
      */
     protected $casts = [
         'brand' => Fincode\Model\CardBrand::class,
-        'expire' => 'date',
+        'expire' => AsCardExpireCast::class,
         'method' => Fincode\Model\CardPayMethod::class,
         'pay_times' => Fincode\Model\CardPayTimes::class,
         'tds_type' => Fincode\Model\TdsType::class,
@@ -46,8 +43,13 @@ class FinPaymentCard extends FinPaymentModel
     /**
      * {@inheritdoc}
      */
-    protected static function booted(): void
+    protected static function booted(): void {}
+
+    /**
+     * 保有する顧客情報を取得する
+     */
+    public function customer(): BelongsTo|FinCustomer
     {
-        static::duplicates(['payment_id'], ['updated']);
+        return $this->fincode_relays->customer();
     }
 }

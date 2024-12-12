@@ -3,29 +3,30 @@
 return [
     /*
      * ------------------------------------------------------------
-     * Default Tenant Prop
+     * Default Platform Prop
      * ------------------------------------------------------------
      */
-    'default' => 'root',
+    'default' => 'default',
 
     /*
      * ------------------------------------------------------------
-     * Tenant Props
+     * Platforms Props
      * ------------------------------------------------------------
      */
-    'tenants' => [
-        'root' => [
-            // Fincodeに登録されているテナントIDを指定してください
-            'tenant_shop_id' => env('FINCODE_TENANT_ID', ''),
+    'platforms' => [
+        'default' => [
+            // Fincodeに登録されているテナントIDを指定してください (必須)
+            'shop_id' => env('FINCODE_TENANT_ID', ''),
             // このテナントで3Dセキュアを行う際に表示される、店舗名
             // デフォルトでは、テナントIDが表示されます
             'tenant_name' => env('FINCODE_TENANT_NAME', null),
-            // Fincodeにてテナントに割り当てられている公開APIキーを適用
+            // Fincodeにてテナントに割り当てられている公開APIキーを適用 (必須)
             'public_key' => env('FINCODE_PUBLIC_KEY', ''),
-            // Fincodeにてテナントに割り当てられている秘密APIキーを適用
+            // Fincodeにてテナントに割り当てられている秘密APIキーを適用 (必須)
             'secret_key' => env('FINCODE_SECRET_KEY', ''),
-            // テストモードを使用する場合は true にしてください
-            'live' => env('FINCODE_LIVE_MODE', env('APP_ENV') === 'production'),
+            'client_field' => env('FINCODE_CLIENT_FIELD'),
+            // Fincodeの本番環境利用フラグ / デフォルト設定のままにするには null にしてください
+            'live' => null,
         ],
     ],
 
@@ -40,6 +41,8 @@ return [
         // Fincode で3Dセキュアを実施する際の認証有効期限(秒数)
         // 未使用の場合はFincodeデフォルトの30分が適用されます
         '3d_secure_ttl' => env('FINCODE_3D_SECURE_TTL', null),
+        // Fincodeの本番環境利用フラグ / テスト環境を使う場合は false に設定
+        'live' => env('FINCODE_LIVE_MODE', env('APP_ENV') === 'production'),
     ],
 
     'dummies' => [

@@ -2,6 +2,7 @@
 
 namespace Fincode\Laravel\Concerns;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
  */
 trait HasFactoryExtend
 {
-    protected static ?\DateTimeInterface $created = null;
+    protected static ?DateTimeInterface $created = null;
 
     /**
      * ID文字列を作成する

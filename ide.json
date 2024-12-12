@@ -7,7 +7,7 @@
                 {
                     "place": "arrayValue",
                     "classFqn": [
-                        "\\LaravelFincode\\Concerns\\HasRejectDuplicates"
+                        "\\Fincode\\Laravel\\Concerns\\HasRejectDuplicates"
                     ],
                     "methodNames": [
                         "duplicates"
@@ -15,6 +15,25 @@
                     "parameterNames": [
                         "group",
                         "unique"
+                    ]
+                }
+            ]
+        },
+        {
+            "complete": "configKey",
+            "options": {
+                "prefix": "fincode.platforms"
+            },
+            "condition": [
+                {
+                    "classFqn": [
+                        "\\Fincode\\Laravel\\Models\\FinPlatformToken"
+                    ],
+                    "methodNames": [
+                        "make"
+                    ],
+                    "parameters": [
+                        1
                     ]
                 }
             ]

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fincode\Laravel\Concerns;
+namespace Fincode\Laravel\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 

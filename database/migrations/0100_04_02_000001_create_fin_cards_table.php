@@ -9,15 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_cards', function (Blueprint $table) {
-            $table->ulid('id')
+            $table->char('id', 25)
                 ->primary()
-                ->comment('#ID');
+                ->comment('#カードID (c_**)');
 
-            $table->string('card_id', 25)
+            $table->char('customer_id', 60)
                 ->index()
-                ->comment('Card ID (c_**)');
-
-            $table->foreignUlid('customer_id')
                 ->comment('Customer ID(cs_**)');
 
             $table->boolean('default_flag')
@@ -25,15 +22,22 @@ return new class extends Migration
                 ->comment('Default Flag');
 
             $table->string('card_no', 16)
-                ->comment('Card No');
+                ->comment('Card No (Masked)');
 
             $table->date('expire')
+                ->nullable()
                 ->comment('有効期限');
 
             $table->string('holder_name', 50)
+                ->nullable()
                 ->comment('カード名義人名');
 
+            $table->string('type', 16)
+                ->nullable()
+                ->comment('カード種別');
+
             $table->string('brand', 50)
+                ->nullable()
                 ->comment('カードブランドコード');
 
             $table->string('card_no_hash', 64)
