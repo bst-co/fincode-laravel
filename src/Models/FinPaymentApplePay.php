@@ -6,6 +6,7 @@ use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
@@ -27,7 +28,10 @@ class FinPaymentApplePay extends FinPaymentModel
     ];
 
     /**
-     * {@inheritdoc}
+     * 保有する顧客情報を取得する
      */
-    protected static function booted(): void {}
+    public function card(): BelongsTo|FinCustomer
+    {
+        return $this->belongsTo(FinCard::class, 'card_id', 'id');
+    }
 }

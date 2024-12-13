@@ -14,6 +14,9 @@ use OpenAPI\Fincode;
 
 class FinPaymentCard extends FinPaymentModel
 {
+    /**
+     * @use HasFactory<FinPaymentCardFactory>
+     */
     use HasFactory, HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
 
     /**
@@ -41,15 +44,10 @@ class FinPaymentCard extends FinPaymentModel
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected static function booted(): void {}
-
-    /**
      * 保有する顧客情報を取得する
      */
-    public function customer(): BelongsTo|FinCustomer
+    public function card(): BelongsTo|FinCustomer
     {
-        return $this->fincode_relays->customer();
+        return $this->belongsTo(FinCard::class, 'card_id', 'id');
     }
 }

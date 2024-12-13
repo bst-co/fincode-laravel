@@ -2,6 +2,22 @@
     "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
     "completions": [
         {
+            "complete": "validationRules",
+            "condition": [
+                {
+                    "classFqn": [
+                        "\\Fincode\\Laravel\\Eloquent\\FinModelBinding"
+                    ],
+                    "methodNames": [
+                        "sanitize"
+                    ],
+                    "parameters": [
+                        2
+                    ]
+                }
+            ]
+        },
+        {
             "complete": "eloquentFields",
             "condition": [
                 {

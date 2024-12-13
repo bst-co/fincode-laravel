@@ -2,10 +2,12 @@
 
 namespace Fincode\Laravel\Eloquent;
 
+use Illuminate\Contracts\Support\Arrayable;
+use JsonSerializable;
 use OpenAPI\Fincode\Model\ExaminationMasterId;
 use OpenAPI\Fincode\Model\PlatformRateConfig;
 
-class PlatformRateObject
+class PlatformRateObject implements Arrayable, JsonSerializable
 {
     public function __construct(
         public ExaminationMasterId $id,
@@ -32,9 +34,31 @@ class PlatformRateObject
         return new self(
             $value['id'],
             $value['platform_rate'],
-            $value['get_fixed_fee'],
-            $value['get_web_registration_fee'],
-            $value['get_paypay_content_category_type'],
+            $value['fixed_fee'],
+            $value['web_registration_fee'],
+            $value['paypay_content_category_type'],
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value,
+            'platform_rate' => $this->platform_rate,
+            'fixed_fee' => $this->fixed_fee,
+            'web_registration_fee' => $this->web_registration_fee,
+            'paypay_content_category_type' => $this->paypay_content_category_type,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

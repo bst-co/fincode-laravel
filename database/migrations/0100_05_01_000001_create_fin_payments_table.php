@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('fin_payments', function (Blueprint $table) {
             $table->comment('Fincode決済データ');
 
-            $table->char('id', 30)
+            $table->string('id', 30)
                 ->primary()
                 ->comment('#オーダーID (o_***)');
 
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('pay_type', 32)
                 ->comment('決済種別');
 
-            $table->ulidMorphs('pay_method');
+            $table->nullableUlidMorphs('pay_method');
 
             $table->string('job_code', 16)
                 ->comment('取引種別');

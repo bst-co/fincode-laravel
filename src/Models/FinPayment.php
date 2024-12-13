@@ -14,7 +14,7 @@ use OpenAPI\Fincode;
 
 class FinPayment extends Model
 {
-    use HasFactory, HasHistories, HasMilliDateTime,  SoftDeletes;
+    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -41,10 +41,15 @@ class FinPayment extends Model
         return new FinPaymentFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected static function booted(): void {}
+    protected static function booted(): void
+    {
+        static::saving(function ($model): void {
+            // payMethod の内容未保存の場合、保存して再割り当てを行う
+            if (($method = $model->pay_method) && ! $method->exists) {
+                $model->pay_method()->associate(tap($method)->save());
+            }
+        });
+    }
 
     /**
      * 販売したショップ情報を取得

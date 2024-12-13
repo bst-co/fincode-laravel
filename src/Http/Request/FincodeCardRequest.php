@@ -2,6 +2,7 @@
 
 namespace Fincode\Laravel\Http\Request;
 
+use Fincode\Laravel\Concerns\HasFinCardBindings;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
@@ -17,8 +18,15 @@ use OpenAPI\Fincode\Model\CustomerCardUpdatingRequest;
 use OpenAPI\Fincode\Model\CustomerCardUpdatingResponse;
 use OpenAPI\Fincode\Model\DefaultFlag;
 
+/**
+ * FincodeカードAPIリクエスト
+ *
+ * @see https://docs.fincode.jp/api#tag/%E3%82%AB%E3%83%BC%E3%83%89
+ */
 class FincodeCardRequest extends FincodeCustomerAbstract
 {
+    use HasFinCardBindings;
+
     /**
      * カード情報を作成する
      *
@@ -27,7 +35,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function create(string $token, bool $default = true, bool $save = true): FinCard
+    public function create(string $token, bool $default = true): FinCard
     {
         $body = (new CustomerCardCreatingRequest)
             ->setToken($token)
@@ -41,26 +49,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
         }
 
         if ($response instanceof CustomerCardCreatingResponse) {
-            $result = (new FinCard)
-                ->forceFill([
-                    'id' => $response->getId(),
-                    'customer_id' => $response->getCustomerId(),
-                    'default_flag' => $response->getDefaultFlag() === DefaultFlag::_1,
-                    'card_no' => $response->getCardNo(),
-                    'expire' => $response->getExpire(),
-                    'holder_name' => $response->getHolderName(),
-                    'type' => $response->getType(),
-                    'brand' => $response->getBrand(),
-                    'card_no_hash' => $response->getCardNoHash(),
-                    'created' => $response->getCreated(),
-                    'updated' => $response->getUpdated(),
-                ]);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
+            return $this->binding->card($response);
         }
 
         throw new FincodeUnknownResponseException;
@@ -86,20 +75,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
         }
 
         if ($response instanceof CustomerCardRetrievingResponse) {
-            $result = (new FinCard)
-                ->forceFill([
-                    'id' => $response->getId(),
-                    'customer_id' => $response->getCustomerId(),
-                    'card_no' => $response->getCardNo(),
-                    'default_flag' => $response->getDefaultFlag() === DefaultFlag::_1,
-                    'expire' => $response->getExpire(),
-                    'holder_name' => $response->getHolderName(),
-                    'type' => $response->getType(),
-                    'brand' => $response->getBrand(),
-                    'card_no_hash' => $response->getCardNoHash(),
-                    'created' => $response->getCreated(),
-                    'updated' => $response->getUpdated(),
-                ]);
+            $result = $this->binding->card($response);
 
             if ($save) {
                 $result->save();
@@ -119,7 +95,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function update(FinCard|string $card, string $token, bool $save = true): FinCard
+    public function update(FinCard|string $card, string $token): FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 
@@ -141,26 +117,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
         }
 
         if ($response instanceof CustomerCardUpdatingResponse) {
-            $result = (new FinCard)
-                ->forceFill([
-                    'id' => $response->getId(),
-                    'customer_id' => $response->getCustomerId(),
-                    'default_flag' => $response->getDefaultFlag() === DefaultFlag::_1,
-                    'card_no' => $response->getCardNo(),
-                    'expire' => $response->getExpire(),
-                    'holder_name' => $response->getHolderName(),
-                    'type' => $response->getType(),
-                    'brand' => $response->getBrand(),
-                    'card_no_hash' => $response->getCardNoHash(),
-                    'created' => $response->getCreated(),
-                    'updated' => $response->getUpdated(),
-                ]);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
+            return $this->binding->card($response);
         }
 
         throw new FincodeUnknownResponseException;
@@ -171,7 +128,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function delete(FinCard|string $card, bool $save = true): Builder|FinCard
+    public function delete(FinCard|string $card): Builder|FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 
@@ -183,17 +140,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
         }
 
         if ($response instanceof CustomerCardDeletingResponse) {
-            $query = FinCard::whereCardId($response->getId())
-                ->whereCustomerId($response->getCustomerId());
-
-            if ($save) {
-                $query->delete();
-                $query->withTrashed();
-            } else {
-                $query->withoutTrashed();
-            }
-
-            return $query;
+            return FinCard::find($response->getId());
         }
 
         throw new FincodeUnknownResponseException;

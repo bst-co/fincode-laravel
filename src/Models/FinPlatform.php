@@ -5,6 +5,7 @@ namespace Fincode\Laravel\Models;
 use Fincode\Laravel\Database\Factories\FinPlatformFactory;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -67,5 +68,49 @@ class FinPlatform extends Model
         return Attribute::make(
             fn () => ! $this->shared_customer_flag && $this->shop_type === ShopType::PLATFORM,
         );
+    }
+
+    /**
+     * ショップがプラットフォーム型であることを判定する
+     */
+    protected function isPlatform(): Attribute
+    {
+        return Attribute::make(
+            fn () => $this->shop_type === ShopType::PLATFORM,
+        );
+    }
+
+    /**
+     * ショップがテナント型であることを判定する
+     */
+    protected function isTenant(): Attribute
+    {
+        return Attribute::make(
+            fn () => $this->shop_type === ShopType::TENANT,
+        );
+    }
+
+    /**
+     * テナント/プラットフォーム以外のショップを取得する
+     */
+    protected function scopeWhereShopOther(Builder $query): Builder
+    {
+        return $query->whereNotin('shop_type', ShopType::cases());
+    }
+
+    /**
+     * テナント型のショップのみ取得する
+     */
+    protected function scopeWhereShopTenant(Builder $query): Builder
+    {
+        return $query->where('shop_type', '=', ShopType::TENANT);
+    }
+
+    /**
+     * プラットフォーム型のショップのみ取得する
+     */
+    protected function scopeWhereShopPlatform(Builder $query): Builder
+    {
+        return $query->where('shop_type', '=', ShopType::PLATFORM);
     }
 }

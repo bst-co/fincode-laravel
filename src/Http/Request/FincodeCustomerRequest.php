@@ -3,6 +3,7 @@
 namespace Fincode\Laravel\Http\Request;
 
 use Fincode\Laravel\Exceptions\FincodeRequestException;
+use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinCustomer;
 use GuzzleHttp\Exception\GuzzleException;
 use OpenAPI\Fincode\ApiException;
@@ -13,12 +14,17 @@ use OpenAPI\Fincode\Model\CustomerUpdatingRequest;
 use OpenAPI\Fincode\Model\CustomerUpdatingResponse;
 use OpenAPI\Fincode\Model\DeleteFlag;
 
+/**
+ * Fincode顧客APIリクエスト
+ *
+ * @see https://docs.fincode.jp/api#tag/%E9%A1%A7%E5%AE%A2
+ */
 class FincodeCustomerRequest extends FincodeAbstract
 {
     /**
-     * 指定顧客の最新情報を取得する
+     * 顧客 取得
      *
-     * @throws FincodeRequestException
+     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
     public function get(FinCustomer|string $customer, bool $save = false): ?FinCustomer
     {
@@ -27,60 +33,31 @@ class FincodeCustomerRequest extends FincodeAbstract
         try {
             $response = $this->token->default()
                 ->retrieveCustomer($customer_id, $this->token->private_shop_id);
-
-            if ($response instanceof CustomerRetrievingResponse) {
-                $result = (new FinCustomer)
-                    ->forceFill([
-                        'id' => $response->getId(),
-                        'name' => $response->getName(),
-                        'email' => $response->getEmail(),
-                        'phone_cc' => $response->getPhoneCc(),
-                        'phone_no' => $response->getPhoneNo(),
-                        'addr_country' => $response->getAddrCountry(),
-                        'addr_city' => $response->getAddrCity(),
-                        'addr_state' => $response->getAddrState(),
-                        'addr_line_1' => $response->getAddrLine1(),
-                        'addr_line_2' => $response->getAddrLine2(),
-                        'addr_line_3' => $response->getAddrLine3(),
-                        'addr_post_code' => $response->getAddrPostCode(),
-                        'card_registration' => $response->getCardRegistration(),
-                        'directdebit_registration' => $response->getDirectdebitRegistration(),
-                        'created' => $response->getCreated(),
-                        'updated' => $response->getUpdated(),
-                    ]);
-
-                if ($save) {
-                    $result->save();
-                }
-
-                return $result;
-            }
         } catch (GuzzleException|ApiException $e) {
             throw new FincodeRequestException($e);
         }
 
-        return null;
+        if ($response instanceof CustomerRetrievingResponse) {
+            $result = $this->binding->customer($response);
+
+            if ($save) {
+                $result->save();
+            }
+
+            return $result;
+        }
+
+        throw new FincodeUnknownResponseException;
     }
 
     /**
-     * 顧客情報を新規作成する
+     * 顧客 登録
      *
-     * @throws FincodeRequestException
+     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
     public function create(FinCustomer $customer, bool $save = true): ?FinCustomer
     {
-        $body = (new CustomerCreatingRequest)
-            ->setName($customer->name)
-            ->setEmail($customer->email)
-            ->setPhoneCc($customer->phone_cc)
-            ->setPhoneNo($customer->phone_no)
-            ->setAddrCountry($customer->addr_country)
-            ->setAddrState($customer->addr_state)
-            ->setAddrCity($customer->addr_city)
-            ->setAddrLine1($customer->addr_line_1)
-            ->setAddrLine2($customer->addr_line_2)
-            ->setAddrLine3($customer->addr_line_3)
-            ->setAddrPostCode($customer->addr_post_code);
+        $body = (new CustomerCreatingRequest($this->binding->castArray($customer)));
 
         try {
             $response = $this->token->default()
@@ -90,23 +67,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         }
 
         if ($response instanceof CustomerCreatingRequest) {
-            $result = (new FinCustomer)
-                ->forceFill([
-                    'id' => $response->getId(),
-                    'name' => $response->getName(),
-                    'email' => $response->getEmail(),
-                    'phone_cc' => $response->getPhoneCc(),
-                    'phone_no' => $response->getPhoneNo(),
-                    'addr_country' => $response->getAddrCountry(),
-                    'addr_city' => $response->getAddrCity(),
-                    'addr_state' => $response->getAddrState(),
-                    'addr_line_1' => $response->getAddrLine1(),
-                    'addr_line_2' => $response->getAddrLine2(),
-                    'addr_line_3' => $response->getAddrLine3(),
-                    'addr_post_code' => $response->getAddrPostCode(),
-                    'created' => now(),
-                    'updated' => now(),
-                ]);
+            $result = $this->binding->customer($response);
 
             if ($save) {
                 $result->save();
@@ -115,23 +76,17 @@ class FincodeCustomerRequest extends FincodeAbstract
             return $result;
         }
 
-        return null;
+        throw new FincodeUnknownResponseException;
     }
 
+    /**
+     * 顧客 更新
+     *
+     * @throws FincodeRequestException|FincodeUnknownResponseException
+     */
     public function update(FinCustomer $customer, bool $save = true): ?FinCustomer
     {
-        $body = (new CustomerUpdatingRequest)
-            ->setName($customer->name)
-            ->setEmail($customer->email)
-            ->setPhoneCc($customer->phone_cc)
-            ->setPhoneNo($customer->phone_no)
-            ->setAddrCountry($customer->addr_country)
-            ->setAddrState($customer->addr_state)
-            ->setAddrCity($customer->addr_city)
-            ->setAddrLine1($customer->addr_line_1)
-            ->setAddrLine2($customer->addr_line_2)
-            ->setAddrLine3($customer->addr_line_3)
-            ->setAddrPostCode($customer->addr_post_code);
+        $body = (new CustomerUpdatingRequest($this->binding->castArray($customer)));
 
         try {
             $response = $this->token->default()
@@ -141,24 +96,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         }
 
         if ($response instanceof CustomerUpdatingResponse) {
-            $result = (new FinCustomer)->forceFill([
-                'id' => $response->getId(),
-                'name' => $response->getName(),
-                'email' => $response->getEmail(),
-                'phone_cc' => $response->getPhoneCc(),
-                'phone_no' => $response->getPhoneNo(),
-                'addr_country' => $response->getAddrCountry(),
-                'addr_city' => $response->getAddrCity(),
-                'addr_state' => $response->getAddrState(),
-                'addr_line_1' => $response->getAddrLine1(),
-                'addr_line_2' => $response->getAddrLine2(),
-                'addr_line_3' => $response->getAddrLine3(),
-                'addr_post_code' => $response->getAddrPostCode(),
-                'card_registration' => $response->getCardRegistration(),
-                'directdebit_registration' => $response->getDirectdebitRegistration(),
-                'created' => $response->getCreated(),
-                'updated' => $response->getUpdated(),
-            ]);
+            $result = $this->binding->customer($response);
 
             if ($save) {
                 $result->save();
@@ -167,15 +105,15 @@ class FincodeCustomerRequest extends FincodeAbstract
             return $result;
         }
 
-        return null;
+        throw new FincodeUnknownResponseException;
     }
 
     /**
-     * 顧客情報を削除する
+     * 顧客 削除
      *
-     * @throws FincodeRequestException
+     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function delete(FinCustomer $customer): bool
+    public function delete(FinCustomer $customer): ?FinCustomer
     {
         try {
             $response = $this->token->default()
@@ -186,14 +124,12 @@ class FincodeCustomerRequest extends FincodeAbstract
 
         if ($response instanceof CustomerDeletingResponse) {
             if ($response->getDeleteFlag() === DeleteFlag::_1) {
-                FinCustomer::whereCustomerId($response->getId())->delete();
-
-                return true;
-            } else {
-                return false;
+                return FInCustomer::find($response->getId());
             }
+
+            return null;
         }
 
-        return false;
+        throw new FincodeUnknownResponseException;
     }
 }
