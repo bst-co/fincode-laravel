@@ -4,25 +4,27 @@ namespace Fincode\Laravel\Http\RequestBody;
 
 use ErrorException;
 use Fincode\Laravel\Models\FinPayment;
-use Illuminate\Contracts\Support\Arrayable;
 use OpenAPI\Fincode\Model\ModelInterface;
 use OpenAPI\Fincode\Model\PayType;
 
 /**
  * @template TInterface of ModelInterface
+ *
+ * @extends PaymentMethod<TInterface>
  */
-class CreatePaymentMethod implements Arrayable
+class CreatePaymentMethod extends PaymentMethod
 {
     /**
-     * @param  CreatePayment  $instance  親オブジェクト
-     * @param  class-string<TInterface>  $interface  リクエストオブジェクト
+     * @param  PayType  $pay_type  決済種別
      */
     public function __construct(
-        protected readonly CreatePayment $instance,
-        protected readonly string $interface,
+        CreatePayment $instance,
+        string $interface,
         protected readonly PayType $pay_type,
-        protected readonly array $attributes = [],
-    ) {}
+        array $attributes = [],
+    ) {
+        parent::__construct($instance, $interface, $attributes);
+    }
 
     protected ?string $client_field_2 = null;
 
@@ -38,9 +40,8 @@ class CreatePaymentMethod implements Arrayable
         return $this;
     }
 
-    /**
-     * @return void
-     *
+    /**s
+     * APIリクエストを中継する
      * @throws ErrorException
      */
     final public function exec(ModelInterface|array|null $model = null): FinPayment
@@ -49,26 +50,21 @@ class CreatePaymentMethod implements Arrayable
     }
 
     /**
-     * APIのリクエストに必要となるModelInterfaceを生成する
-     *
-     * @throws ErrorException
+     * 値を指定のインターフェイスに注入する
      */
-    final protected function marshal(ModelInterface|array $model = []): ?ModelInterface
+    protected function marshalValue(ModelInterface|array $model = []): array
     {
-        if (class_exists($this->interface)) {
-            if (is_a($this->instance, ModelInterface::class, true)) {
-                $binding = $this->instance->binding;
+        $binding = $this->instance->binding;
+        $token = $this->instance->token;
 
-                return new $this->interface([
-                    ...$binding->castArray($model),
-                    ...$binding->castArray($this->toArray()),
-                ]);
-            }
-
-            throw new ErrorException('ModelInterface not found: '.$this->interface.'.');
-        }
-
-        throw new ErrorException('Class not found: '.$this->interface.'.');
+        return [
+            ...parent::marshalValue($model),
+            ...$binding->castArray([
+                'td_tenant_name' => $token->tenant_name,
+                'client_field_1' => $token->client_field_1,
+                'client_field_3' => $token->client_field_3,
+            ]),
+        ];
     }
 
     /**
@@ -82,7 +78,7 @@ class CreatePaymentMethod implements Arrayable
             'amount' => (string) max(0, $this->instance->amount),
             'tax' => (string) max($this->instance->tax),
             'client_field_2' => $this->client_field_2,
-            ...$this->attributes,
+            ...parent::toArray(),
         ];
     }
 }

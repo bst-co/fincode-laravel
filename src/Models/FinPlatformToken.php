@@ -27,6 +27,17 @@ class FinPlatformToken extends Model
     /**
      * {@inheritdoc}
      */
+    protected $fillable = [
+        'tenant_name',
+        'public_key',
+        'secret_key',
+        'client_field',
+        'live',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'public_key' => 'encrypted',
         'secret_key' => 'encrypted',

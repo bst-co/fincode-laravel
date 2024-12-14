@@ -14,6 +14,25 @@ class FinPaymentApplePay extends FinPaymentModel
 {
     use HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
 
+    protected $fillable = [
+        'card_id',
+        'brand',
+        'card_no',
+        'expire',
+        'holder_name',
+        'card_no_hash',
+        'method',
+        'pay_times',
+        'forward',
+        'issuer',
+        'transaction_id',
+        'approve',
+        'auth_max_date',
+        'item_code',
+        'created',
+        'updated',
+    ];
+
     /**
      * {@inheritdoc}
      */

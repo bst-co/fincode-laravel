@@ -3,6 +3,15 @@
     "completions": [
         {
             "complete": "validationRules",
+            "options": {
+            },
+            "condition": [
+                {
+                }
+            ]
+        },
+        {
+            "complete": "validationRules",
             "condition": [
                 {
                     "classFqn": [
@@ -18,24 +27,6 @@
             ]
         },
         {
-            "complete": "eloquentFields",
-            "condition": [
-                {
-                    "place": "arrayValue",
-                    "classFqn": [
-                        "\\Fincode\\Laravel\\Concerns\\HasRejectDuplicates"
-                    ],
-                    "methodNames": [
-                        "duplicates"
-                    ],
-                    "parameterNames": [
-                        "group",
-                        "unique"
-                    ]
-                }
-            ]
-        },
-        {
             "complete": "configKey",
             "options": {
                 "prefix": "fincode.platforms"
@@ -43,7 +34,7 @@
             "condition": [
                 {
                     "classFqn": [
-                        "\\Fincode\\Laravel\\Models\\FinPlatformToken"
+                        "\\Fincode\\Laravel\\Http\\FincodeRequestToken"
                     ],
                     "methodNames": [
                         "make"

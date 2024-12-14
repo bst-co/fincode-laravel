@@ -22,6 +22,14 @@ class FinHistory extends Model
     /**
      * {@inheritdoc}
      */
+    protected $fillable = [
+        'type',
+        'difference',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'type' => FinHistoryType::class,
         'difference' => 'json',

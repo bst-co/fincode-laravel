@@ -6,7 +6,6 @@ use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Database\Factories\FinCardFactory;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,24 +27,30 @@ class FinCard extends Model
     /**
      * {@inheritdoc}
      */
-    protected $casts = [
-        'type' => Fincode\Model\CardType::class,
-        'brand' => Fincode\Model\CardBrand::class,
-        'expire' => AsCardExpireCast::class,
-        'default_flag' => Fincode\Model\DefaultFlag::class,
-        'created' => 'datetime',
-        'updated' => 'datetime',
+    protected $fillable = [
+        'customer_id',
+        'default_flag',
+        'card_no',
+        'expire',
+        'holder_name',
+        'type',
+        'brand',
+        'card_no_hash',
+        'created',
+        'updated',
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected $appends = ['is_default'];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $hidden = ['default_flag'];
+    protected $casts = [
+        'type' => Fincode\Model\CardType::class,
+        'brand' => Fincode\Model\CardBrand::class,
+        'expire' => AsCardExpireCast::class,
+        'default_flag' => 'boolean',
+        'created' => 'datetime',
+        'updated' => 'datetime',
+    ];
 
     /**
      * {@inheritdoc}
@@ -61,12 +66,5 @@ class FinCard extends Model
     public function customer(): BelongsTo|FinCustomer
     {
         return $this->belongsTo(FinCustomer::class, 'customer_id', 'id');
-    }
-
-    protected function isDefault(): Attribute
-    {
-        return Attribute::make(
-            fn (): bool => $this->default_flag === Fincode\Model\DefaultFlag::_1,
-        );
     }
 }

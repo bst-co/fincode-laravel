@@ -51,10 +51,10 @@ readonly class FincodeRequestToken
     public ?string $client_field_1;
 
     /**
-     * 決済情報に適用する加盟店自由紅毛 (client_field_2に適用される)
+     * 決済情報に適用する加盟店自由紅毛 (client_field_3に適用される)
      * 決済経路を示すためにシステム利用する
      */
-    public ?string $client_field_2;
+    public ?string $client_field_3;
 
     /**
      * 顧客情報を共有しないプラットフォームのメインショップである場合、ショップIDを参照できます
@@ -78,7 +78,7 @@ readonly class FincodeRequestToken
         $this->secret_key = $this->token->secret_key;
 
         $this->client_field_1 = $this->token->client_field;
-        $this->client_field_2 = $this->token->exists ? $this->token->getTable().':'.$this->token->id : $source;
+        $this->client_field_3 = $this->token->exists ? $this->token->getTable().':'.$this->token->id : $source;
 
         $this->private_shop_id = $this->token->shop?->is_private_shop ? $this->token->shop_id : null;
     }

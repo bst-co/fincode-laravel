@@ -4,15 +4,16 @@ namespace Fincode\Laravel\Http\Request;
 
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
+use Fincode\Laravel\Http\RequestBody\ChangePayment;
+use Fincode\Laravel\Http\RequestBody\CreatePayment;
+use Fincode\Laravel\Http\RequestBody\ExecutePayment;
 use Fincode\Laravel\Models\FinPayment;
 use GuzzleHttp\Exception\GuzzleException;
 use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\CreatePaymentRequest;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PaymentApplePayCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentCard;
-use OpenAPI\Fincode\Model\PaymentCardCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentPayPayCreatingRequest;
+use OpenAPI\Fincode\Model\CancelPayment200Response;
+use OpenAPI\Fincode\Model\CancelPaymentRequest;
+use OpenAPI\Fincode\Model\CardPayMethod;
+use OpenAPI\Fincode\Model\PaymentCardReauthorizingRequest;
 use OpenAPI\Fincode\Model\PayType;
 
 /**
@@ -24,6 +25,7 @@ class FincodePaymentRequest extends FincodeAbstract
 {
     /**
      * 決済 一覧取得
+     *
      * @throws FincodeUnknownResponseException
      */
     public function index()
@@ -33,38 +35,24 @@ class FincodePaymentRequest extends FincodeAbstract
 
     /**
      * 決済 登録
-     * @throws FincodeUnknownResponseException
+     *
+     * @param  int  $amount  購入金額小径
+     * @param  int  $tax  付加消費税額
      */
-    public function register(
-        PayType $pay_type,
-        float $amount,
-        float $tax = 0.0,
-        ModelInterface|array $body = null,
-    )
-    {
-        $body
-            ->setPayType($payment->pay_type)
-            ->setClientField1($this->token->client_field_1)
-            ->setClientField2($this->token->client_field_2)
-            ->setTdTenantName($this->token->tenant_name);
-
-        try {
-            $response = $this->token->default()
-                ->createPayment($this->token->tenant_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
-
-        throw new FincodeUnknownResponseException;
+    public function create(
+        int $amount,
+        int $tax = 0,
+        ?string $id = null,
+    ): CreatePayment {
+        return new CreatePayment($this->token, $amount, $tax, $id);
     }
 
     /**
      * 決済 確定
-     * @throws FincodeUnknownResponseException
      */
-    public function execute(FinPayment $payment)
+    public function execute(FinPayment $payment): ExecutePayment
     {
-        throw new FincodeUnknownResponseException;
+        return new ExecutePayment($this->token, $payment);
     }
 
     /**
@@ -77,37 +65,79 @@ class FincodePaymentRequest extends FincodeAbstract
         throw new FincodeUnknownResponseException;
     }
 
-    /**
-     * 決済 金額変更
-     * @throws FincodeUnknownResponseException
-     */
-    public function change()
-    {
-        throw new FincodeUnknownResponseException;
-    }
+    public function capture(FinPayment $payment) {}
 
     /**
      * 決済 再オーソリ
+     *
      * @throws FincodeUnknownResponseException
      */
-    public function authorize()
-    {
+    public function authorize(
+        FinPayment $payment,
+        CardPayMethod $method = CardPayMethod::_1,
+        ?PayType $pay_times = null
+    ): FinPayment {
+        $body = new PaymentCardReauthorizingRequest([
+            'pay_type' => $payment->pay_type->value,
+            'access_id' => $payment->access_id,
+            'method' => $method->value,
+            'pay_times' => $pay_times?->value,
+        ]);
+
+        try {
+            $response = $this->token->default()
+                ->authorizePayment($payment->id, null, $body);
+        } catch (GuzzleException|ApiException $e) {
+            throw new FincodeApiException($e);
+        }
+
+        if ($response instanceof PaymentCardReauthorizingRequest) {
+            return $this->binding->payment($response);
+        }
         throw new FincodeUnknownResponseException;
     }
 
     /**
      * 決済キャンセル処理を実行
      *
+     * @throws FincodeUnknownResponseException
      */
-    public function cancel()
+    public function cancel(FinPayment $payment): FinPayment
     {
+        $body = new CancelPaymentRequest([
+            'pay_type' => $payment->pay_type->value,
+            'access_id' => $payment->access_id,
+        ]);
+
+        try {
+            $response = $this->token->default()
+                ->cancelPayment($payment->id, null, $body);
+        } catch (GuzzleException|ApiException $e) {
+            throw new FincodeApiException($e);
+        }
+
+        if ($response instanceof CancelPayment200Response) {
+            return $this->binding->payment($response);
+        }
 
         throw new FincodeUnknownResponseException;
     }
 
     /**
-     * 決済 認証後決済実行
+     * 決済 金額変更
      *
+     * @throws FincodeUnknownResponseException
+     */
+    public function change(
+        FinPayment $payment,
+        int $amount,
+        int $tax = 0,
+    ) {
+        return new ChangePayment($this->token, $payment, $amount, $tax);
+    }
+
+    /**
+     * 決済 認証後決済実行
      */
     public function secure()
     {
@@ -117,10 +147,9 @@ class FincodePaymentRequest extends FincodeAbstract
 
     /**
      * 決済 バーコード発行
-     *
      */
     public function barcode()
     {
-
         throw new FincodeUnknownResponseException;
     }
+}

@@ -30,6 +30,26 @@ class FinPlatform extends Model
     /**
      * {@inheritdoc}
      */
+    protected $fillable = [
+        'shop_name',
+        'shop_type',
+        'platform_id',
+        'platform_name',
+        'shared_customer_flag',
+        'customer_group_id',
+        'platform_rate_list',
+        'send_mail_address',
+        'shop_mail_address',
+        'log_keep_days',
+        'api_version',
+        'api_key_display_flag',
+        'created',
+        'updated',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'shop_type' => Fincode\Model\ShopType::class,
         'shared_customer_flag' => 'boolean',

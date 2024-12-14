@@ -11,6 +11,11 @@
       </laravel_pint_by_interpreter>
     </laravel_pint_settings>
   </component>
+  <component name="MessDetector">
+    <phpmd_settings>
+      <phpmd_by_interpreter asDefaultInterpreter="true" interpreter_id="9d3536c4-bbf0-4ee8-a42b-6a9a99f71530" timeout="30000" />
+    </phpmd_settings>
+  </component>
   <component name="MessDetectorOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
@@ -250,8 +255,8 @@
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="9d3536c4-bbf0-4ee8-a42b-6a9a99f71530" name="Ubuntu" home="\\wsl$\Ubuntu/usr/bin/php" auto="false" debugger_id="php.debugger.XDebug">
-        <remote_data INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DISTRIBUTION_ID="Ubuntu" />
+      <interpreter id="9d3536c4-bbf0-4ee8-a42b-6a9a99f71530" name="Ubuntu" home="\\wsl$\Ubuntu-24.04/usr/bin/php" auto="false" debugger_id="php.debugger.XDebug">
+        <remote_data INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DISTRIBUTION_ID="Ubuntu-24.04" />
       </interpreter>
     </interpreters>
   </component>

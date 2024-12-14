@@ -22,6 +22,37 @@ class FinPaymentCard extends FinPaymentModel
     /**
      * {@inheritdoc}
      */
+    protected $fillable = [
+        'card_id',
+        'brand',
+        'card_no',
+        'expire',
+        'holder_name',
+        'card_no_hash',
+        'method',
+        'pay_times',
+        'bulk_payment_id',
+        'subscription_id',
+        'tds_type',
+        'tds2_type',
+        'tds2_ret_url',
+        'return_url',
+        'return_url_on_failure',
+        'tds2_status',
+        'merchant_name',
+        'forward',
+        'issuer',
+        'transaction_id',
+        'approve',
+        'auth_max_date',
+        'item_code',
+        'created',
+        'updated',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'brand' => Fincode\Model\CardBrand::class,
         'expire' => AsCardExpireCast::class,

@@ -24,6 +24,29 @@ class FinPayment extends Model
     /**
      * {@inheritdoc}
      */
+    protected $fillable = [
+        'shop_id',
+        'pay_type',
+        'job_code',
+        'status',
+        'access_id',
+        'amount',
+        'tax',
+        'total_amount',
+        'client_field_1',
+        'client_field_2',
+        'client_field_3',
+        'process_date',
+        'customer_id',
+        'customer_group_id',
+        'error_code',
+        'created',
+        'updated',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'pay_type' => Fincode\Model\PayType::class,
         'job_code' => Fincode\Model\CardPaymentJobCode::class,
@@ -73,5 +96,20 @@ class FinPayment extends Model
     public function pay_method(): MorphTo|FinPaymentModel
     {
         return $this->morphTo(__FUNCTION__);
+    }
+
+    /**
+     * @template RModel of FinPaymentModel
+     *
+     * @param  class-string<RModel>  $model
+     * @return RModel|null
+     */
+    public function getPayMethodBy(string $model): ?FinPaymentModel
+    {
+        if ($this->pay_method && $this->pay_method instanceof $model) {
+            return $this->pay_method;
+        }
+
+        return null;
     }
 }

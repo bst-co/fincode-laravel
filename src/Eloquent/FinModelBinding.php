@@ -44,20 +44,16 @@ class FinModelBinding
         /*
          * モデルを取得、または新規作成
          */
-        return tap(FinCard::findOrnew($attributes->input('id')))
-            ->forceFill([
-                'id' => $attributes->input('id'),
-                'customer_id' => $attributes->input('customer_id'),
-                'default_flag' => $attributes->boolean('default_flag'),
-                'card_no' => $attributes->input('card_no'),
-                'expire' => $attributes->input('expire'),
-                'holder_name' => $attributes->input('holder_name'),
-                'type' => $attributes->input('type'),
-                'brand' => $attributes->input('brand'),
-                'card_no_hash' => $attributes->input('card_no_hash'),
-                'created' => $attributes->input('created') ?? $model->created ?? now(),
-                'updated' => $attributes->input('updated'),
-            ]);
+        return tap(
+            FinCard::findOrnew($attributes->input('id')),
+            function (FinCard $model) use ($attributes) {
+                $model
+                    ->forceFill([
+                        'id' => $attributes->input('id'),
+                        ...$attributes->only($model->getFillable()),
+                    ]);
+            }
+        );
     }
 
     /**
@@ -73,25 +69,15 @@ class FinModelBinding
             'email' => ['nullable', 'string', 'between:1,254'],
         ]);
 
-        return tap(FinCustomer::findOrnew($attributes->input('id')))
-            ->forceFill([
-                'id' => $attributes->input('id'),
-                'name' => $attributes->input('name'),
-                'email' => $attributes->input('email'),
-                'phone_cc' => $attributes->input('phone_cc'),
-                'phone_no' => $attributes->input('phone_no'),
-                'addr_country' => $attributes->input('addr_country'),
-                'addr_state' => $attributes->input('addr_state'),
-                'addr_city' => $attributes->input('addr_city'),
-                'addr_line_1' => $attributes->input('addr_line_1'),
-                'addr_line_2' => $attributes->input('addr_line_2'),
-                'addr_line_3' => $attributes->input('addr_line_3'),
-                'addr_post_code' => $attributes->input('addr_post_code'),
-                'card_registration' => $attributes->input('card_registration'),
-                'directdebit_registration' => $attributes->input('directdebit_registration'),
-                'created' => $attributes->input('created') ?? $model->created ?? now(),
-                'updated' => $attributes->input('updated'),
-            ]);
+        return tap(
+            FinCustomer::findOrnew($attributes->input('id')),
+            function (FinCustomer $model) use ($attributes) {
+                $model
+                    ->forceFill([
+                        'id' => $attributes->input('id'),
+                        ...$attributes->only($model->getFillable()),
+                    ]);
+            });
     }
 
     /**
@@ -115,24 +101,16 @@ class FinModelBinding
         /*
          * モデルを取得、または新規作成
          */
-        return tap(FinPlatform::findOrnew($attributes->input('id')))
-            ->forceFill([
-                'id' => $attributes->input('id'),
-                'shop_name' => $attributes->input('shop_name'),
-                'shop_type' => $attributes->input('shop_type'),
-                'platform_id' => $attributes->input('platform_id'),
-                'platform_name' => $attributes->input('platform_name'),
-                'shared_customer_flag' => $attributes->boolean('shared_customer_flag'),
-                'customer_group_id' => $attributes->input('customer_group_id'),
-                'platform_rate_list' => $attributes->input('platform_rate_list'),
-                'send_mail_address' => $attributes->input('send_mail_address'),
-                'shop_email_address' => $attributes->input('shop_email_address'),
-                'log_keep_days' => $attributes->input('log_keep_days'),
-                'api_version' => $attributes->input('api_version'),
-                'api_key_display_flag' => $attributes->boolean('api_key_display_flag'),
-                'created' => $attributes->input('created') ?? $model->created ?? now(),
-                'updated' => $attributes->input('updated'),
-            ]);
+        return tap(
+            FinPlatform::findOrnew($attributes->input('id')),
+            function (FinPlatform $model) use ($attributes) {
+                $model
+                    ->forceFill([
+                        'id' => $attributes->input('id'),
+                        ...$attributes->only($model->getFillable()),
+                    ]);
+            }
+        );
     }
 
     /**
@@ -152,49 +130,32 @@ class FinModelBinding
 
         $id = $attributes->input('id');
 
-        $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
-            PayType::CARD => $this->paymentCard($id, $attributes->toArray()),
-            PayType::KONBINI => $this->paymentKonbini($id, $attributes->toArray()),
-            PayType::APPLEPAY => $this->paymentApplePay($id, $attributes->toArray()),
-            PayType::PAYPAY => $this->paymentPayPay($id, $attributes->toArray()),
-            default => null,
-        };
-
         /*
          * モデルを取得、または新規作成
          */
-        return tap(FinPayment::findOrnew($attributes->input('id')), function (FinPayment $model) use ($attributes) {
-            $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
-                PayType::CARD => $this->paymentCard($model, $attributes->toArray()),
-                PayType::KONBINI => $this->paymentKonbini($model, $attributes->toArray()),
-                PayType::APPLEPAY => $this->paymentApplePay($model, $attributes->toArray()),
-                PayType::PAYPAY => $this->paymentPayPay($model, $attributes->toArray()),
-                default => null,
-            };
+        return tap(
+            FinPayment::findOrnew($attributes->input('id')),
+            function (FinPayment $model) use ($attributes, $id) {
+                $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
+                    PayType::CARD => $this->paymentCard($model, $attributes->toArray()),
+                    PayType::KONBINI => $this->paymentKonbini($model, $attributes->toArray()),
+                    PayType::APPLEPAY => $this->paymentApplePay($model, $attributes->toArray()),
+                    PayType::PAYPAY => $this->paymentPayPay($model, $attributes->toArray()),
+                    default => null,
+                };
 
-            $model->pay_method()->associate($pay_method);
-        })->forceFill([
-            'id' => $id,
-            'shop_id' => $attributes->input('shop_id'),
-            'pay_type' => $attributes->input('pay_type'),
-            'job_code' => $attributes->input('job_code'),
-            'status' => $attributes->input('status'),
-            'access_id' => $attributes->input('access_id'),
-            'amount' => $attributes->input('amount'),
-            'tax' => $attributes->input('tax'),
-            'total_amount' => $attributes->input('total_amount'),
-            'client_field_1' => $attributes->input('client_field_1'),
-            'client_field_2' => $attributes->input('client_field_2'),
-            'client_field_3' => $attributes->input('client_field_3'),
-            'processed_at' => $attributes->input('processed_at'),
-            'customer_id' => $attributes->input('customer_id'),
-            'customer_group_id' => $attributes->input('customer_group_id'),
-            'error_code' => $attributes->input('error_code'),
-            'created' => $attributes->input('created') ?? $model->created ?? now(),
-            'updated' => $attributes->input('updated'),
-        ]);
+                $model
+                    ->forceFill([
+                        'id' => $id,
+                        $attributes->only($model->getFillable()),
+                    ])
+                    ->pay_method()->associate($pay_method);
+            });
     }
 
+    /**
+     * クレジットカード決済情報を結合する
+     */
     public function paymentCard(FinPayment $payment, Arrayable|array $values): FinPaymentCard
     {
         $attributes = $this->sanitize($values, [
@@ -206,42 +167,50 @@ class FinModelBinding
             'card_no_hash' => ['required', 'string', 'size:64'],
         ]);
 
-        return tap($payment->pay_method instanceof FinPaymentCard ? $payment->pay_method : new FinPaymentCard, function (FinPaymentCard $model) use ($attributes) {
-            $model->forceFill([
-                'card_id' => $attributes->input('card_id'),
-                'brand' => $attributes->input('brand'),
-                'card_no' => $attributes->input('card_no'),
-                'expire' => $attributes->input('expire'),
-                'holder_name' => $attributes->input('holder_name'),
-                'card_no_hash' => $attributes->input('card_no_hash'),
-                'method' => $attributes->input('method'),
-                'pay_times' => $attributes->input('pay_times'),
-                'bulk_payment_id' => $attributes->input('bulk_payment_id'),
-                'sub_payment_id' => $attributes->input('sub_payment_id'),
-                'tds_type' => $attributes->input('tds_type'),
-                'tds2_type' => $attributes->input('tds2_type'),
-                'tds2_ret_url' => $attributes->input('tds2_ret_url'),
-                'return_url' => $attributes->input('return_url'),
-                'return_url_on_failure' => $attributes->input('return_url_on_failure'),
-                'return_url_on_timeout' => $attributes->input('return_url_on_timeout'),
-                'tds2_status' => $attributes->input('tds2_status'),
-                'merchant_name' => $attributes->input('merchant_name'),
-                'forward' => $attributes->input('forward'),
-                'issuer' => $attributes->input('issuer'),
-                'transaction_id' => $attributes->input('transaction_id'),
-                'approve' => $attributes->input('approve'),
-                'auth_max_date' => $attributes->input('auth_max_date'),
-                'created' => $attributes->input('created') ?? $model->created ?? now(),
-                'updated' => $attributes->input('updated'),
-            ]);
-        });
+        return tap(
+            $payment->getPayMethodBy(FinPaymentCard::class) ?? new FinPaymentCard,
+            fn (FinPaymentCard $model) => $model->fill($attributes->only($model->getFillable()))
+        );
     }
 
-    public function paymentPayPay(string $payment_id, Arrayable|array $values) {}
+    /**
+     * PayPay決済情報を結合する
+     */
+    public function paymentPayPay(FinPayment $payment, Arrayable|array $values) {}
 
-    public function paymentApplePay(string $payment_id, Arrayable|array $values): FinPaymentApplePay {}
+    /**
+     * ApplePay決済情報を結合する
+     */
+    public function paymentApplePay(FinPayment $payment, Arrayable|array $values): FinPaymentApplePay
+    {
+        $attributes = $this->sanitize($values, [
+            'card_id' => ['required', 'string', 'size:25'],
+            'card_no' => ['required', 'string', 'max:16'],
+            'expire' => ['required', 'string', 'size:4'],
+            'holder_name' => ['required', 'string', 'max:50'],
+            'type' => ['required', new Enum(CardBrand::class)],
+            'card_no_hash' => ['required', 'string', 'size:64'],
+        ]);
 
-    public function paymentKonbini(string $payment_id, Arrayable|array $values): FinPaymentKonbini {}
+        return tap(
+            $payment->getPayMethodBy(FinPaymentApplePay::class) ?? new FinPaymentApplePay,
+            fn (FinPaymentApplePay $model) => $model->fill($attributes->only($model->getFillable()))
+        );
+    }
+
+    /**
+     * コンビニ決済情報を結合する
+     */
+    public function paymentKonbini(FinPayment $payment, Arrayable|array $values): FinPaymentKonbini
+    {
+        $attributes = $this->sanitize($values, [
+        ]);
+
+        return tap(
+            $payment->getPayMethodBy(FinPaymentKonbini::class) ?? new FinPaymentKonbini,
+            fn (FinPaymentKonbini $model) => $model->fill($attributes->only($model->getFillable()))
+        );
+    }
 
     /**
      * 引き受けた値を配列に同一して返却する

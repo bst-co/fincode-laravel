@@ -2,9 +2,12 @@
 
 namespace Fincode\Laravel\Http\RequestBody;
 
-use Fincode\Laravel\Eloquent\FinModelBinding;
+use Fincode\Laravel\Exceptions\FincodeApiException;
+use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Http\FincodeRequestToken;
-use Illuminate\Contracts\Support\Arrayable;
+use Fincode\Laravel\Models\FinPayment;
+use GuzzleHttp\Exception\GuzzleException;
+use OpenAPI\Fincode\ApiException;
 use OpenAPI\Fincode\Model\ApplePayPaymentJobCode;
 use OpenAPI\Fincode\Model\CardPaymentJobCode;
 use OpenAPI\Fincode\Model\CreatePayment200Response;
@@ -18,21 +21,19 @@ use OpenAPI\Fincode\Model\PaymentVirtualAccountCreatingRequest;
 use OpenAPI\Fincode\Model\PayPayPaymentJobCode;
 use OpenAPI\Fincode\Model\PayType;
 
-readonly class CreatePayment implements Arrayable
+class CreatePayment extends PaymentBase
 {
-    public FinModelBinding $binding;
-
     /**
      * @param  int  $amount  利用金額
      * @param  int  $tax  税送料
      */
     public function __construct(
-        public FincodeRequestToken $token,
-        public int $amount,
-        public int $tax = 0,
-        public ?string $id = null,
+        FincodeRequestToken $token,
+        public readonly int $amount,
+        public readonly int $tax = 0,
+        public readonly ?string $id = null,
     ) {
-        $this->binding = new FinModelBinding;
+        parent::__construct($token);
     }
 
     /**
@@ -110,18 +111,27 @@ readonly class CreatePayment implements Arrayable
         ]);
     }
 
-    final public function exec(ModelInterface $body)
+    /**
+     * @throws FincodeUnknownResponseException
+     */
+    final public function exec(ModelInterface $body): FinPayment
     {
-        $response = $this->token->default()
-            ->createPayment($body);
+        try {
+            $response = $this->token->default()
+                ->createPayment($this->token->shop_id, $body);
+        } catch (GuzzleException|ApiException $e) {
+            throw new FincodeApiException($e);
+        }
 
         if ($response instanceof CreatePayment200Response) {
-            $result = $this->binding->payment();
+            return $this->binding->payment($response);
         }
+
+        throw new FincodeUnknownResponseException;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}fin_payments
      */
     public function toArray(): array
     {
