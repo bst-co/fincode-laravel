@@ -94,6 +94,14 @@ class FinShop extends Model
     }
 
     /**
+     * サブスクリプション契約への連携
+     */
+    public function subscriptions(): HasMany|FinSubscription
+    {
+        return $this->hasMany(FinSubscription::class, 'shop_id', 'id');
+    }
+
+    /**
      * 顧客情報を共有しないプラットフォームであるかを判定する
      */
     protected function isPrivateShop(): Attribute

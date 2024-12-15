@@ -26,7 +26,7 @@ class FincodeCustomerRequest extends FincodeAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function get(FinCustomer|string $customer, bool $save = false): ?FinCustomer
+    public function retrieve(FinCustomer|string $customer, bool $save = false): ?FinCustomer
     {
         $customer_id = $customer instanceof FinCustomer ? $customer->id : $customer;
 

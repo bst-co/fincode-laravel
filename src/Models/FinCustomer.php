@@ -69,4 +69,12 @@ class FinCustomer extends Model
     {
         return $this->hasMany(FinCard::class, 'customer_id', 'id');
     }
+
+    /**
+     * サブスクリプション契約への連携
+     */
+    public function subscriptions(): HasMany|FinSubscription
+    {
+        return $this->hasMany(FinSubscription::class, 'plan_id', 'id');
+    }
 }

@@ -9,6 +9,7 @@ use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
@@ -66,5 +67,13 @@ class FinCard extends Model
     public function customer(): BelongsTo|FinCustomer
     {
         return $this->belongsTo(FinCustomer::class, 'customer_id', 'id');
+    }
+
+    /**
+     * サブスクリプション契約への連携
+     */
+    public function subscriptions(): HasMany|FinSubscription
+    {
+        return $this->hasMany(FinSubscription::class, 'plan_id', 'id');
     }
 }

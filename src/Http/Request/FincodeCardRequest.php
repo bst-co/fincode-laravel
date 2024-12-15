@@ -2,7 +2,6 @@
 
 namespace Fincode\Laravel\Http\Request;
 
-use Fincode\Laravel\Concerns\HasFinCardBindings;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
@@ -25,8 +24,6 @@ use OpenAPI\Fincode\Model\DefaultFlag;
  */
 class FincodeCardRequest extends FincodeCustomerAbstract
 {
-    use HasFinCardBindings;
-
     /**
      * カード情報を作成する
      *
@@ -63,7 +60,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function get(FinCard|string $card, bool $save = false): FinCard
+    public function retrieve(FinCard|string $card, bool $save = false): FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 

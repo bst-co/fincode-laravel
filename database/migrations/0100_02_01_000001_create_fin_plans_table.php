@@ -9,6 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_plans', function (Blueprint $table) {
+            $table->comment('Fincode サブスクリプションプラン');
+
             $table->string('id', 25)
                 ->primary()
                 ->comment('#ID');
