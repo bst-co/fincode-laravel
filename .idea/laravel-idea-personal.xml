@@ -8,9 +8,11 @@
     </option>
     <option name="generationStringOptionValues">
       <map>
+        <entry key="createController.singleAction" value="1" />
         <entry key="createHttpException.code" value="123" />
         <entry key="createObserver.method_forceDeleted" value="1" />
         <entry key="createObserver.method_saved" value="1" />
+        <entry key="newModelSimpleOption:softDeletes" value="1" />
       </map>
     </option>
     <option name="helperCode">

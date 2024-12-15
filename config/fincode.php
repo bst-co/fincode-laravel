@@ -45,6 +45,12 @@ return [
         'live' => env('FINCODE_LIVE_MODE', env('APP_ENV') === 'production'),
     ],
 
+    'webhook' => [
+        'domain' => env('FINCODE_DOMAIN'),
+        'path' => env('FINCODE_PATH'),
+        'middleware' => env('FINCODE_MIDDLEWARE'),
+    ],
+
     'dummies' => [
         'card' => [
             [

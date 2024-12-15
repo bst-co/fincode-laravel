@@ -11,7 +11,9 @@ use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
 use Fincode\Laravel\Models\FinShop;
 use Fincode\Laravel\Models\FinShopToken;
+use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -29,6 +31,7 @@ class LaravelFincodeServiceProvider extends ServiceProvider
         }
 
         $this->registerCommands();
+        $this->registerRoutes();
     }
 
     /**
@@ -62,6 +65,21 @@ class LaravelFincodeServiceProvider extends ServiceProvider
                 PublishCommand::class,
             ]);
         }
+    }
+
+    protected function registerRoutes(): void
+    {
+        if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
+            return;
+        }
+
+        Route::group([
+            'domain' => config('fincode.webhook.domain'),
+            'prefix' => config('fincode.webhook.path'),
+            'middleware' => config('fincode.webhook.middleware'),
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        });
     }
 
     /**
