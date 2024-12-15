@@ -8,7 +8,7 @@ use Fincode\Laravel\Models\FinPayment;
 use Fincode\Laravel\Models\FinPaymentApplePay;
 use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
-use Fincode\Laravel\Models\FinPlatform;
+use Fincode\Laravel\Models\FinShop;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -85,7 +85,7 @@ class FinModelBinding
      *
      * @throws ValidationException
      */
-    public function shop(FinPlatform|ModelInterface|array|string $values): FinPlatform
+    public function shop(FinShop|ModelInterface|array|string $values): FinShop
     {
         $attributes = $this->sanitize($values, [
             'id' => ['required', 'string', 'size:13'],
@@ -102,8 +102,8 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinPlatform::findOrnew($attributes->input('id')),
-            function (FinPlatform $model) use ($attributes) {
+            FinShop::findOrnew($attributes->input('id')),
+            function (FinShop $model) use ($attributes) {
                 $model
                     ->forceFill([
                         'id' => $attributes->input('id'),

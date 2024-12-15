@@ -6,8 +6,8 @@ namespace Fincode\Laravel\Http;
 
 use Fincode\Laravel\Events\FincodeRequestTokenEvent;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Models\FinPlatform;
-use Fincode\Laravel\Models\FinPlatformToken;
+use Fincode\Laravel\Models\FinShop;
+use Fincode\Laravel\Models\FinShopToken;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use OpenAPI\Fincode\Api\DefaultApi;
@@ -15,7 +15,7 @@ use OpenAPI\Fincode\Configuration;
 use OpenAPI\Fincode\HeaderSelector;
 
 /**
- * @template TToken of (string|FinPlatform|FinPlatformToken|null)
+ * @template TToken of (string|FinShop|FinShopToken|null)
  */
 readonly class FincodeRequestToken
 {
@@ -62,10 +62,10 @@ readonly class FincodeRequestToken
     public ?string $private_shop_id;
 
     /**
-     * @param  FinPlatformToken  $token  接続先情報パック
+     * @param  FinShopToken  $token  接続先情報パック
      */
     protected function __construct(
-        protected FinPlatformToken $token,
+        protected FinShopToken $token,
         ?bool $live = null,
         ?string $source = null,
         protected bool $debug = false,
@@ -84,13 +84,13 @@ readonly class FincodeRequestToken
     }
 
     /**
-     * @param  FinPlatformToken|string|FinPlatform|null  $token  接続に使用するトークン情報
-     *                                                           <ul>
-     *                                                           <li>FinPlatformToken: オブジェクトの値に基づき、接続情報を構築する</li>
-     *                                                           <li>FinPlatform: オブジェクトに紐づく FinPlatformToken を取得して接続情報を構築する</li>
-     *                                                           <li>string: "shop_id" として FinPlatformTokenモデルを検索、またはコンフィグ設定から 'fincode.platforms.***' を取得する</li>
-     *                                                           <li>null: システムのデフォルト設定から接続情報を取得する</li>
-     *                                                           </ul>
+     * @param  FinShopToken|string|FinShop|null  $token  接続に使用するトークン情報
+     *                                                   <ul>
+     *                                                   <li>FinShopToken: オブジェクトの値に基づき、接続情報を構築する</li>
+     *                                                   <li>FinShop: オブジェクトに紐づく FinShopToken を取得して接続情報を構築する</li>
+     *                                                   <li>string: "shop_id" として FinShopToken、またはコンフィグ設定から 'fincode.platforms.***' を取得する</li>
+     *                                                   <li>null: システムのデフォルト設定から接続情報を取得する</li>
+     *                                                   </ul>
      * @param  ?bool  $live  Fincodeの接続先を強制的に設定できます。
      *                       <ul>
      *                       <li>true = 本番環境に接続</li>
@@ -100,22 +100,22 @@ readonly class FincodeRequestToken
      *
      * @throws FincodeRequestException
      */
-    public static function make(FinPlatformToken|string|FinPlatform|null $token = null, ?bool $live = null): static
+    public static function make(FinShopToken|string|FinShop|null $token = null, ?bool $live = null): static
     {
         $token = static::token($token) ?? $token ?? config('fincode.default');
 
         $live = $live ?: config('fincode.options.live');
 
-        if ($token instanceof FinPlatform) {
+        if ($token instanceof FinShop) {
             $token = $token->token();
         }
 
-        if ($token instanceof FinPlatformToken) {
+        if ($token instanceof FinShopToken) {
             return new static($token, $live);
         }
 
         if (is_string($token) && $token !== '') {
-            if ($value = FinPlatformToken::whereShopId($token)->first()) {
+            if ($value = FinShopToken::whereShopId($token)->first()) {
                 return new static($value, $live);
             }
 
@@ -123,7 +123,7 @@ readonly class FincodeRequestToken
 
             if (($value = config($config))) {
                 if (is_array($value) && isset($value['shop_id'], $value['public_key'], $value['secret_key'])) {
-                    return new static((new FinPlatformToken)->forceFill([
+                    return new static((new FinShopToken)->forceFill([
                         'id' => $value['shop_id'],
                         'public_key' => $value['public_key'],
                         'secret_key' => $value['secret_key'],
@@ -144,7 +144,7 @@ readonly class FincodeRequestToken
     /**
      * イベント発火による、トークンの更新を試みる
      */
-    private static function token(FinPlatformToken|string|FinPlatform|null $token): FinPlatformToken|string|FinPlatform|null
+    private static function token(FinShopToken|string|FinShop|null $token): FinShopToken|string|FinShop|null
     {
         [$response] = event(new FincodeRequestTokenEvent($token));
 
@@ -152,7 +152,7 @@ readonly class FincodeRequestToken
             return $response ? $token : null;
         }
 
-        if (is_string($response) || is_null($response) || $response instanceof FinPlatformToken || $response instanceof FinPlatform) {
+        if (is_string($response) || is_null($response) || $response instanceof FinShopToken || $response instanceof FinShop) {
             return $response;
         }
 

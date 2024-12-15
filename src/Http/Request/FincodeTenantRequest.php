@@ -5,7 +5,7 @@ namespace Fincode\Laravel\Http\Request;
 use Fincode\Laravel\Eloquent\PlatformRateObject;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
-use Fincode\Laravel\Models\FinPlatform;
+use Fincode\Laravel\Models\FinShop;
 use GuzzleHttp\Exception\GuzzleException;
 use OpenAPI\Fincode\ApiException;
 use OpenAPI\Fincode\Model\PlatformRateConfig;
@@ -34,9 +34,9 @@ class FincodeTenantRequest extends FincodeAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function get(FinPlatform|string $tenant, bool $save = true): FinPlatform
+    public function get(FinShop|string $tenant, bool $save = true): FinShop
     {
-        $tenant_id = $tenant instanceof FinPlatform ? $tenant->id : $tenant;
+        $tenant_id = $tenant instanceof FinShop ? $tenant->id : $tenant;
 
         try {
             $response = $this->token->default()
@@ -63,9 +63,9 @@ class FincodeTenantRequest extends FincodeAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function update(FinPlatform|string $tenant, PlatformRateObject $rate, bool $save = true): FinPlatform
+    public function update(FinShop|string $tenant, PlatformRateObject $rate, bool $save = true): FinShop
     {
-        $tenant = FinPlatform::find($tenant);
+        $tenant = FinShop::find($tenant);
 
         $body = new PlatformRateConfig($this->binding->castArray($rate));
 

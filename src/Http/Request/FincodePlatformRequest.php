@@ -7,7 +7,7 @@ namespace Fincode\Laravel\Http\Request;
 use Fincode\Laravel\Eloquent\PlatformRateObject;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
-use Fincode\Laravel\Models\FinPlatform;
+use Fincode\Laravel\Models\FinShop;
 use GuzzleHttp\Exception\GuzzleException;
 use OpenAPI\Fincode\ApiException;
 use OpenAPI\Fincode\Model\PlatformAccountRetrievingResponse;
@@ -36,13 +36,13 @@ class FincodePlatformRequest extends FincodeAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function get(FinPlatform|string $platform): FinPlatform
+    public function get(FinShop|string $shop): FinShop
     {
-        $platform_id = $platform instanceof FinPlatform ? $platform->id : $platform;
+        $shop_id = $shop instanceof FinShop ? $shop->id : $shop;
 
         try {
             $response = $this->token->default()
-                ->retrievePlatformAccount($platform_id);
+                ->retrievePlatformAccount($shop_id);
         } catch (GuzzleException|ApiException $e) {
             throw new FincodeApiException($e);
         }
@@ -59,15 +59,15 @@ class FincodePlatformRequest extends FincodeAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function update(FinPlatform|string $platform, PlatformRateObject $rate): FinPlatform
+    public function update(FinShop|string $shop, PlatformRateObject $rate): FinShop
     {
-        $platform_id = $platform instanceof FinPlatform ? $platform->id : $platform;
+        $shop_id = $shop instanceof FinShop ? $shop->id : $shop;
 
         $body = new PlatformRateConfig($this->binding->castArray($rate));
 
         try {
             $response = $this->token->default()
-                ->updatePlatformShop($platform_id, $body);
+                ->updatePlatformShop($shop_id, $body);
         } catch (GuzzleException|ApiException $e) {
             throw new FincodeApiException($e);
         }

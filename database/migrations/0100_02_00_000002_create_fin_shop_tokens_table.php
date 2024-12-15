@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('fin_platform_tokens', function (Blueprint $table) {
+        Schema::create('fin_shop_tokens', function (Blueprint $table) {
             $table->char('id', 13)
                 ->primary()
                 ->comment('#ショップID');
@@ -39,6 +39,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('fin_platform_tokens');
+        Schema::dropIfExists('fin_shop_tokens');
     }
 };

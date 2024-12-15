@@ -9,8 +9,8 @@ use Fincode\Laravel\Models\FinPayment;
 use Fincode\Laravel\Models\FinPaymentApplePay;
 use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
-use Fincode\Laravel\Models\FinPlatform;
-use Fincode\Laravel\Models\FinPlatformToken;
+use Fincode\Laravel\Models\FinShop;
+use Fincode\Laravel\Models\FinShopToken;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,8 +47,8 @@ class LaravelFincodeServiceProvider extends ServiceProvider
             'fin_payment_card' => FinPaymentCard::class,
             'fin_payment_konbini' => FinPaymentKonbini::class,
             'fin_payment' => FinPayment::class,
-            'fin_platform_token' => FinPlatformToken::class,
-            'fin_platform' => FinPlatform::class,
+            'fin_shop_token' => FinShopToken::class,
+            'fin_shop' => FinShop::class,
         ]);
     }
 

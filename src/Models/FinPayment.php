@@ -77,9 +77,9 @@ class FinPayment extends Model
     /**
      * 販売したショップ情報を取得
      */
-    public function platform(): BelongsTo|FinPlatform
+    public function platform(): BelongsTo|FinShop
     {
-        return $this->belongsTo(FinPlatform::class, 'shop_id', 'id');
+        return $this->belongsTo(FinShop::class, 'shop_id', 'id');
     }
 
     /**

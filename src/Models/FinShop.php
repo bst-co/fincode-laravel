@@ -2,12 +2,11 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Database\Factories\FinPlatformFactory;
+use Fincode\Laravel\Database\Factories\FinShopFactory;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,10 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 use OpenAPI\Fincode\Model\ShopType;
 
-/**
- * @property-read Collection<FinPlatform>|null $siblings
- */
-class FinPlatform extends Model
+class FinShop extends Model
 {
     use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
 
@@ -62,9 +58,9 @@ class FinPlatform extends Model
     /**
      * {@inheritdoc}
      */
-    protected static function newFactory(): FinPlatformFactory
+    protected static function newFactory(): FinShopFactory
     {
-        return new FinPlatformFactory;
+        return new FinShopFactory;
     }
 
     /**
@@ -75,9 +71,9 @@ class FinPlatform extends Model
     /**
      * ショップの通信トークンを取得する
      */
-    public function token(): HasOne|FinPlatformToken
+    public function token(): HasOne|FinShopToken
     {
-        return $this->hasOne(FinPlatformToken::class, 'id', 'id');
+        return $this->hasOne(FinShopToken::class, 'id', 'id');
     }
 
     /**

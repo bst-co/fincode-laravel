@@ -2,8 +2,8 @@
 
 namespace Fincode\Laravel\Events;
 
-use Fincode\Laravel\Models\FinPlatform;
-use Fincode\Laravel\Models\FinPlatformToken;
+use Fincode\Laravel\Models\FinShop;
+use Fincode\Laravel\Models\FinShopToken;
 use Illuminate\Foundation\Events\Dispatchable;
 
 class FincodeRequestTokenEvent
@@ -11,6 +11,6 @@ class FincodeRequestTokenEvent
     use Dispatchable;
 
     public function __construct(
-        public string|FinPlatform|FinPlatformToken|null $token
+        public string|FinShop|FinShopToken|null $token
     ) {}
 }

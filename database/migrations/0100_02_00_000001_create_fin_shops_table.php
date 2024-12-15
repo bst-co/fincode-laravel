@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('fin_platforms', function (Blueprint $table) {
-            $table->comment('プラットフォーム情報');
+        Schema::create('fin_shops', function (Blueprint $table) {
+            $table->comment('Fincode ショップ情報');
 
             $table->char('id', 13)
                 ->primary()
@@ -77,6 +77,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('fin_platforms');
+        Schema::dropIfExists('fin_shops');
     }
 };

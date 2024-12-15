@@ -3,14 +3,14 @@
 namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
-use Fincode\Laravel\Models\FinPlatformToken;
+use Fincode\Laravel\Models\FinShopToken;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class FinPlatformTokenFactory extends Factory
+class FinShopTokenFactory extends Factory
 {
     use HasFactoryExtend;
 
-    protected $model = FinPlatformToken::class;
+    protected $model = FinShopToken::class;
 
     public function definition(): array
     {

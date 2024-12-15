@@ -3,20 +3,20 @@
 namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
-use Fincode\Laravel\Models\FinPlatform;
+use Fincode\Laravel\Models\FinShop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use OpenAPI\Fincode\Model\ShopType;
 
-class FinPlatformFactory extends Factory
+class FinShopFactory extends Factory
 {
     use HasFactoryExtend;
 
     /**
      * {@inheritdoc}
      */
-    protected $model = FinPlatform::class;
+    protected $model = FinShop::class;
 
     public function definition(): array
     {

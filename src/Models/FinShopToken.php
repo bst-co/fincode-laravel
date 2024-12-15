@@ -2,7 +2,7 @@
 
 namespace Fincode\Laravel\Models;
 
-use Fincode\Laravel\Database\Factories\FinPlatformTokenFactory;
+use Fincode\Laravel\Database\Factories\FinShopTokenFactory;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property-read ?FinPlatform $shop トークンを保有するプラットフォーム
+ * @property-read ?FinShop $shop トークンを保有するプラットフォーム
  */
-class FinPlatformToken extends Model
+class FinShopToken extends Model
 {
     /**
-     * @use HasFactory<FinPlatformTokenFactory>
+     * @use HasFactory<FinShopTokenFactory>
      */
     use HasFactory, HasHistories, HasMilliDateTime;
 
@@ -46,16 +46,16 @@ class FinPlatformToken extends Model
     /**
      * {@inheritdoc}
      */
-    protected static function newFactory(): FinPlatformTokenFactory
+    protected static function newFactory(): FinShopTokenFactory
     {
-        return new FinPlatformTokenFactory;
+        return new FinShopTokenFactory;
     }
 
     /**
      * このトークンを保有するプラットフォームを返却
      */
-    public function platform(): BelongsTo|FinPlatform
+    public function shop(): BelongsTo|FinShop
     {
-        return $this->belongsTo(FinPlatform::class, 'platform_id', 'id');
+        return $this->belongsTo(FinShop::class, 'id', 'id');
     }
 }
