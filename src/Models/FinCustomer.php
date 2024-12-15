@@ -3,8 +3,10 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinCustomerFactory;
+use Fincode\Laravel\Eloquent\HasFincodeApiModel;
 use Fincode\Laravel\Eloquent\HasHistories;
 use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Http\Request\FincodeCustomerRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +17,7 @@ class FinCustomer extends Model
     /**
      * @use HasFactory<FinCustomerFactory>
      */
-    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
+    use HasFactory, HasFincodeApiModel, HasHistories, HasMilliDateTime, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -60,6 +62,28 @@ class FinCustomer extends Model
     protected static function newFactory(): FinCustomerFactory
     {
         return new FinCustomerFactory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function findOrRetrieve(string $id, bool $sync = false): static
+    {
+        $model = static::with('shop')->find($id);
+
+        if ($model) {
+            return $sync ? $model->syncRetrieve() : $model;
+        }
+
+        return static::forceFill(['id' => $id])->syncRetrieve();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function syncRetrieve(): static
+    {
+        return tap((new FincodeCustomerRequest)->retrieve($this->id), fn (FinCustomer $model) => $model->save());
     }
 
     /**

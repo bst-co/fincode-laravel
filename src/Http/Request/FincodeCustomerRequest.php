@@ -26,7 +26,7 @@ class FincodeCustomerRequest extends FincodeAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function retrieve(FinCustomer|string $customer, bool $save = false): ?FinCustomer
+    public function retrieve(FinCustomer|string $customer): ?FinCustomer
     {
         $customer_id = $customer instanceof FinCustomer ? $customer->id : $customer;
 
@@ -38,13 +38,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         }
 
         if ($response instanceof CustomerRetrievingResponse) {
-            $result = $this->binding->customer($response);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
+            return $this->binding->customer($response);
         }
 
         throw new FincodeUnknownResponseException;
@@ -55,7 +49,7 @@ class FincodeCustomerRequest extends FincodeAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function create(FinCustomer $customer, bool $save = true): ?FinCustomer
+    public function create(FinCustomer $customer): ?FinCustomer
     {
         $body = (new CustomerCreatingRequest($this->binding->castArray($customer)));
 
@@ -67,13 +61,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         }
 
         if ($response instanceof CustomerCreatingRequest) {
-            $result = $this->binding->customer($response);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
+            return $this->binding->customer($response);
         }
 
         throw new FincodeUnknownResponseException;
@@ -84,7 +72,7 @@ class FincodeCustomerRequest extends FincodeAbstract
      *
      * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function update(FinCustomer $customer, bool $save = true): ?FinCustomer
+    public function update(FinCustomer $customer): ?FinCustomer
     {
         $body = (new CustomerUpdatingRequest($this->binding->castArray($customer)));
 
@@ -96,13 +84,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         }
 
         if ($response instanceof CustomerUpdatingResponse) {
-            $result = $this->binding->customer($response);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
+            return $this->binding->customer($response);
         }
 
         throw new FincodeUnknownResponseException;
