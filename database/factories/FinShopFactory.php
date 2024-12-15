@@ -18,6 +18,9 @@ class FinShopFactory extends Factory
      */
     protected $model = FinShop::class;
 
+    /**
+     * Define the model's default state.
+     */
     public function definition(): array
     {
         return [
