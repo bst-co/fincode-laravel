@@ -4,20 +4,20 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Database\Factories\FinPaymentCardFactory;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinPaymentModels;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
-class FinPaymentCard extends FinPaymentModel
+class FinPaymentCard extends Model
 {
     /**
      * @use HasFactory<FinPaymentCardFactory>
      */
-    use HasFactory, HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
+    use HasFactory, HasFinPaymentModels, HasUlids, SoftDeletes;
 
     /**
      * {@inheritdoc}

@@ -48,7 +48,7 @@ return [
     'route' => [
         'domain' => env('FINCODE_DOMAIN'),
         'path' => env('FINCODE_PATH', 'fincode'),
-        'middleware' => env('FINCODE_MIDDLEWARE'),
+        'middleware' => env('FINCODE_MIDDLEWARE', 'api'),
     ],
 
     'dummies' => [

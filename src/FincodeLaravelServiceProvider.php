@@ -3,6 +3,8 @@
 namespace Fincode\Laravel;
 
 use Fincode\Laravel\Console\Commands\PublishCommand;
+use Fincode\Laravel\Events\FincodeWebhookEvent;
+use Fincode\Laravel\Listeners\FincodeWebhookListener;
 use Fincode\Laravel\Models\FinCard;
 use Fincode\Laravel\Models\FinCustomer;
 use Fincode\Laravel\Models\FinPayment;
@@ -11,8 +13,10 @@ use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
 use Fincode\Laravel\Models\FinShop;
 use Fincode\Laravel\Models\FinShopToken;
+use Fincode\Laravel\Models\FinWebhook;
 use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -43,7 +47,12 @@ class FincodeLaravelServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        Relation::enforceMorphMap([
+        Event::listen(
+            FincodeWebhookEvent::class,
+            FincodeWebhookListener::class,
+        );
+
+        Relation::morphMap([
             'fin_card' => FInCard::class,
             'fin_customer' => FinCustomer::class,
             'fin_payment_apple_pay' => FinPaymentApplePay::class,
@@ -52,6 +61,7 @@ class FincodeLaravelServiceProvider extends ServiceProvider
             'fin_payment' => FinPayment::class,
             'fin_shop_token' => FinShopToken::class,
             'fin_shop' => FinShop::class,
+            'fin_webhook' => FinWebhook::class,
         ]);
     }
 

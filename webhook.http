@@ -1,0 +1,17 @@
+### GET request to example server
+POST http://localhost/fincode/webhook/s_5de40a5aefe/payments.card.auth
+Fincode-Signature: e743af90-db46-3ded-9224-62899d6ad194
+Content-Type: application/json
+
+{
+    "event": "payments.card.auth",
+    "shop_id": "s_23132314134",
+    "order_id": "p_111111",
+    "access_id": "a_111111",
+    "amount": "1",
+    "tax": "1",
+    "pay_type": "Card",
+    "test": "aaa"
+}
+
+###

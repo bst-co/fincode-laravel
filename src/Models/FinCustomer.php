@@ -4,8 +4,7 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinCustomerFactory;
 use Fincode\Laravel\Eloquent\HasFincodeApiModel;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinModels;
 use Fincode\Laravel\Http\Request\FincodeCustomerRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +16,7 @@ class FinCustomer extends Model
     /**
      * @use HasFactory<FinCustomerFactory>
      */
-    use HasFactory, HasFincodeApiModel, HasHistories, HasMilliDateTime, SoftDeletes;
+    use HasFactory, HasFincodeApiModel, HasFinModels, SoftDeletes;
 
     /**
      * {@inheritdoc}

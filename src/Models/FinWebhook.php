@@ -3,6 +3,7 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinWebhookFactory;
+use Fincode\Laravel\Eloquent\HasFinModels;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,12 @@ class FinWebhook extends Model
     /**
      * @use HasFactory<FinWebhookFactory>
      */
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasFinModels, SoftDeletes;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $incrementing = false;
 
     /**
      * {@inheritdoc}
@@ -32,7 +38,6 @@ class FinWebhook extends Model
     protected $fillable = [
         'shop_id',
         'url',
-        'prefix',
         'event',
         'signature',
         'created',

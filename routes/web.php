@@ -3,6 +3,6 @@
 use Fincode\Laravel\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['as' => 'fincode.'], function () {
-    Route::post('webhook/{hash}/{event}', Controllers\FincodeWebhookController::class)->name('webhook');
+Route::as('fincode.')->group(function () {
+    Route::post('webhook/{shop}/{event}', Controllers\FincodeWebhookController::class)->name('webhook');
 });

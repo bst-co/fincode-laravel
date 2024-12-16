@@ -3,8 +3,7 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinShopTokenFactory;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinModels;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +16,7 @@ class FinShopToken extends Model
     /**
      * @use HasFactory<FinShopTokenFactory>
      */
-    use HasFactory, HasHistories, HasMilliDateTime;
+    use HasFactory, HasFinModels;
 
     /**
      * {@inheritdoc}

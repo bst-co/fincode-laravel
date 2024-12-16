@@ -10,6 +10,7 @@ use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
 use Fincode\Laravel\Models\FinShop;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -18,7 +19,10 @@ use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use JsonSerializable;
 use OpenAPI\Fincode\Model\CardBrand;
+use OpenAPI\Fincode\Model\CardPaymentJobCode;
+use OpenAPI\Fincode\Model\CardPayMethod;
 use OpenAPI\Fincode\Model\ModelInterface;
+use OpenAPI\Fincode\Model\PaymentStatus;
 use OpenAPI\Fincode\Model\PayType;
 use OpenAPI\Fincode\Model\ShopType;
 
@@ -34,11 +38,11 @@ class FinModelBinding
         $attributes = self::sanitize($values, [
             'id' => ['required', 'string', 'size:25'],
             'customer_id' => ['required', 'string', 'max:60'],
-            'default_flat' => ['required', 'boolean'],
+            'default_flag' => ['required', 'boolean'],
             'card_no' => ['required', 'string', 'max:16'],
             'holder_name' => ['nullable', 'string', 'max:50'],
             'type' => ['nullable', new Enum(CardBrand::class)],
-            'card_no_hash' => ['required', 'string', 'size:64'],
+            'card_no_hash' => ['required', 'string', 'max:64'],
         ]);
 
         /*
@@ -50,7 +54,7 @@ class FinModelBinding
                 $model
                     ->forceFill([
                         'id' => $attributes->input('id'),
-                        ...$attributes->only($model->getFillable()),
+                        ...$this->concat($model, $attributes),
                     ]);
             }
         );
@@ -75,7 +79,7 @@ class FinModelBinding
                 $model
                     ->forceFill([
                         'id' => $attributes->input('id'),
-                        ...$attributes->only($model->getFillable()),
+                        ...$this->concat($model, $attributes),
                     ]);
             });
     }
@@ -107,7 +111,7 @@ class FinModelBinding
                 $model
                     ->forceFill([
                         'id' => $attributes->input('id'),
-                        ...$attributes->only($model->getFillable()),
+                        ...$this->concat($model, $attributes),
                     ]);
             }
         );
@@ -125,6 +129,7 @@ class FinModelBinding
             'amount' => ['required', 'integer'],
             'tax' => ['required', 'integer'],
             'total_amount' => ['required', 'integer'],
+            'status' => ['required', new Enum(PaymentStatus::class)],
             'pay_type' => ['required', new Enum(PayType::class)],
         ]);
 
@@ -147,9 +152,11 @@ class FinModelBinding
                 $model
                     ->forceFill([
                         'id' => $id,
-                        $attributes->only($model->getFillable()),
+                        ...$this->concat($model, $attributes),
                     ])
                     ->pay_method()->associate($pay_method);
+
+                dump($model->toArray());
             });
     }
 
@@ -159,17 +166,19 @@ class FinModelBinding
     public function paymentCard(FinPayment $payment, Arrayable|array $values): FinPaymentCard
     {
         $attributes = $this->sanitize($values, [
-            'card_id' => ['required', 'string', 'size:25'],
-            'card_no' => ['required', 'string', 'max:16'],
-            'expire' => ['required', 'string', 'size:4'],
-            'holder_name' => ['required', 'string', 'max:50'],
-            'type' => ['required', new Enum(CardBrand::class)],
-            'card_no_hash' => ['required', 'string', 'size:64'],
+            'card_id' => ['nullable', 'string', 'size:25'],
+            'card_no' => ['nullable', 'string', 'max:16'],
+            'expire' => ['nullable', 'string', 'size:4'],
+            'holder_name' => ['nullable', 'string', 'max:50'],
+            'brand' => ['nullable', new Enum(CardBrand::class)],
+            'job_code' => ['required', new Enum(CardPaymentJobCode::class)],
+            'card_no_hash' => ['nullable', 'string', 'size:64'],
+            'method' => ['required', new Enum(CardPayMethod::class)],
         ]);
 
         return tap(
             $payment->getPayMethodBy(FinPaymentCard::class) ?? new FinPaymentCard,
-            fn (FinPaymentCard $model) => $model->fill($attributes->only($model->getFillable()))
+            fn (FinPaymentCard $model) => $model->fill($this->concat($model, $attributes))
         );
     }
 
@@ -194,7 +203,7 @@ class FinModelBinding
 
         return tap(
             $payment->getPayMethodBy(FinPaymentApplePay::class) ?? new FinPaymentApplePay,
-            fn (FinPaymentApplePay $model) => $model->fill($attributes->only($model->getFillable()))
+            fn (FinPaymentApplePay $model) => $model->fill($this->concat($model, $attributes))
         );
     }
 
@@ -208,7 +217,7 @@ class FinModelBinding
 
         return tap(
             $payment->getPayMethodBy(FinPaymentKonbini::class) ?? new FinPaymentKonbini,
-            fn (FinPaymentKonbini $model) => $model->fill($attributes->only($model->getFillable()))
+            fn (FinPaymentKonbini $model) => $model->fill($this->concat($model, $attributes))
         );
     }
 
@@ -238,11 +247,31 @@ class FinModelBinding
             $values = get_object_vars($values);
         }
 
-        // キー名をスネーク式に変更しつつ値を返却する
-        return Validator::make(
-            Arr::mapWithKeys($values, fn ($value, $key) => [Str::snake($key) => $value]),
-            $rules
-        )->safe();
+        // キー名をスネーク型に変更
+        $values = Arr::mapWithKeys($values, fn ($value, $key) => [Str::snake($key) => $value]);
+
+        // Validationを実行、エラーがある場合は例外
+        Validator::make($values, $rules)->validated();
+
+        // 値のコンテナを返却する
+        return new ValidatedInput($values);
+    }
+
+    private function concat(Model $model, ValidatedInput $input): array
+    {
+        $columns = $model->getFillable();
+
+        $values = [];
+
+        foreach ($columns as $column) {
+            if ($input->has($column)) {
+                $values[$column] = $input->input($column);
+            } else {
+                $values[$column] = $model->getAttribute($column);
+            }
+        }
+
+        return $values;
     }
 
     /**

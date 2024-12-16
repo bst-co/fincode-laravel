@@ -19,23 +19,19 @@ return new class extends Migration
             $table->text('url')
                 ->comment('Webhook URL');
 
-            $table->uuid('hash')
-                ->comment('Webhook Hash');
-
             $table->string('event', 40)
                 ->comment('対象イベント');
 
             $table->text('signature')
                 ->comment('署名');
 
-            $table->dateTime('created')
+            $table->dateTime('created', 3)
                 ->comment('作成日');
 
-            $table->dateTime('updated')
+            $table->dateTime('updated', 3)
                 ->nullable()
                 ->comment('更新日');
 
-            $table->unique(['hash', 'event']);
             $table->unique(['shop_id', 'event']);
 
             $table->datetimes(3);

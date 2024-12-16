@@ -1,14 +1,17 @@
 <?php
 
-namespace Fincode\Laravel\Models;
+namespace Fincode\Laravel\Eloquent;
 
+use Fincode\Laravel\Models\FinPayment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-abstract class FinPaymentModel extends Model
+/**
+ * @mixin Model
+ */
+trait HasFinPaymentModels
 {
-    use SoftDeletes;
+    use HasFinModels;
 
     /**
      * 親の決済情報を参照する

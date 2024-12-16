@@ -3,16 +3,16 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Casts\AsCardExpireCast;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinPaymentModels;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OpenAPI\Fincode;
 
-class FinPaymentApplePay extends FinPaymentModel
+class FinPaymentApplePay extends Model
 {
-    use HasHistories, HasMilliDateTime, HasUlids, SoftDeletes;
+    use HasFinPaymentModels, HasUlids, SoftDeletes;
 
     protected $fillable = [
         'card_id',

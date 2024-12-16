@@ -72,7 +72,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('プラットフォーム上の更新日時');
 
-            $table->timestamps(3);
+            $table->datetimes(3);
 
             $table->softDeletesDatetime('deleted_at', 3);
         });

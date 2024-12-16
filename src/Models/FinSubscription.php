@@ -3,8 +3,7 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinSubscriptionFactory;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinModels;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +16,7 @@ class FinSubscription extends Model
     /**
      * @use HasFactory<FinSubscriptionFactory>
      */
-    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
+    use HasFactory, HasFinModels, SoftDeletes;
 
     /**
      * {@inheritdoc}

@@ -3,8 +3,7 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinShopFactory;
-use Fincode\Laravel\Eloquent\HasHistories;
-use Fincode\Laravel\Eloquent\HasMilliDateTime;
+use Fincode\Laravel\Eloquent\HasFinModels;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +16,7 @@ use OpenAPI\Fincode\Model\ShopType;
 
 class FinShop extends Model
 {
-    use HasFactory, HasHistories, HasMilliDateTime, SoftDeletes;
+    use HasFactory, HasFinModels, SoftDeletes;
 
     /**
      * {@inheritdoc}
