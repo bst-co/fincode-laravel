@@ -11,6 +11,6 @@ class FincodeWebhookListener
 
     public function handle(FincodeWebhookEvent $event): void
     {
-        FincodeWebhookJob::dispatch($event->webhook, $event->payload);
+        FincodeWebhookJob::dispatch($event->webhook, $event->payload, $event->process_id);
     }
 }

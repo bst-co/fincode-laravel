@@ -19,6 +19,7 @@ readonly class WebhookService
     public function __construct(
         public FinWebHook $webhook,
         array $payload,
+        public ?string $process_id = null,
     ) {
         $this->payload = collect($payload);
         $this->event = FincodeEvent::tryFrom($payload['event']);
@@ -37,7 +38,7 @@ readonly class WebhookService
             $model->save();
         });
 
-        FincodeWebhookCompleteEvent::dispatch($this->webhook, $model);
+        FincodeWebhookCompleteEvent::dispatch($this->webhook, $model, $this->process_id);
     }
 
     private function instance(): WebhookServiceInstance

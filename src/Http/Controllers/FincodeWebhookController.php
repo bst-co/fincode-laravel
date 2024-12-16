@@ -4,9 +4,9 @@ namespace Fincode\Laravel\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Fincode\Laravel\Events\FincodeWebhookEvent;
-use Fincode\Laravel\Jobs\FincodeWebhookJob;
 use Fincode\Laravel\Models\FinWebhook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use OpenAPI\Fincode\Model\FincodeEvent;
 
 class FincodeWebhookController extends Controller
@@ -40,8 +40,7 @@ class FincodeWebhookController extends Controller
             return response()->json(['message' => 'Invalid signature'], 401);
         }
 
-        FincodeWebhookEvent::dispatch($webhook, $request->all());
-        FincodeWebhookJob::dispatch($webhook, $request->all());
+        FincodeWebhookEvent::dispatch(Str::orderedUuid()->toString(), $webhook, $request->all());
 
         return response()->json(['receive' => '1']);
     }

@@ -17,10 +17,12 @@ class FincodeWebhookJob implements ShouldQueue
     /**
      * @param  FinWebhook  $webhook  対象のWebhookイベント
      * @param  array  $payload  送信された値
+     * @param  string  $process_id  処理番号を示す一意のID
      */
     public function __construct(
         private readonly FInWebHook $webhook,
         private readonly array $payload,
+        private readonly string $process_id,
     ) {}
 
     /**
@@ -28,6 +30,6 @@ class FincodeWebhookJob implements ShouldQueue
      */
     public function handle(): void
     {
-        (new WebhookService($this->webhook, $this->payload))();
+        (new WebhookService($this->webhook, $this->payload, $this->process_id))();
     }
 }
