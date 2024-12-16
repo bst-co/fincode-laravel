@@ -2,6 +2,8 @@
 
 namespace Fincode\Laravel\Models;
 
+use Fincode\Laravel\Database\Factories\FinWebhookFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +11,10 @@ use OpenAPI\Fincode\Model\FincodeEvent;
 
 class FinWebhook extends Model
 {
-    use SoftDeletes;
+    /**
+     * @use HasFactory<FinWebhookFactory>
+     */
+    use HasFactory, SoftDeletes;
 
     /**
      * {@inheritdoc}
@@ -33,6 +38,14 @@ class FinWebhook extends Model
         'created',
         'updated',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function newFactory(): FinWebhookFactory
+    {
+        return new FinWebhookFactory;
+    }
 
     /**
      * ショップとの連携

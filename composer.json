@@ -45,7 +45,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Fincode\\Laravel\\LaravelFincodeServiceProvider"
+                "Fincode\\Laravel\\FincodeLaravelServiceProvider"
             ]
         }
     },

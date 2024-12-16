@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('url')
                 ->comment('Webhook URL');
 
-            $table->string('prefix', 40)
-                ->comment('Webhook Path');
+            $table->uuid('hash')
+                ->comment('Webhook Hash');
 
             $table->string('event', 40)
                 ->comment('対象イベント');
@@ -35,7 +35,8 @@ return new class extends Migration
                 ->nullable()
                 ->comment('更新日');
 
-            $table->unique(['prefix', 'event']);
+            $table->unique(['hash', 'event']);
+            $table->unique(['shop_id', 'event']);
 
             $table->datetimes(3);
             $table->softDeletesDatetime('deleted_at', 3);

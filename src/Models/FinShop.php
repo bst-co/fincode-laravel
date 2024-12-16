@@ -78,6 +78,14 @@ class FinShop extends Model
     }
 
     /**
+     * Webhookエンドポイント情報と連携
+     */
+    public function webhooks(): HasMany|FinWebhook
+    {
+        return $this->hasMany(FinWebhook::class, 'shop_id', 'id');
+    }
+
+    /**
      * サブスクリプションプランへの連携
      */
     public function plans(): HasMany|FinPlan

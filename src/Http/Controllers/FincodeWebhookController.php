@@ -7,10 +7,10 @@ use Fincode\Laravel\Models\FinWebhook;
 
 class FincodeWebhookController extends Controller
 {
-    public function __invoke(string $prefix, string $event)
+    public function __invoke(string $hash, string $event)
     {
         $webhook = FinWebhook::withoutTrashed()
-            ->wherePrefix($prefix)
+            ->whereHash($hash)
             ->whereEvent($event)
             ->first();
 

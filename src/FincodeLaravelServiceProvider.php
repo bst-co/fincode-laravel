@@ -19,7 +19,7 @@ use Illuminate\Support\ServiceProvider;
 /**
  * @noinspection PhpUnused
  */
-class LaravelFincodeServiceProvider extends ServiceProvider
+class FincodeLaravelServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -67,6 +67,9 @@ class LaravelFincodeServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Appending Fincode Route
+     */
     protected function registerRoutes(): void
     {
         if ($this->app instanceof CachesRoutes && $this->app->routesAreCached()) {
@@ -74,9 +77,9 @@ class LaravelFincodeServiceProvider extends ServiceProvider
         }
 
         Route::group([
-            'domain' => config('fincode.webhook.domain'),
-            'prefix' => config('fincode.webhook.path'),
-            'middleware' => config('fincode.webhook.middleware'),
+            'domain' => config('fincode.route.domain'),
+            'prefix' => config('fincode.route.path'),
+            'middleware' => config('fincode.route.middleware'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });

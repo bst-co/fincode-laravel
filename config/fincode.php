@@ -45,9 +45,9 @@ return [
         'live' => env('FINCODE_LIVE_MODE', env('APP_ENV') === 'production'),
     ],
 
-    'webhook' => [
+    'route' => [
         'domain' => env('FINCODE_DOMAIN'),
-        'path' => env('FINCODE_PATH'),
+        'path' => env('FINCODE_PATH', 'fincode'),
         'middleware' => env('FINCODE_MIDDLEWARE'),
     ],
 
