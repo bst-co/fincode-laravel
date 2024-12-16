@@ -11,6 +11,7 @@ use Fincode\Laravel\Models\FinShopToken;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use OpenAPI\Fincode\Api\DefaultApi;
+use OpenAPI\Fincode\Api\WebhookApi;
 use OpenAPI\Fincode\Configuration;
 use OpenAPI\Fincode\HeaderSelector;
 
@@ -57,6 +58,11 @@ readonly class FincodeRequestToken
     public ?string $client_field_3;
 
     /**
+     * テナントのメインショップである場合に、ショップIDを参照できます
+     */
+    public ?string $main_tenant_id;
+
+    /**
      * 顧客情報を共有しないプラットフォームのメインショップである場合、ショップIDを参照できます
      */
     public ?string $private_shop_id;
@@ -80,6 +86,7 @@ readonly class FincodeRequestToken
         $this->client_field_1 = $this->token->client_field;
         $this->client_field_3 = $this->token->exists ? $this->token->getTable().':'.$this->token->id : $source;
 
+        $this->main_tenant_id = null;
         $this->private_shop_id = $this->token->shop?->is_private_shop ? $this->token->shop_id : null;
     }
 
@@ -191,5 +198,16 @@ readonly class FincodeRequestToken
         ?HeaderSelector $selector = null,
     ): DefaultApi {
         return new DefaultApi($client, $config ?? $this->config(), $selector);
+    }
+
+    /**
+     * Fincode WebhookAPIオブジェクトを返却
+     */
+    public function webhook(
+        ?ClientInterface $client = null,
+        ?Configuration $config = null,
+        ?HeaderSelector $selector = null,
+    ): WebhookApi {
+        return new WebhookApi($client, $config ?? $this->config(), $selector);
     }
 }

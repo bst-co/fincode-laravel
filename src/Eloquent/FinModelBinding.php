@@ -9,6 +9,7 @@ use Fincode\Laravel\Models\FinPaymentApplePay;
 use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
 use Fincode\Laravel\Models\FinShop;
+use Fincode\Laravel\Models\FinWebhook;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -21,6 +22,7 @@ use JsonSerializable;
 use OpenAPI\Fincode\Model\CardBrand;
 use OpenAPI\Fincode\Model\CardPaymentJobCode;
 use OpenAPI\Fincode\Model\CardPayMethod;
+use OpenAPI\Fincode\Model\FincodeEvent;
 use OpenAPI\Fincode\Model\ModelInterface;
 use OpenAPI\Fincode\Model\PaymentStatus;
 use OpenAPI\Fincode\Model\PayType;
@@ -218,6 +220,30 @@ class FinModelBinding
         return tap(
             $payment->getPayMethodBy(FinPaymentKonbini::class) ?? new FinPaymentKonbini,
             fn (FinPaymentKonbini $model) => $model->fill($this->concat($model, $attributes))
+        );
+    }
+
+    public function webhook(FinWebhook|ModelInterface|array|string $values, FinShop|string $shop): FinWebhook
+    {
+        $shop_id = $shop instanceof FinShop ? $shop->id : $shop;
+
+        $attributes = $this->sanitize($values, [
+            'id' => ['required', 'string', 'max:1,50'],
+            'url' => ['required', 'string'],
+            'event' => ['required', new Enum(FincodeEvent::class)],
+            'signature' => ['required', 'string', 'max:60'],
+            'created' => ['required', 'date'],
+            'updated' => ['nullable', 'date'],
+        ]);
+
+        return tap(
+            FinWebhook::findOrnew($attributes->input('id')),
+            fn (FinWebhook $model) => $model
+                ->forceFill([
+                    'id' => $attributes->input('id'),
+                    'shop_id' => $shop_id,
+                    ...$this->concat($model, $attributes),
+                ])
         );
     }
 
