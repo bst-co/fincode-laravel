@@ -3,6 +3,7 @@
 namespace Fincode\Laravel\Services;
 
 use Exception;
+use Fincode\Laravel\Events\FincodeWebhookCompleteEvent;
 use Fincode\Laravel\Models\FinWebhook;
 use Fincode\Laravel\Services\Webhook\CardWebhook;
 use Fincode\Laravel\Services\Webhook\PaymentApplePayWebhook;
@@ -35,6 +36,8 @@ readonly class WebhookService
         $model = tap($this->instance()->handle(), function (Model $model) {
             $model->save();
         });
+
+        FincodeWebhookCompleteEvent::dispatch($this->webhook, $model);
     }
 
     private function instance(): WebhookServiceInstance
