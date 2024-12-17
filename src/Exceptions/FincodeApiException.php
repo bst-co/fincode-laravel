@@ -2,24 +2,70 @@
 
 namespace Fincode\Laravel\Exceptions;
 
+use Arr;
 use GuzzleHttp\Exception\GuzzleException;
 use OpenAPI\Fincode\ApiException;
+use OpenAPI\Fincode\Model\FincodeAPIErrorResponse;
 
+/**
+ * FincodeAPIと通信時に発生したエラーの例外
+ */
 class FincodeApiException extends FincodeHttpException
 {
-    /**
-     * @param  int  $code
-     */
-    public function __construct(GuzzleException|ApiException $previous, array $headers = [], $code = 0)
+    private array $messages = [];
+
+    public function __construct(GuzzleException|ApiException|FincodeAPIErrorResponse $previous)
     {
-        if ($previous instanceof ApiException) {
-            $status = $previous->getCode();
-            $message = $previous->getMessage();
-        } else {
-            $status = 501;
-            $message = $previous->getMessage();
+        if ($previous instanceof FincodeAPIErrorResponse) {
+            $previous = new ApiException('400 Bad Request', 400, [], $previous->jsonSerialize());
         }
 
-        parent::__construct($status, $message, $previous, $headers, $code);
+        if ($previous instanceof ApiException) {
+            $this->messages = $messages = $this->parseBody($previous->getResponseBody());
+
+            if (count($messages) > 0) {
+                $message = "{$messages[0]['error_code']}: {$messages[0]['error_message']}";
+            } else {
+                $message = $previous->getMessage();
+            }
+
+            parent::__construct($previous->getCode(), $message, $previous, $previous->getResponseHeaders());
+        } else {
+            $message = $previous->getMessage();
+
+            parent::__construct(501, $message, $previous, $previous->getResponseHeaders(), $previous->getCode());
+        }
+    }
+
+    /**
+     * @param  array|object|string|null  $body  ResponseBody
+     * @return array{error_code: string, error_message: string}[]
+     */
+    private function parseBody(array|object|string|null $body): array
+    {
+        $body = $body ?? [];
+
+        if (is_object($body)) {
+            $body = json_encode(json_encode($body));
+        }
+        if (is_string($body)) {
+            $body = json_decode($body, true);
+        }
+
+        if (is_array($body) && isset($body['errors']) && is_array($body['errors'])) {
+            $errors = [];
+            foreach ($body['errors'] as $error) {
+                $errors[] = Arr::only($error, ['error_code', 'error_message']);
+            }
+
+            return array_filter($errors);
+        }
+
+        return [];
+    }
+
+    public function getMessages(): array
+    {
+        return $this->messages;
     }
 }
