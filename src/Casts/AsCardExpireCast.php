@@ -25,9 +25,15 @@ class AsCardExpireCast implements CastsAttributes
         }
 
         if ($value instanceof DateTimeInterface) {
-            return ['expire' => Carbon::parse($value)->lastOfMonth()];
+            $value = Carbon::parse($value)->lastOfMonth();
+
+            if (isset($attributes[$key]) && $value->equalTo($attributes[$key])) {
+                return [$key => $attributes[$key]];
+            }
+
+            return [$key => $value];
         }
 
-        return ['expire' => null];
+        return [$key => null];
     }
 }
