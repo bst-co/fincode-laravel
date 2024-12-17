@@ -3,11 +3,8 @@
 namespace Fincode\Laravel\Http\Request;
 
 use Fincode\Laravel\Eloquent\PlatformRateObject;
-use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinShop;
-use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
 use OpenAPI\Fincode\Model\PlatformRateConfig;
 use OpenAPI\Fincode\Model\TenantShopRetrievingResponse;
 use OpenAPI\Fincode\Model\TenantShopUpdatingResponse;
@@ -31,31 +28,17 @@ class FincodeTenantRequest extends FincodeAbstract
 
     /**
      * テナントショップ 取得
-     *
-     * @throws FincodeUnknownResponseException
      */
-    public function get(FinShop|string $tenant, bool $save = true): FinShop
+    public function retrieve(FinShop|string $tenant): FinShop
     {
         $tenant_id = $tenant instanceof FinShop ? $tenant->id : $tenant;
 
-        try {
-            $response = $this->token->default()
-                ->retrieveTenantShop($tenant_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            TenantShopRetrievingResponse::class,
+            fn () => $this->token->default()->retrieveTenantShop($tenant_id)
+        );
 
-        if ($response instanceof TenantShopRetrievingResponse) {
-            $model = $this->binding->shop($response);
-
-            if ($save) {
-                $model->save();
-            }
-
-            return $model;
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->shop($response);
     }
 
     /**
@@ -63,29 +46,17 @@ class FincodeTenantRequest extends FincodeAbstract
      *
      * @throws FincodeUnknownResponseException
      */
-    public function update(FinShop|string $tenant, PlatformRateObject $rate, bool $save = true): FinShop
+    public function update(FinShop|string $tenant, PlatformRateObject $rate): FinShop
     {
         $tenant = FinShop::find($tenant);
 
         $body = new PlatformRateConfig($this->binding->castArray($rate));
 
-        try {
-            $response = $this->token->default()
-                ->updateTenantShop($tenant->id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            TenantShopUpdatingResponse::class,
+            fn () => $this->token->default()->updateTenantShop($tenant->id, $body)
+        );
 
-        if ($response instanceof TenantShopUpdatingResponse) {
-            $model = $this->binding->shop($response);
-
-            if ($save) {
-                $model->save();
-            }
-
-            return $model;
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->shop($response);
     }
 }

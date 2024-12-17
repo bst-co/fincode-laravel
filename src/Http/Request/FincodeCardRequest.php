@@ -2,16 +2,13 @@
 
 namespace Fincode\Laravel\Http\Request;
 
-use Fincode\Laravel\Exceptions\FincodeApiException;
-use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinCard;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
-use OpenAPI\Fincode\ApiException;
+use Illuminate\Database\Eloquent\Collection;
 use OpenAPI\Fincode\Model\CustomerCardCreatingRequest;
 use OpenAPI\Fincode\Model\CustomerCardCreatingResponse;
 use OpenAPI\Fincode\Model\CustomerCardDeletingResponse;
+use OpenAPI\Fincode\Model\CustomerCardListRetrievingResponse;
 use OpenAPI\Fincode\Model\CustomerCardRetrievingResponse;
 use OpenAPI\Fincode\Model\CustomerCardUpdatingRequest;
 use OpenAPI\Fincode\Model\CustomerCardUpdatingResponse;
@@ -29,8 +26,6 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @param  string  $token  FincodeJSで取得したカード利用トークン
      * @param  bool  $default  デフォルトフラグ
-     *
-     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
     public function create(string $token, bool $default = true): FinCard
     {
@@ -38,50 +33,50 @@ class FincodeCardRequest extends FincodeCustomerAbstract
             ->setToken($token)
             ->setDefaultFlag($default ? DefaultFlag::_1 : DefaultFlag::_0);
 
-        try {
-            $response = $this->token->default()
-                ->createCustomerCard($this->customer->id, $this->token->private_shop_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeRequestException($e);
+        $response = $this->dispatch(
+            CustomerCardCreatingResponse::class,
+            fn () => $this->token->default()->createCustomerCard($this->customer->id, $this->token->private_shop_id, $body),
+        );
+
+        return $this->binding->card($response);
+    }
+
+    /**
+     * カード 一覧取得
+     *
+     * @return Collection<FinCard>
+     */
+    public function list(): Collection
+    {
+        $response = $this->dispatch(
+            CustomerCardListRetrievingResponse::class,
+            fn () => $this->token->default()->retrieveCustomerCardList($this->customer->id, $this->token->private_shop_id),
+        );
+
+        $models = Collection::make();
+
+        foreach ($response->getList() as $item) {
+            $models->push($this->binding->card($item));
         }
 
-        if ($response instanceof CustomerCardCreatingResponse) {
-            return $this->binding->card($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $models;
     }
 
     /**
      * カード情報の最新情報を取得する
      *
      * @param  FinCard|string  $card  取得対象のFinCardオブジェクトまたは、カードID
-     * @param  bool  $save  データ取得成功時の保存フラグ、デフォルトでは保存しません
-     *
-     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
-    public function retrieve(FinCard|string $card, bool $save = false): FinCard
+    public function retrieve(FinCard|string $card): FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 
-        try {
-            $response = $this->token->default()
-                ->retrieveCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeRequestException($e);
-        }
+        $response = $this->dispatch(
+            CustomerCardRetrievingResponse::class,
+            fn () => $this->token->default()->retrieveCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+        );
 
-        if ($response instanceof CustomerCardRetrievingResponse) {
-            $result = $this->binding->card($response);
-
-            if ($save) {
-                $result->save();
-            }
-
-            return $result;
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->card($response);
     }
 
     /**
@@ -89,8 +84,6 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @param  FinCard|string  $card  更新対象となるFinCardオブジェクト、またはカードID。カード名義人名や有効期限を変更する場合は FinCardオブジェクトの各値を変更してください。
      * @param  string  $token  FincodeJSで取得したカード利用トークン
-     *
-     * @throws FincodeRequestException|FincodeUnknownResponseException
      */
     public function update(FinCard|string $card, string $token): FinCard
     {
@@ -106,40 +99,26 @@ class FincodeCardRequest extends FincodeCustomerAbstract
                 ->setExpire($card->expire->format('Ym'));
         }
 
-        try {
-            $response = $this->token->default()
-                ->updateCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeRequestException($e);
-        }
+        $response = $this->dispatch(
+            CustomerCardUpdatingResponse::class,
+            fn () => $this->token->default()->updateCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+        );
 
-        if ($response instanceof CustomerCardUpdatingResponse) {
-            return $this->binding->card($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->card($response);
     }
 
     /**
      * カード情報を削除する
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function delete(FinCard|string $card): Builder|FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 
-        try {
-            $response = $this->token->default()
-                ->deleteCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            CustomerCardDeletingResponse::class,
+            fn () => $this->token->default()->deleteCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+        );
 
-        if ($response instanceof CustomerCardDeletingResponse) {
-            return FinCard::find($response->getId());
-        }
-
-        throw new FincodeUnknownResponseException;
+        return FinCard::find($response->getId());
     }
 }

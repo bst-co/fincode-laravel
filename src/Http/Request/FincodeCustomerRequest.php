@@ -27,7 +27,7 @@ class FincodeCustomerRequest extends FincodeAbstract
     {
         $customer_id = $customer instanceof FinCustomer ? $customer->id : $customer;
 
-        $response = $this->doing(
+        $response = $this->dispatch(
             CustomerRetrievingResponse::class,
             fn () => $this->token->default()->retrieveCustomer($customer_id, $this->token->private_shop_id)
         );
@@ -44,7 +44,7 @@ class FincodeCustomerRequest extends FincodeAbstract
     {
         $body = (new CustomerCreatingRequest($this->binding->castArray($customer)));
 
-        $response = $this->doing(
+        $response = $this->dispatch(
             CustomerCreatingRequest::class,
             fn () => $this->token->default()->createCustomer($this->token->private_shop_id, $body)
         );
@@ -61,7 +61,7 @@ class FincodeCustomerRequest extends FincodeAbstract
     {
         $body = (new CustomerUpdatingRequest($this->binding->castArray($customer)));
 
-        $response = $this->doing(
+        $response = $this->dispatch(
             CustomerUpdatingResponse::class,
             fn () => $this->token->default()->updateCustomer($customer->id, $this->token->private_shop_id, $body)
         );
@@ -80,7 +80,7 @@ class FincodeCustomerRequest extends FincodeAbstract
     {
         $customer_id = $customer instanceof FinCustomer ? $customer->id : $customer;
 
-        $response = $this->doing(
+        $response = $this->dispatch(
             CustomerDeletingResponse::class,
             fn () => $this->token->default()->deleteCustomer($customer_id, $this->token->private_shop_id)
         );

@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Fincode\Laravel\Http\Request;
 
 use Fincode\Laravel\Eloquent\PlatformRateObject;
-use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinShop;
-use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\PlatformAccountRetrievingResponse;
 use OpenAPI\Fincode\Model\PlatformRateConfig;
+use OpenAPI\Fincode\Model\PlatformShopRetrievingResponse;
 use OpenAPI\Fincode\Model\PlatformShopUpdatingResponse;
 
 /**
@@ -33,31 +30,21 @@ class FincodePlatformRequest extends FincodeAbstract
 
     /**
      * プラットフォームショップ 取得
-     *
-     * @throws FincodeUnknownResponseException
      */
-    public function get(FinShop|string $shop): FinShop
+    public function retrieve(FinShop|string $shop): FinShop
     {
         $shop_id = $shop instanceof FinShop ? $shop->id : $shop;
 
-        try {
-            $response = $this->token->default()
-                ->retrievePlatformAccount($shop_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            PlatformShopRetrievingResponse::class,
+            fn () => $this->token->default()->retrievePlatformShop($shop_id)
+        );
 
-        if ($response instanceof PlatformAccountRetrievingResponse) {
-            return $this->binding->shop($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->shop($response);
     }
 
     /**
      * プラットフォームショップ 更新
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function update(FinShop|string $shop, PlatformRateObject $rate): FinShop
     {
@@ -65,17 +52,11 @@ class FincodePlatformRequest extends FincodeAbstract
 
         $body = new PlatformRateConfig($this->binding->castArray($rate));
 
-        try {
-            $response = $this->token->default()
-                ->updatePlatformShop($shop_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            PlatformShopUpdatingResponse::class,
+            fn () => $this->token->default()->updatePlatformShop($shop_id, $body)
+        );
 
-        if ($response instanceof PlatformShopUpdatingResponse) {
-            return $this->binding->shop($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->shop($response);
     }
 }

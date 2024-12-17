@@ -3,12 +3,10 @@
 namespace Fincode\Laravel\Http\Request;
 
 use ErrorException;
-use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinPayment;
-use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
 use OpenAPI\Fincode\Model\CancelPayment200Response;
+use OpenAPI\Fincode\Model\CapturePayment200Response;
 use OpenAPI\Fincode\Model\CardPayMethod;
 use OpenAPI\Fincode\Model\CreatePayment200Response;
 use OpenAPI\Fincode\Model\ExecutePayment200Response;
@@ -65,8 +63,6 @@ class FincodePaymentRequest extends FincodeAbstract
      * @param  string[]  $attributes  追加パラメータ
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/createPayment
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function create(
         PayType $pay_type,
@@ -102,18 +98,12 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountCreatingRequest($values),
         };
 
-        try {
-            $response = $this->token->default()
-                ->createPayment($this->token->shop_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            CreatePayment200Response::class,
+            fn () => $this->token->default()->createPayment($this->token->shop_id, $body),
+        );
 
-        if ($response instanceof CreatePayment200Response) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
@@ -123,8 +113,6 @@ class FincodePaymentRequest extends FincodeAbstract
      * @param  array<string, string>  $attributes  追加パラメータ
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/executePayment
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function execute(
         FinPayment $payment,
@@ -148,26 +136,18 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountExecutingRequest($values),
         };
 
-        try {
-            $response = $this->token->default()
-                ->executePayment($payment->id, $this->token->shop_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            ExecutePayment200Response::class,
+            fn () => $this->token->default()->executePayment($payment->id, $this->token->shop_id, $body),
+        );
 
-        if ($response instanceof ExecutePayment200Response) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
      * 決済 取得API
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/retrievePayment
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function retrieve(
         FinPayment|string $payment,
@@ -181,18 +161,12 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $query = new PaymentRetrievingQueryParams($this->binding->castArray($queries));
 
-        try {
-            $response = $this->token->default()
-                ->retrievePayment($payment_id, $query, $payment->shop_id);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            RetrievePayment200Response::class,
+            fn () => $this->token->default()->retrievePayment($payment_id, $query, $this->token->shop_id),
+        );
 
-        if ($response instanceof RetrievePayment200Response) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
@@ -200,7 +174,6 @@ class FincodePaymentRequest extends FincodeAbstract
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/capturePayment
      *
-     * @throws FincodeUnknownResponseException
      * @throws ErrorException
      */
     public function capture(
@@ -222,26 +195,18 @@ class FincodePaymentRequest extends FincodeAbstract
             default => throw new ErrorException("{$payment->pay_type} is not supported."),
         };
 
-        try {
-            $response = $this->token->default()
-                ->capturePayment($payment->id, $this->token->shop_id, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            CapturePayment200Response::class,
+            fn () => $this->token->default()->capturePayment($payment->id, $this->token->shop_id, $body),
+        );
 
-        if ($response instanceof ExecutePayment200Response) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
      * 決済キャンセル処理を実行
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/cancelPayment
-     *
-     * @throws FincodeUnknownResponseException
      */
     public function cancel(
         FinPayment $payment,
@@ -264,18 +229,12 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountCancelingRequest($values),
         };
 
-        try {
-            $response = $this->token->default()
-                ->cancelPayment($payment->id, null, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            CancelPayment200Response::class,
+            fn () => $this->token->default()->cancelPayment($payment->id, $this->token->shop_id, $body),
+        );
 
-        if ($response instanceof CancelPayment200Response) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
@@ -283,7 +242,7 @@ class FincodePaymentRequest extends FincodeAbstract
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/authorizePayment
      *
-     * @throws FincodeUnknownResponseException|ErrorException
+     * @throws ErrorException
      */
     public function authorize(
         FinPayment $payment,
@@ -306,24 +265,18 @@ class FincodePaymentRequest extends FincodeAbstract
             default => throw new ErrorException("{$payment->pay_type} is not supported."),
         };
 
-        try {
-            $response = $this->token->default()
-                ->authorizePayment($payment->id, null, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            PaymentCardReauthorizingRequest::class,
+            fn () => $this->token->default()->authorizePayment($payment->id, null, $body),
+        );
 
-        if ($response instanceof PaymentCardReauthorizingRequest) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**
      * 決済 金額変更
      *
-     * @throws FincodeUnknownResponseException|ErrorException
+     * @throws ErrorException
      */
     public function change(
         FinPayment $payment,
@@ -347,18 +300,12 @@ class FincodePaymentRequest extends FincodeAbstract
             default => throw new ErrorException("{$payment->pay_type} is not supported."),
         };
 
-        try {
-            $response = $this->token->default()
-                ->changeAmountOfPayment($payment->id, null, $body);
-        } catch (GuzzleException|ApiException $e) {
-            throw new FincodeApiException($e);
-        }
+        $response = $this->dispatch(
+            PaymentCardReauthorizingRequest::class,
+            fn () => $this->token->default()->changeAmountOfPayment($payment->id, null, $body),
+        );
 
-        if ($response instanceof PaymentCardReauthorizingRequest) {
-            return $this->binding->payment($response);
-        }
-
-        throw new FincodeUnknownResponseException;
+        return $this->binding->payment($response);
     }
 
     /**

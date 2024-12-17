@@ -14,11 +14,11 @@ abstract class FincodeCustomerAbstract extends FincodeAbstract
      * @throws FincodeRequestException
      */
     public function __construct(
-        FinCustomer $customer,
+        FinCustomer|string $customer,
         ?FincodeRequestToken $token = null,
     ) {
         parent::__construct($token);
-        $this->customer = $customer;
+        $this->customer = $customer instanceof FinCustomer ? $customer : FinCustomer::findOrFail($customer);
     }
 
     /**

@@ -45,7 +45,7 @@ abstract class FincodeAbstract
      *
      * @noinspection PhpRedundantCatchClauseInspection
      */
-    protected function doing(array|string $interface, Closure $closure)
+    protected function dispatch(array|string $interface, Closure $closure)
     {
         $interface = is_array($interface) ? $interface : [$interface];
 
