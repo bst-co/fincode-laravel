@@ -3,9 +3,9 @@
 namespace Fincode\Laravel\Console\Commands;
 
 use Exception;
+use Fincode\Laravel\Clients\FincodeWebhookRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\Request\FincodeWebhookRequest;
 use Fincode\Laravel\Models\FinWebhook;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

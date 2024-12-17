@@ -2,10 +2,10 @@
 
 namespace Fincode\Laravel\Console\Commands;
 
+use Fincode\Laravel\Clients\FincodeCustomerRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
-use Fincode\Laravel\Http\Request\FincodeCustomerRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\Console\Attribute\AsCommand;

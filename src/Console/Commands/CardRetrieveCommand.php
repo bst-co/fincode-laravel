@@ -2,8 +2,8 @@
 
 namespace Fincode\Laravel\Console\Commands;
 
+use Fincode\Laravel\Clients\FincodeCardRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
-use Fincode\Laravel\Http\Request\FincodeCardRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 

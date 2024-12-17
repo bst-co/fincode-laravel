@@ -2,8 +2,8 @@
 
 namespace Fincode\Laravel\Console\Commands;
 
+use Fincode\Laravel\Clients\FincodeTenantRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
-use Fincode\Laravel\Http\Request\FincodeTenantRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 

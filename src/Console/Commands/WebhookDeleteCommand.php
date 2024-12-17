@@ -2,9 +2,10 @@
 
 namespace Fincode\Laravel\Console\Commands;
 
+use Exception;
+use Fincode\Laravel\Clients\FincodeWebhookRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\Request\FincodeWebhookRequest;
 use Fincode\Laravel\Models\FinWebhook;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +59,7 @@ class WebhookDeleteCommand extends FincodeApiCommand
                         $this->exceptions->put($event->value, $e);
                     }
                 } else {
-                    $this->exceptions->put($event->value, new \Exception('Webhook not exists.'));
+                    $this->exceptions->put($event->value, new Exception('Webhook not exists.'));
                 }
             });
         }

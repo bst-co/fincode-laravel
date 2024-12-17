@@ -2,9 +2,9 @@
 
 namespace Fincode\Laravel\Console\Commands;
 
+use Fincode\Laravel\Clients\FincodePlatformRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\Request\FincodePlatformRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 

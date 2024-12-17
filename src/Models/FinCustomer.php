@@ -2,10 +2,10 @@
 
 namespace Fincode\Laravel\Models;
 
+use Fincode\Laravel\Clients\FincodeCustomerRequest;
 use Fincode\Laravel\Database\Factories\FinCustomerFactory;
 use Fincode\Laravel\Eloquent\HasFincodeApiModel;
 use Fincode\Laravel\Eloquent\HasFinModels;
-use Fincode\Laravel\Http\Request\FincodeCustomerRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;

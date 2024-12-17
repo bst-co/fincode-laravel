@@ -2,6 +2,7 @@
 
 namespace Fincode\Laravel\Jobs;
 
+use Exception;
 use Fincode\Laravel\Models\FinWebhook;
 use Fincode\Laravel\Services\WebhookService;
 use Illuminate\Bus\Queueable;
@@ -26,7 +27,7 @@ class FincodeWebhookJob implements ShouldQueue
     ) {}
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(): void
     {
