@@ -24,6 +24,7 @@ return [
             'public_key' => env('FINCODE_PUBLIC_KEY', ''),
             // Fincodeにてテナントに割り当てられている秘密APIキーを適用 (必須)
             'secret_key' => env('FINCODE_SECRET_KEY', ''),
+            // 決済時に送信される、クライアント自由項目, client_field_1 に適用される
             'client_field' => env('FINCODE_CLIENT_FIELD'),
             // Fincodeの本番環境利用フラグ / デフォルト設定のままにするには null にしてください
             'live' => null,
@@ -37,12 +38,14 @@ return [
      */
     'options' => [
         // Fincodeに送信するUserAgentを設定する、空の場合はデフォルト値が使用されます
-        'user_agent' => env('FINCODE_USER_AGENT'),
+        'user_agent' => env('FINCODE_USER_AGENT', 'Fincode-Laravel/1.0.0 (https://github.com/bst-co/fincode-laravel)'),
         // Fincode で3Dセキュアを実施する際の認証有効期限(秒数)
         // 未使用の場合はFincodeデフォルトの30分が適用されます
         '3d_secure_ttl' => env('FINCODE_3D_SECURE_TTL', null),
         // Fincodeの本番環境利用フラグ / テスト環境を使う場合は false に設定
         'live' => env('FINCODE_LIVE_MODE', env('APP_ENV') === 'production'),
+        // デバッグモードの仕様フラグ、指定のない場合はアプリケーションの設定に従う
+        'debug' => env('FINCODE_DEBUG', env('APP_DEBUG')),
     ],
 
     'route' => [
