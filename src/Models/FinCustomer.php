@@ -27,7 +27,6 @@ class FinCustomer extends Model
      * {@inheritdoc}
      */
     protected $fillable = [
-        'customer_id',
         'name',
         'email',
         'phone_cc',
