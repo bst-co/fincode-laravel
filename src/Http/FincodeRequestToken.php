@@ -67,6 +67,8 @@ readonly class FincodeRequestToken
      */
     public ?string $private_shop_id;
 
+    public bool $debug;
+
     /**
      * @param  FinShopToken  $token  接続先情報パック
      */
@@ -74,11 +76,12 @@ readonly class FincodeRequestToken
         protected FinShopToken $token,
         ?bool $live = null,
         ?string $source = null,
-        protected bool $debug = false,
+        ?bool $debug = null,
     ) {
         $this->live = $live ?? $this->token->live ?? config('fincode.options.live') ?? false;
+        $this->debug = $debug ?? (bool) (config('fincode.options.debug') ?? false);
 
-        $this->shop_id = $this->token->shop_id;
+        $this->shop_id = $this->token->id;
         $this->tenant_name = $this->token->tenant_name;
         $this->public_key = $this->token->public_key;
         $this->secret_key = $this->token->secret_key;
@@ -87,7 +90,7 @@ readonly class FincodeRequestToken
         $this->client_field_3 = $this->token->exists ? $this->token->getTable().':'.$this->token->id : $source;
 
         $this->main_tenant_id = null;
-        $this->private_shop_id = $this->token->shop?->is_private_shop ? $this->token->shop_id : null;
+        $this->private_shop_id = $this->token->shop?->is_private_shop ? $this->token->id : null;
     }
 
     /**
@@ -107,8 +110,11 @@ readonly class FincodeRequestToken
      *
      * @throws FincodeRequestException
      */
-    public static function make(FinShopToken|string|FinShop|null $token = null, ?bool $live = null): static
-    {
+    public static function make(
+        FinShopToken|string|FinShop|null $token = null,
+        ?bool $live = null,
+        ?bool $debug = null
+    ): static {
         $token = static::token($token) ?? $token ?? config('fincode.default');
 
         $live = $live ?: config('fincode.options.live');
@@ -118,12 +124,12 @@ readonly class FincodeRequestToken
         }
 
         if ($token instanceof FinShopToken) {
-            return new static($token, $live);
+            return new static($token, $live, null, $debug);
         }
 
         if (is_string($token) && $token !== '') {
-            if ($value = FinShopToken::whereShopId($token)->first()) {
-                return new static($value, $live);
+            if ($value = FinShopToken::whereId($token)->first()) {
+                return new static($value, $live, null, $debug);
             }
 
             $config = "fincode.platforms.$token";
@@ -136,7 +142,7 @@ readonly class FincodeRequestToken
                         'secret_key' => $value['secret_key'],
                         'tenant_name' => $value['tenant_name'] ?? null,
                         'client_field' => $value['client_field'] ?? null,
-                    ]), $value['live'] ?? $live, 'config:'.$config);
+                    ]), $value['live'] ?? $live, 'config:'.$config, $debug);
                 }
 
                 throw new FincodeRequestException("Config '$config' is missing required parameters.", 2);
@@ -153,7 +159,7 @@ readonly class FincodeRequestToken
      */
     private static function token(FinShopToken|string|FinShop|null $token): FinShopToken|string|FinShop|null
     {
-        [$response] = event(new FincodeRequestTokenEvent($token));
+        [$response] = array_pad(event(new FincodeRequestTokenEvent($token)), 1, null);
 
         if (is_bool($response)) {
             return $response ? $token : null;
@@ -193,9 +199,9 @@ readonly class FincodeRequestToken
      * Fincode デフォルトAPIオブジェクトを返却
      */
     public function default(
-        ?ClientInterface $client = null,
+        ?ClientInterface $client = new Client,
         ?Configuration $config = null,
-        ?HeaderSelector $selector = null,
+        ?HeaderSelector $selector = new HeaderSelector,
     ): DefaultApi {
         return new DefaultApi($client, $config ?? $this->config(), $selector);
     }
@@ -204,9 +210,9 @@ readonly class FincodeRequestToken
      * Fincode WebhookAPIオブジェクトを返却
      */
     public function webhook(
-        ?ClientInterface $client = null,
+        ?ClientInterface $client = new Client,
         ?Configuration $config = null,
-        ?HeaderSelector $selector = null,
+        ?HeaderSelector $selector = new HeaderSelector,
     ): WebhookApi {
         return new WebhookApi($client, $config ?? $this->config(), $selector);
     }
