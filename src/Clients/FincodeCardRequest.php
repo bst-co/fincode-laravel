@@ -1,6 +1,6 @@
 <?php
 
-namespace Fincode\Laravel\Http\Request;
+namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Models\FinCard;
 use Illuminate\Database\Eloquent\Builder;

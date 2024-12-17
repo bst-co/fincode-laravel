@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fincode\Laravel\Http\Request;
+namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Eloquent\PlatformRateObject;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;

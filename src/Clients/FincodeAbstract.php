@@ -1,6 +1,6 @@
 <?php
 
-namespace Fincode\Laravel\Http\Request;
+namespace Fincode\Laravel\Clients;
 
 use Closure;
 use Fincode\Laravel\Eloquent\FinModelBinding;
