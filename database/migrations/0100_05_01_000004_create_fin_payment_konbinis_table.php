@@ -93,7 +93,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('注文管理ID');
 
-            $table->string('invoice_id', 20)
+            $table->binary('invoice_id', 20)
                 ->nullable()
                 ->comment('請求ID');
 

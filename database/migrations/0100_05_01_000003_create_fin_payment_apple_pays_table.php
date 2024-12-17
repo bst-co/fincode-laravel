@@ -15,7 +15,7 @@ return new class extends Migration
                 ->primary()
                 ->comment('#ID');
 
-            $table->string('card_id', 25)
+            $table->binary('card_id', 25)
                 ->nullable()
                 ->comment('カードID');
 
@@ -55,7 +55,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('イシュア');
 
-            $table->string('transaction_id', 28)
+            $table->binary('transaction_id', 28)
                 ->nullable()
                 ->comment('トランザクションID');
 

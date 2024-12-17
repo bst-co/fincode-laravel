@@ -9,11 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_cards', function (Blueprint $table) {
-            $table->char('id', 25)
+            $table->binary('id', 25)
                 ->primary()
                 ->comment('#カードID (c_**)');
 
-            $table->char('customer_id', 60)
+            $table->binary('customer_id', 60)
                 ->index()
                 ->comment('Customer ID(cs_**)');
 

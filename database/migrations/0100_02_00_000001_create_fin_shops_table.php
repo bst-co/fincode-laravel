@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('fin_shops', function (Blueprint $table) {
             $table->comment('Fincode ショップ情報');
 
-            $table->char('id', 13)
+            $table->binary('id', 13)
                 ->primary()
                 ->comment('ショップID');
 
@@ -22,7 +22,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('ショップタイプ');
 
-            $table->string('platform_id', 13)
+            $table->binary('platform_id', 13)
                 ->index()
                 ->comment('プラットフォームID');
 
@@ -33,7 +33,7 @@ return new class extends Migration
                 ->default(false)
                 ->comment('顧客情報共有フラグ');
 
-            $table->string('customer_group_id', 13)
+            $table->binary('customer_group_id', 13)
                 ->nullable()
                 ->index()
                 ->comment('顧客情報共有グループID');

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('fin_plans', function (Blueprint $table) {
             $table->comment('Fincode サブスクリプションプラン');
 
-            $table->string('id', 25)
+            $table->binary('id', 25)
                 ->primary()
                 ->comment('#ID');
 
@@ -22,7 +22,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('プランの説明');
 
-            $table->char('shop_id', 13)
+            $table->binary('shop_id', 13)
                 ->index()
                 ->comment('ショップID');
 

@@ -15,7 +15,7 @@ return new class extends Migration
                 ->primary()
                 ->comment('#ID');
 
-            $table->string('card_id', 25)
+            $table->binary('card_id', 25)
                 ->nullable()
                 ->comment('カードID');
 
@@ -47,11 +47,11 @@ return new class extends Migration
                 ->unsigned()
                 ->comment('支払回数');
 
-            $table->string('bulk_payment_id', 25)
+            $table->binary('bulk_payment_id', 25)
                 ->nullable()
                 ->comment('一括決済ID');
 
-            $table->string('subscription_id', 25)
+            $table->binary('subscription_id', 25)
                 ->nullable()
                 ->comment('サブスクリプションID');
 
@@ -91,7 +91,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('イシュア');
 
-            $table->string('transaction_id', 28)
+            $table->binary('transaction_id', 28)
                 ->nullable()
                 ->comment('トランザクションID');
 

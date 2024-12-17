@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_customers', function (Blueprint $table) {
-            $table->string('id', 60)
+            $table->binary('id', 60)
                 ->primary()
                 ->comment('#顧客ID');
 

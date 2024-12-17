@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('fin_subscriptions', function (Blueprint $table) {
             $table->comment('Fincode サブスクリプション');
 
-            $table->string('id', 25)
+            $table->binary('id', 25)
                 ->primary()
                 ->comment('サブスクリプションID');
 
-            $table->char('shop_id', 13)
+            $table->binary('shop_id', 13)
                 ->index()
                 ->comment('ショップID');
 
@@ -23,22 +23,22 @@ return new class extends Migration
                 ->index()
                 ->comment('決済種別');
 
-            $table->string('plan_id', 25)
+            $table->binary('plan_id', 25)
                 ->index()
                 ->comment('プランID');
 
             $table->string('plan_name', 200)
                 ->comment('プラン名');
 
-            $table->string('customer_id', 60)
+            $table->binary('customer_id', 60)
                 ->index()
                 ->comment('顧客ID');
 
-            $table->char('card_id', 25)
+            $table->binary('card_id', 25)
                 ->index()
                 ->comment('カードID');
 
-            $table->char('payment_method_id', 25)
+            $table->binary('payment_method_id', 25)
                 ->index()
                 ->comment('決済手段ID');
 

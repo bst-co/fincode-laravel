@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('fin_payments', function (Blueprint $table) {
             $table->comment('Fincode決済データ');
 
-            $table->string('id', 30)
+            $table->binary('id', 30)
                 ->primary()
                 ->comment('#オーダーID (o_***)');
 
-            $table->char('shop_id', 13)
+            $table->binary('shop_id', 13)
                 ->index()
                 ->comment('#ショップID (s_***)');
 
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('status', 32)
                 ->comment('決済ステータス');
 
-            $table->string('access_id', 24)
+            $table->binary('access_id', 24)
                 ->comment('アクセスID');
 
             $table->integer('amount')
@@ -60,7 +60,7 @@ return new class extends Migration
             $table->dateTime('process_date', 3)
                 ->comment('決済 処理日時');
 
-            $table->string('customer_id', 60)
+            $table->binary('customer_id', 60)
                 ->index()
                 ->nullable()
                 ->comment('顧客ID');

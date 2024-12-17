@@ -9,17 +9,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_webhooks', function (Blueprint $table) {
-            $table->string('id', 50)
+            $table->binary('id', 50)
                 ->primary()
                 ->comment('Webhook ID');
 
-            $table->string('shop_id', 13)
+            $table->binary('shop_id', 13)
+                ->index()
                 ->comment('ショップID');
 
             $table->text('url')
                 ->comment('Webhook URL');
 
             $table->string('event', 40)
+                ->index()
                 ->comment('対象イベント');
 
             $table->text('signature')
@@ -31,8 +33,6 @@ return new class extends Migration
             $table->dateTime('updated', 3)
                 ->nullable()
                 ->comment('更新日');
-
-            $table->unique(['shop_id', 'event']);
 
             $table->datetimes(3);
             $table->softDeletesDatetime('deleted_at', 3);

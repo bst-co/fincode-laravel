@@ -14,7 +14,7 @@ return new class extends Migration
                 ->comment('#ID');
 
             $table->string('source_type');
-            $table->string('source_id', 64);
+            $table->binary('source_id', 64);
 
             $table->index(['source_type', 'source_id']);
 

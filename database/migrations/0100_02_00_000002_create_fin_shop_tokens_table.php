@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_shop_tokens', function (Blueprint $table) {
-            $table->char('id', 13)
+            $table->binary('id', 13)
                 ->primary()
                 ->comment('#ショップID');
 
