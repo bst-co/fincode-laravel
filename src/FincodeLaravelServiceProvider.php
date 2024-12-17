@@ -2,7 +2,7 @@
 
 namespace Fincode\Laravel;
 
-use Fincode\Laravel\Console\Commands\PublishCommand;
+use Fincode\Laravel\Console\Commands;
 use Fincode\Laravel\Events\FincodeWebhookEvent;
 use Fincode\Laravel\Listeners\FincodeWebhookListener;
 use Fincode\Laravel\Models\FinCard;
@@ -72,7 +72,17 @@ class FincodeLaravelServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                PublishCommand::class,
+                Commands\PublishCommand::class,
+                Commands\CustomerRetrieveCommand::class,
+                Commands\CustomerDeleteCommand::class,
+                Commands\CardCommand::class,
+                Commands\CardDeleteCommand::class,
+                Commands\CardRetrieveCommand::class,
+                Commands\PlatformRetrieveCommand::class,
+                Commands\TenantRetrieveCommand::class,
+                Commands\WebhookCommand::class,
+                Commands\WebhookCreateCommand::class,
+                Commands\WebhookDeleteCommand::class,
             ]);
         }
     }
