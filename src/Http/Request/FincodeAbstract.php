@@ -4,9 +4,12 @@ namespace Fincode\Laravel\Http\Request;
 
 use Closure;
 use Fincode\Laravel\Eloquent\FinModelBinding;
+use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Http\FincodeRequestToken;
-use Throwable;
+use GuzzleHttp\Exception\GuzzleException;
+use OpenAPI\Fincode\ApiException;
+use OpenAPI\Fincode\Model\ModelInterface;
 
 abstract class FincodeAbstract
 {
@@ -30,21 +33,32 @@ abstract class FincodeAbstract
     }
 
     /**
-     * @template TReturn of mixed
+     * APIのリクエストラッパ
      *
-     * @param  Closure(): TReturn  $closure  aaa
-     * @return TReturn
+     * @template TInterface of ModelInterface
      *
-     * @throws FincodeRequestException
+     * @param  class-string<TInterface>|class-string<TInterface>[]  $interface  返却が期待されるオブジェクト名、またはそのリスト
+     * @param  Closure  $closure  APIリクエストを実行するクロージャ関数
+     * @return TInterface
+     *
+     * @throws FincodeApiException APIリクエストに失敗すると発生する例外
+     *
+     * @noinspection PhpRedundantCatchClauseInspection
      */
-    protected function try(Closure $closure)
+    protected function doing(array|string $interface, Closure $closure)
     {
+        $interface = is_array($interface) ? $interface : [$interface];
+
         try {
-            return $closure($this);
-        } catch (FincodeRequestException $e) {
-            throw $e;
-        } catch (Throwable $e) {
-            throw new FincodeRequestException($e->getMessage(), $e->getCode(), $e);
+            $response = $closure();
+        } catch (GuzzleException|ApiException $e) {
+            throw new FincodeApiException($e);
         }
+
+        if (in_array($response::class, $interface)) {
+            return $response;
+        }
+
+        throw new FincodeApiException($response);
     }
 }
