@@ -43,7 +43,7 @@ class FinModelBinding
             'default_flag' => ['required', 'boolean'],
             'card_no' => ['required', 'string', 'max:16'],
             'holder_name' => ['nullable', 'string', 'max:50'],
-            'type' => ['nullable', new Enum(CardBrand::class)],
+            'brand' => ['nullable', new Enum(CardBrand::class)],
             'card_no_hash' => ['required', 'string', 'max:64'],
         ]);
 
@@ -51,7 +51,7 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinCard::findOrnew($attributes->input('id')),
+            FinCard::withTrashed()->findOrnew($attributes->input('id')),
             function (FinCard $model) use ($attributes) {
                 $model
                     ->forceFill([
@@ -70,13 +70,13 @@ class FinModelBinding
     public function customer(FinCustomer|ModelInterface|array|string $values): FinCustomer
     {
         $attributes = $this->sanitize($values, [
-            'id' => ['required', 'string', 'max:1,60'],
-            'name' => ['nullable', 'string', 'between:1,384'],
-            'email' => ['nullable', 'string', 'between:1,254'],
+            'id' => ['required', 'string', 'max:60'],
+            'name' => ['nullable', 'string', 'max:384'],
+            'email' => ['nullable', 'string', 'max:254'],
         ]);
 
         return tap(
-            FinCustomer::findOrnew($attributes->input('id')),
+            FinCustomer::withTrashed()->findOrNew($attributes->input('id')),
             function (FinCustomer $model) use ($attributes) {
                 $model
                     ->forceFill([
@@ -108,7 +108,7 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinShop::findOrnew($attributes->input('id')),
+            FinShop::withTrashed()->findOrNew($attributes->input('id')),
             function (FinShop $model) use ($attributes) {
                 $model
                     ->forceFill([
@@ -141,7 +141,7 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinPayment::findOrnew($attributes->input('id')),
+            FinPayment::withTrashed()->findOrNew($attributes->input('id')),
             function (FinPayment $model) use ($attributes, $id) {
                 $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
                     PayType::CARD => $this->paymentCard($model, $attributes->toArray()),
@@ -228,7 +228,7 @@ class FinModelBinding
         $shop_id = $shop instanceof FinShop ? $shop->id : $shop;
 
         $attributes = $this->sanitize($values, [
-            'id' => ['required', 'string', 'max:1,50'],
+            'id' => ['required', 'string', 'max:50'],
             'url' => ['required', 'string'],
             'event' => ['required', new Enum(FincodeEvent::class)],
             'signature' => ['required', 'string', 'max:60'],
@@ -237,12 +237,12 @@ class FinModelBinding
         ]);
 
         return tap(
-            FinWebhook::findOrnew($attributes->input('id')),
+            FinWebhook::withTrashed()->findOrNew($attributes->input('id')),
             fn (FinWebhook $model) => $model
                 ->forceFill([
                     'id' => $attributes->input('id'),
-                    'shop_id' => $shop_id,
                     ...$this->concat($model, $attributes),
+                    'shop_id' => $shop_id,
                 ])
         );
     }
