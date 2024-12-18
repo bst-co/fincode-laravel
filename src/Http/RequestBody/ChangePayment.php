@@ -6,14 +6,14 @@ use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinPayment;
+use Fincode\OpenAPI\ApiException;
+use Fincode\OpenAPI\Model\CardPaymentJobCode;
+use Fincode\OpenAPI\Model\ChangeAmountOfPayment200Response;
+use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PaymentCardChangingAmountRequest;
+use Fincode\OpenAPI\Model\PaymentDirectDebitChangingAmountRequest;
+use Fincode\OpenAPI\Model\PaymentPayPayChangingAmountRequest;
 use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\CardPaymentJobCode;
-use OpenAPI\Fincode\Model\ChangeAmountOfPayment200Response;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PaymentCardChangingAmountRequest;
-use OpenAPI\Fincode\Model\PaymentDirectDebitChangingAmountRequest;
-use OpenAPI\Fincode\Model\PaymentPayPayChangingAmountRequest;
 
 class ChangePayment extends PaymentBase
 {

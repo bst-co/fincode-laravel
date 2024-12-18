@@ -3,9 +3,9 @@
 namespace Fincode\Laravel\Exceptions;
 
 use Arr;
+use Fincode\OpenAPI\ApiException;
+use Fincode\OpenAPI\Model\FincodeAPIErrorResponse;
 use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\FincodeAPIErrorResponse;
 
 /**
  * FincodeAPIと通信時に発生したエラーの例外

@@ -10,6 +10,14 @@ use Fincode\Laravel\Models\FinPaymentCard;
 use Fincode\Laravel\Models\FinPaymentKonbini;
 use Fincode\Laravel\Models\FinShop;
 use Fincode\Laravel\Models\FinWebhook;
+use Fincode\OpenAPI\Model\CardBrand;
+use Fincode\OpenAPI\Model\CardPaymentJobCode;
+use Fincode\OpenAPI\Model\CardPayMethod;
+use Fincode\OpenAPI\Model\FincodeEvent;
+use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PaymentStatus;
+use Fincode\OpenAPI\Model\PayType;
+use Fincode\OpenAPI\Model\ShopType;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -19,14 +27,6 @@ use Illuminate\Support\ValidatedInput;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use JsonSerializable;
-use OpenAPI\Fincode\Model\CardBrand;
-use OpenAPI\Fincode\Model\CardPaymentJobCode;
-use OpenAPI\Fincode\Model\CardPayMethod;
-use OpenAPI\Fincode\Model\FincodeEvent;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PaymentStatus;
-use OpenAPI\Fincode\Model\PayType;
-use OpenAPI\Fincode\Model\ShopType;
 
 class FinModelBinding
 {

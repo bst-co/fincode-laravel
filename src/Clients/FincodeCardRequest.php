@@ -3,16 +3,16 @@
 namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Models\FinCard;
+use Fincode\OpenAPI\Model\CustomerCardCreatingRequest;
+use Fincode\OpenAPI\Model\CustomerCardCreatingResponse;
+use Fincode\OpenAPI\Model\CustomerCardDeletingResponse;
+use Fincode\OpenAPI\Model\CustomerCardListRetrievingResponse;
+use Fincode\OpenAPI\Model\CustomerCardRetrievingResponse;
+use Fincode\OpenAPI\Model\CustomerCardUpdatingRequest;
+use Fincode\OpenAPI\Model\CustomerCardUpdatingResponse;
+use Fincode\OpenAPI\Model\DefaultFlag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use OpenAPI\Fincode\Model\CustomerCardCreatingRequest;
-use OpenAPI\Fincode\Model\CustomerCardCreatingResponse;
-use OpenAPI\Fincode\Model\CustomerCardDeletingResponse;
-use OpenAPI\Fincode\Model\CustomerCardListRetrievingResponse;
-use OpenAPI\Fincode\Model\CustomerCardRetrievingResponse;
-use OpenAPI\Fincode\Model\CustomerCardUpdatingRequest;
-use OpenAPI\Fincode\Model\CustomerCardUpdatingResponse;
-use OpenAPI\Fincode\Model\DefaultFlag;
 
 /**
  * FincodeカードAPIリクエスト

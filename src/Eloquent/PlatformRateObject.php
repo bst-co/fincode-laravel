@@ -2,10 +2,10 @@
 
 namespace Fincode\Laravel\Eloquent;
 
+use Fincode\OpenAPI\Model\ExaminationMasterId;
+use Fincode\OpenAPI\Model\PlatformRateConfig;
 use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
-use OpenAPI\Fincode\Model\ExaminationMasterId;
-use OpenAPI\Fincode\Model\PlatformRateConfig;
 
 class PlatformRateObject implements Arrayable, JsonSerializable
 {

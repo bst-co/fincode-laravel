@@ -6,20 +6,20 @@ use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinPayment;
+use Fincode\OpenAPI\ApiException;
+use Fincode\OpenAPI\Model\ApplePayPaymentJobCode;
+use Fincode\OpenAPI\Model\CardPaymentJobCode;
+use Fincode\OpenAPI\Model\CreatePayment200Response;
+use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PaymentApplePayCreatingRequest;
+use Fincode\OpenAPI\Model\PaymentCardCreatingRequest;
+use Fincode\OpenAPI\Model\PaymentDirectDebitCreatingRequest;
+use Fincode\OpenAPI\Model\PaymentKonbiniCreatingRequest;
+use Fincode\OpenAPI\Model\PaymentPayPayCreatingRequest;
+use Fincode\OpenAPI\Model\PaymentVirtualAccountCreatingRequest;
+use Fincode\OpenAPI\Model\PayPayPaymentJobCode;
+use Fincode\OpenAPI\Model\PayType;
 use GuzzleHttp\Exception\GuzzleException;
-use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\ApplePayPaymentJobCode;
-use OpenAPI\Fincode\Model\CardPaymentJobCode;
-use OpenAPI\Fincode\Model\CreatePayment200Response;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PaymentApplePayCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentCardCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentDirectDebitCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentKonbiniCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentPayPayCreatingRequest;
-use OpenAPI\Fincode\Model\PaymentVirtualAccountCreatingRequest;
-use OpenAPI\Fincode\Model\PayPayPaymentJobCode;
-use OpenAPI\Fincode\Model\PayType;
 
 class CreatePayment extends PaymentBase
 {

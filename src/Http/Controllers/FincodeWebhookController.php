@@ -5,9 +5,9 @@ namespace Fincode\Laravel\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Fincode\Laravel\Events\FincodeWebhookEvent;
 use Fincode\Laravel\Models\FinWebhook;
+use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\FincodeEvent;
 
 class FincodeWebhookController extends Controller
 {

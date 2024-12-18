@@ -4,10 +4,10 @@ namespace Fincode\Laravel\Http\RequestBody;
 
 use Fincode\Laravel\Eloquent\FinModelBinding;
 use Fincode\Laravel\Http\FincodeRequestToken;
+use Fincode\OpenAPI\Model\ModelInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use JsonSerializable;
-use OpenAPI\Fincode\Model\ModelInterface;
 
 abstract class PaymentBase implements Arrayable, JsonSerializable
 {

@@ -10,9 +10,9 @@ use Fincode\Laravel\Services\Webhook\PaymentApplePayWebhook;
 use Fincode\Laravel\Services\Webhook\PaymentCardWebhook;
 use Fincode\Laravel\Services\Webhook\PaymentKonbiniWebhook;
 use Fincode\Laravel\Services\Webhook\WebhookServiceInstance;
+use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use OpenAPI\Fincode\Model\FincodeEvent;
 
 readonly class WebhookService
 {

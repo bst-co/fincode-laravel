@@ -6,7 +6,6 @@ use Fincode\Laravel\Eloquent\HasFinPaymentModels;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OpenAPI\Fincode;
 
 class FinPaymentKonbini extends Model
 {

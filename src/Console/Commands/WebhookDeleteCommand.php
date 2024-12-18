@@ -7,10 +7,10 @@ use Fincode\Laravel\Clients\FincodeWebhookRequest;
 use Fincode\Laravel\Concerns\FincodeApiCommand;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Models\FinWebhook;
+use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\FincodeEvent;
 use Throwable;
 
 class WebhookDeleteCommand extends FincodeApiCommand

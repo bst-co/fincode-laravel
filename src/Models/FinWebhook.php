@@ -4,11 +4,11 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinWebhookFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OpenAPI\Fincode\Model\FincodeEvent;
 
 class FinWebhook extends Model
 {

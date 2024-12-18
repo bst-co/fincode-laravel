@@ -4,13 +4,13 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinPlanFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI\Model\IntervalCount;
+use Fincode\OpenAPI\Model\IntervalPattern;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OpenAPI\Fincode\Model\IntervalCount;
-use OpenAPI\Fincode\Model\IntervalPattern;
 
 class FinPlan extends Model
 {

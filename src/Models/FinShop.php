@@ -4,6 +4,7 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinShopFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI\Model\ShopType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,8 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OpenAPI\Fincode;
-use OpenAPI\Fincode\Model\ShopType;
 
 class FinShop extends Model
 {

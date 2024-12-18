@@ -7,9 +7,9 @@ namespace Fincode\Laravel\Clients;
 use Fincode\Laravel\Eloquent\PlatformRateObject;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinShop;
-use OpenAPI\Fincode\Model\PlatformRateConfig;
-use OpenAPI\Fincode\Model\PlatformShopRetrievingResponse;
-use OpenAPI\Fincode\Model\PlatformShopUpdatingResponse;
+use Fincode\OpenAPI\Model\PlatformRateConfig;
+use Fincode\OpenAPI\Model\PlatformShopRetrievingResponse;
+use Fincode\OpenAPI\Model\PlatformShopUpdatingResponse;
 
 /**
  * FincodeプラットフォームショップAPI

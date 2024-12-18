@@ -4,12 +4,12 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinSubscriptionFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI\Model\PayType;
+use Fincode\OpenAPI\Model\SubscriptionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OpenAPI\Fincode\Model\PayType;
-use OpenAPI\Fincode\Model\SubscriptionStatus;
 
 class FinSubscription extends Model
 {

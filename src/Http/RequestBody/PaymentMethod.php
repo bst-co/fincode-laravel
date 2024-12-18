@@ -3,8 +3,8 @@
 namespace Fincode\Laravel\Http\RequestBody;
 
 use ErrorException;
+use Fincode\OpenAPI\Model\ModelInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use OpenAPI\Fincode\Model\ModelInterface;
 
 /**
  * @template TInterface of ModelInterface

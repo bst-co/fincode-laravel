@@ -8,12 +8,12 @@ use Fincode\Laravel\Events\FincodeRequestTokenEvent;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
 use Fincode\Laravel\Models\FinShop;
 use Fincode\Laravel\Models\FinShopToken;
+use Fincode\OpenAPI\Api\DefaultApi;
+use Fincode\OpenAPI\Api\WebhookApi;
+use Fincode\OpenAPI\Configuration;
+use Fincode\OpenAPI\HeaderSelector;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use OpenAPI\Fincode\Api\DefaultApi;
-use OpenAPI\Fincode\Api\WebhookApi;
-use OpenAPI\Fincode\Configuration;
-use OpenAPI\Fincode\HeaderSelector;
 
 /**
  * @template TToken of (string|FinShop|FinShopToken|null)

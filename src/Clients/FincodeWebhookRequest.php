@@ -3,16 +3,16 @@
 namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Models\FinWebhook;
+use Fincode\OpenAPI\Model\FincodeEvent;
+use Fincode\OpenAPI\Model\WebhookSettingCreatingRequest;
+use Fincode\OpenAPI\Model\WebhookSettingCreatingResponse;
+use Fincode\OpenAPI\Model\WebhookSettingDeletingResponse;
+use Fincode\OpenAPI\Model\WebhookSettingListRetrievingResponse;
+use Fincode\OpenAPI\Model\WebhookSettingRetrievingResponse;
+use Fincode\OpenAPI\Model\WebhookSettingUpdatingRequest;
+use Fincode\OpenAPI\Model\WebhookSettingUpdatingResponse;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\FincodeEvent;
-use OpenAPI\Fincode\Model\WebhookSettingCreatingRequest;
-use OpenAPI\Fincode\Model\WebhookSettingCreatingResponse;
-use OpenAPI\Fincode\Model\WebhookSettingDeletingResponse;
-use OpenAPI\Fincode\Model\WebhookSettingListRetrievingResponse;
-use OpenAPI\Fincode\Model\WebhookSettingRetrievingResponse;
-use OpenAPI\Fincode\Model\WebhookSettingUpdatingRequest;
-use OpenAPI\Fincode\Model\WebhookSettingUpdatingResponse;
 
 class FincodeWebhookRequest extends FincodeAbstract
 {

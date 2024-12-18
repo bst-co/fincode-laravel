@@ -4,8 +4,8 @@ namespace Fincode\Laravel\Http\RequestBody;
 
 use ErrorException;
 use Fincode\Laravel\Models\FinPayment;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PayType;
+use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PayType;
 
 /**
  * @template TInterface of ModelInterface

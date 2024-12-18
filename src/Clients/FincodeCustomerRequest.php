@@ -4,12 +4,12 @@ namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Models\FinCustomer;
-use OpenAPI\Fincode\Model\CustomerCreatingRequest;
-use OpenAPI\Fincode\Model\CustomerDeletingResponse;
-use OpenAPI\Fincode\Model\CustomerRetrievingResponse;
-use OpenAPI\Fincode\Model\CustomerUpdatingRequest;
-use OpenAPI\Fincode\Model\CustomerUpdatingResponse;
-use OpenAPI\Fincode\Model\DeleteFlag;
+use Fincode\OpenAPI\Model\CustomerCreatingRequest;
+use Fincode\OpenAPI\Model\CustomerDeletingResponse;
+use Fincode\OpenAPI\Model\CustomerRetrievingResponse;
+use Fincode\OpenAPI\Model\CustomerUpdatingRequest;
+use Fincode\OpenAPI\Model\CustomerUpdatingResponse;
+use Fincode\OpenAPI\Model\DeleteFlag;
 
 /**
  * Fincode顧客APIリクエスト

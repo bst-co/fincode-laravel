@@ -9,18 +9,18 @@ use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinCard;
 use Fincode\Laravel\Models\FinPayment;
+use Fincode\OpenAPI\ApiException;
+use Fincode\OpenAPI\Model\ExecutePayment200Response;
+use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PaymentCardExecutingRequest;
+use Fincode\OpenAPI\Model\PaymentDirectDebitExecutingRequest;
+use Fincode\OpenAPI\Model\PaymentKonbiniExecutingRequest;
+use Fincode\OpenAPI\Model\PaymentPayPayExecutingRequest;
+use Fincode\OpenAPI\Model\PaymentVirtualAccountExecutingRequest;
+use Fincode\OpenAPI\Model\RedirectType;
+use Fincode\OpenAPI\Model\WinSizeType;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
-use OpenAPI\Fincode\ApiException;
-use OpenAPI\Fincode\Model\ExecutePayment200Response;
-use OpenAPI\Fincode\Model\ModelInterface;
-use OpenAPI\Fincode\Model\PaymentCardExecutingRequest;
-use OpenAPI\Fincode\Model\PaymentDirectDebitExecutingRequest;
-use OpenAPI\Fincode\Model\PaymentKonbiniExecutingRequest;
-use OpenAPI\Fincode\Model\PaymentPayPayExecutingRequest;
-use OpenAPI\Fincode\Model\PaymentVirtualAccountExecutingRequest;
-use OpenAPI\Fincode\Model\RedirectType;
-use OpenAPI\Fincode\Model\WinSizeType;
 
 /**
  * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/executePayment
