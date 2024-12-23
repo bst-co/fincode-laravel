@@ -111,7 +111,7 @@ class FincodeLaravelServiceProvider extends ServiceProvider
     protected function configurePublishes(): void
     {
         if (app()->runningInConsole()) {
-            $this->publishesMigrations([
+            $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], ['fincode', 'fincode-migrations']);
 
