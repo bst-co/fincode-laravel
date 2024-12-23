@@ -15,6 +15,8 @@ class CardDeleteCommand extends FincodeApiCommand
 
     protected $description = 'Deleting Customer Card information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      *

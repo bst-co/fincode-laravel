@@ -13,6 +13,8 @@ class CardRetrieveCommand extends FincodeApiCommand
 
     protected $description = 'Retrieve Customer Card information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      */

@@ -18,6 +18,8 @@ class CustomerRetrieveCommand extends FincodeApiCommand
 
     protected $description = 'Get Customer information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritdoc}
      *

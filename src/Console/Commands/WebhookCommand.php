@@ -16,6 +16,8 @@ class WebhookCommand extends FincodeApiCommand
 
     protected $description = 'List Webhook information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      *

@@ -19,6 +19,8 @@ class WebhookDeleteCommand extends FincodeApiCommand
 
     protected $description = 'Deleting0 Webhook information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      *

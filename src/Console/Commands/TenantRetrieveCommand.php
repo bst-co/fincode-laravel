@@ -13,6 +13,8 @@ class TenantRetrieveCommand extends FincodeApiCommand
 
     protected $description = 'Retrieve Tenant shop information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      */

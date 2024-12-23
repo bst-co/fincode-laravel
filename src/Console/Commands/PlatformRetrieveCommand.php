@@ -14,6 +14,8 @@ class PlatformRetrieveCommand extends FincodeApiCommand
 
     protected $description = 'Retrieve Platform information from Fincode.';
 
+    protected $hidden = true;
+
     /**
      * {@inheritDoc}
      *
