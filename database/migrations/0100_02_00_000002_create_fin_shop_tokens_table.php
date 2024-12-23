@@ -9,7 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_shop_tokens', function (Blueprint $table) {
-            $table->binary('id', 13)
+            $table->string('id', 13)
+                ->charset('binary')
                 ->primary()
                 ->comment('#ショップID');
 
@@ -33,7 +34,13 @@ return new class extends Migration
                 ->nullable()
                 ->comment('本番環境利用フラグ');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
+
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
         });
     }
 

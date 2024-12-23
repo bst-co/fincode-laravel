@@ -9,7 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_customers', function (Blueprint $table) {
-            $table->binary('id', 60)
+            $table->comment('Fincode 顧客データ');
+
+            $table->string('id', 60)
+                ->charset('binary')
                 ->primary()
                 ->comment('#顧客ID');
 
@@ -72,9 +75,17 @@ return new class extends Migration
                 ->nullable()
                 ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('fin_plans', function (Blueprint $table) {
             $table->comment('Fincode サブスクリプションプラン');
 
-            $table->binary('id', 25)
+            $table->string('id', 25)
+                ->charset('binary')
                 ->primary()
                 ->comment('#ID');
 
@@ -22,7 +23,8 @@ return new class extends Migration
                 ->nullable()
                 ->comment('プランの説明');
 
-            $table->binary('shop_id', 13)
+            $table->string('shop_id', 13)
+                ->charset('binary')
                 ->index()
                 ->comment('ショップID');
 
@@ -51,16 +53,24 @@ return new class extends Migration
             $table->boolean('delete_flag')
                 ->comment('削除フラグ');
 
-            $table->dateTime('created')
-                ->comment('作成日');
+            $table->dateTime('created', 3)
+                ->comment('プラットフォーム上の作成日時');
 
-            $table->dateTime('updated')
+            $table->dateTime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

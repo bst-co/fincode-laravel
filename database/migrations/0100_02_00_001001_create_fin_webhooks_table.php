@@ -9,11 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_webhooks', function (Blueprint $table) {
-            $table->binary('id', 50)
+            $table->string('id', 50)
+                ->charset('binary')
                 ->primary()
                 ->comment('Webhook ID');
 
-            $table->binary('shop_id', 13)
+            $table->string('shop_id', 13)
+                ->charset('binary')
                 ->index()
                 ->comment('ショップID');
 
@@ -28,14 +30,23 @@ return new class extends Migration
                 ->comment('署名');
 
             $table->dateTime('created', 3)
-                ->comment('作成日');
+                ->comment('プラットフォーム上の作成日時');
 
             $table->dateTime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
+
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

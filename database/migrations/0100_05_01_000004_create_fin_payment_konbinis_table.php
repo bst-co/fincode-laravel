@@ -93,20 +93,29 @@ return new class extends Migration
                 ->nullable()
                 ->comment('注文管理ID');
 
-            $table->binary('invoice_id', 20)
+            $table->string('invoice_id', 20)
+                ->charset('binary')
                 ->nullable()
                 ->comment('請求ID');
 
             $table->dateTime('created', 3)
-                ->comment('作成日');
+                ->comment('プラットフォーム上の作成日時');
 
             $table->dateTime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

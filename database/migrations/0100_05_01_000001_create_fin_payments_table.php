@@ -11,11 +11,13 @@ return new class extends Migration
         Schema::create('fin_payments', function (Blueprint $table) {
             $table->comment('Fincode決済データ');
 
-            $table->binary('id', 30)
+            $table->string('id', 30)
+                ->charset('binary')
                 ->primary()
                 ->comment('#オーダーID (o_***)');
 
-            $table->binary('shop_id', 13)
+            $table->string('shop_id', 13)
+                ->charset('binary')
                 ->index()
                 ->comment('#ショップID (s_***)');
 
@@ -30,7 +32,8 @@ return new class extends Migration
             $table->string('status', 32)
                 ->comment('決済ステータス');
 
-            $table->binary('access_id', 24)
+            $table->string('access_id', 24)
+                ->charset('binary')
                 ->comment('アクセスID');
 
             $table->integer('amount')
@@ -60,7 +63,8 @@ return new class extends Migration
             $table->dateTime('process_date', 3)
                 ->comment('決済 処理日時');
 
-            $table->binary('customer_id', 60)
+            $table->string('customer_id', 60)
+                ->charset('binary')
                 ->index()
                 ->nullable()
                 ->comment('顧客ID');
@@ -75,15 +79,23 @@ return new class extends Migration
                 ->comment('最新エラーコード');
 
             $table->datetime('created', 3)
-                ->comment('作成日');
+                ->comment('プラットフォーム上の作成日時');
 
             $table->datetime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

@@ -11,11 +11,13 @@ return new class extends Migration
         Schema::create('fin_subscriptions', function (Blueprint $table) {
             $table->comment('Fincode サブスクリプション');
 
-            $table->binary('id', 25)
+            $table->string('id', 25)
+                ->charset('binary')
                 ->primary()
                 ->comment('サブスクリプションID');
 
-            $table->binary('shop_id', 13)
+            $table->string('shop_id', 13)
+                ->charset('binary')
                 ->index()
                 ->comment('ショップID');
 
@@ -23,22 +25,26 @@ return new class extends Migration
                 ->index()
                 ->comment('決済種別');
 
-            $table->binary('plan_id', 25)
+            $table->string('plan_id', 25)
+                ->charset('binary')
                 ->index()
                 ->comment('プランID');
 
             $table->string('plan_name', 200)
                 ->comment('プラン名');
 
-            $table->binary('customer_id', 60)
+            $table->string('customer_id', 60)
+                ->charset('binary')
                 ->index()
                 ->comment('顧客ID');
 
-            $table->binary('card_id', 25)
+            $table->string('card_id', 25)
+                ->charset('binary')
                 ->index()
                 ->comment('カードID');
 
-            $table->binary('payment_method_id', 25)
+            $table->string('payment_method_id', 25)
+                ->charset('binary')
                 ->index()
                 ->comment('決済手段ID');
 
@@ -104,15 +110,23 @@ return new class extends Migration
                 ->comment('ご利用明細表示内容');
 
             $table->dateTime('created', 3)
-                ->comment('作成日');
+                ->comment('プラットフォーム上の作成日時');
 
             $table->dateTime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

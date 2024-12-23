@@ -9,12 +9,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_histories', function (Blueprint $table) {
+            $table->comment('テーブル変更履歴');
+
             $table->ulid('id')
                 ->primary()
                 ->comment('#ID');
 
-            $table->string('source_type');
-            $table->binary('source_id', 64);
+            $table->string('source_type')
+                ->comment('ソース種別');
+
+            $table->string('source_id', 64)
+                ->charset('binary')
+                ->comment('ソースID');
 
             $table->index(['source_type', 'source_id']);
 
@@ -25,9 +31,13 @@ return new class extends Migration
             $table->longText('difference')
                 ->comment('差分データ');
 
-            $table->datetime('created_at', 6);
+            $table->datetime('created_at', 6)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 6);
+            $table->datetime('deleted_at', 6)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

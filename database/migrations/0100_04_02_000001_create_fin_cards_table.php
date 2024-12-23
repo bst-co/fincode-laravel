@@ -9,11 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fin_cards', function (Blueprint $table) {
-            $table->binary('id', 25)
+            $table->comment('Fincode 顧客カードデータ');
+
+            $table->string('id', 25)
+                ->charset('binary')
                 ->primary()
                 ->comment('#カードID (c_**)');
 
-            $table->binary('customer_id', 60)
+            $table->string('customer_id', 60)
+                ->charset('binary')
                 ->index()
                 ->comment('Customer ID(cs_**)');
 
@@ -43,12 +47,24 @@ return new class extends Migration
             $table->string('card_no_hash', 64)
                 ->comment('カード番号ハッシュ値');
 
-            $table->datetime('created', 3);
-            $table->datetime('updated', 3);
+            $table->datetime('created', 3)
+                ->comment('プラットフォーム上の作成日時');
 
-            $table->datetimes(3);
+            $table->datetime('updated', 3)
+                ->nullable()
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
+
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 

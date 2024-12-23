@@ -15,7 +15,8 @@ return new class extends Migration
                 ->primary()
                 ->comment('#ID');
 
-            $table->binary('card_id', 25)
+            $table->string('card_id', 25)
+                ->charset('binary')
                 ->nullable()
                 ->comment('カードID');
 
@@ -55,7 +56,8 @@ return new class extends Migration
                 ->nullable()
                 ->comment('イシュア');
 
-            $table->binary('transaction_id', 28)
+            $table->string('transaction_id', 28)
+                ->charset('binary')
                 ->nullable()
                 ->comment('トランザクションID');
 
@@ -72,15 +74,23 @@ return new class extends Migration
                 ->comment('商品コード');
 
             $table->dateTime('created', 3)
-                ->comment('作成日');
+                ->comment('プラットフォーム上の作成日時');
 
             $table->dateTime('updated', 3)
                 ->nullable()
-                ->comment('更新日');
+                ->comment('プラットフォーム上の更新日時');
 
-            $table->datetimes(3);
+            $table->datetime('created_at', 3)
+                ->nullable()
+                ->comment('作成日時');
 
-            $table->softDeletesDatetime('deleted_at', 3);
+            $table->datetime('updated_at', 3)
+                ->nullable()
+                ->comment('更新日時');
+
+            $table->datetime('deleted_at', 3)
+                ->nullable()
+                ->comment('削除日時');
         });
     }
 
