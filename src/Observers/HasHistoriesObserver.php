@@ -5,7 +5,6 @@ namespace Fincode\Laravel\Observers;
 use Fincode\Laravel\Enums\FinHistoryType;
 use Fincode\Laravel\Models\FinHistory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HasHistoriesObserver
 {
@@ -42,25 +41,30 @@ class HasHistoriesObserver
 
         $changes = $model->getChanges();
 
-        $deleted_at = in_array(SoftDeletes::class, class_uses_recursive($model)) ? $model->getDeletedAtColumn() : null;
+        $deleted_at = method_exists($model, 'getDeletedAtColumn') ? $model->getDeletedAtColumn() : null;
         $updated_at = $model->getUpdatedAtColumn();
 
         // 更新日付は記録対象から除外する
-        if ($updated_at) {
+        if ($updated_at && isset($changes[$updated_at])) {
             unset($changes[$updated_at]);
         }
 
         // 削除日付は記録対象から除外する
-        if ($deleted_at) {
+        if ($deleted_at && isset($changes[$deleted_at])) {
             unset($changes[$deleted_at]);
         }
 
+        // 更新時にデータがない場合は記録しない
         if ($type === FinHistoryType::UPDATE && empty($changes)) {
             return;
         }
 
-        $deleted = $type === FinHistoryType::FORCE_DELETE || ($deleted_at && $type === FinHistoryType::DELETE);
+        // 非論理削除モデル時に FinHistoryType::DELETE を受け取った場合 FinHistoryType::FORCE_DELETE に置き換える
+        if ($type === FinHistoryType::DELETE && $deleted_at !== null) {
+            $type = FinHistoryType::FORCE_DELETE;
+        }
 
+        // 履歴モデルを作成
         $history = (new FinHistory)
             ->source()->associate($model)
             ->forceFill([
@@ -68,7 +72,8 @@ class HasHistoriesObserver
                 'type' => $type,
             ]);
 
-        if ($history->saveQuietly() && $deleted) {
+        // 履歴データ保存、強制削除の場合は対象オブジェクトすべてを論理削除状態に移行する
+        if ($history->saveQuietly() && $type === FinHistoryType::FORCE_DELETE) {
             FinHistory::whereSourceId($history->source_id)
                 ->whereSourceType($history->source_type)
                 ->delete();
