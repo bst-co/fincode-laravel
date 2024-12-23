@@ -46,7 +46,7 @@ class FinShop extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'shop_type' => Fincode\Model\ShopType::class,
+        'shop_type' => ShopType::class,
         'shared_customer_flag' => 'boolean',
         'api_key_display_flag' => 'boolean',
         'platform_rate_list' => 'array',
