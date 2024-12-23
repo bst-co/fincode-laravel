@@ -14,20 +14,20 @@ use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-readonly class WebhookService
+class WebhookService
 {
     public function __construct(
-        public FinWebHook $webhook,
+        readonly public FinWebHook $webhook,
         array $payload,
-        public ?string $process_id = null,
+        readonly public ?string $process_id = null,
     ) {
         $this->payload = collect($payload);
         $this->event = FincodeEvent::tryFrom($payload['event']);
     }
 
-    public FincodeEvent $event;
+    public readonly FincodeEvent $event;
 
-    public Collection $payload;
+    public readonly Collection $payload;
 
     /**
      * @throws Exception

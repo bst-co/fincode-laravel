@@ -2,10 +2,10 @@
 
 namespace Fincode\Laravel\Exceptions;
 
-use Arr;
 use Fincode\OpenAPI\ApiException;
 use Fincode\OpenAPI\Model\FincodeAPIErrorResponse;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Arr;
 
 /**
  * FincodeAPIと通信時に発生したエラーの例外

@@ -18,62 +18,62 @@ use GuzzleHttp\ClientInterface;
 /**
  * @template TToken of (string|FinShop|FinShopToken|null)
  */
-readonly class FincodeRequestToken
+class FincodeRequestToken
 {
     /**
      * 本番環境利用フラグ
      */
-    public bool $live;
+    public readonly bool $live;
 
     /**
      * ショップID
      */
-    public string $shop_id;
+    public readonly string $shop_id;
 
     /**
      * 3Dセキュア時に表示される店舗名
      */
-    public ?string $tenant_name;
+    public readonly ?string $tenant_name;
 
     /**
      * サーバーAPIで使用するAPIキー
      */
-    public string $secret_key;
+    public readonly string $secret_key;
 
     /**
      * クライアントAPIで使用するAPIキー
      */
-    public string $public_key;
+    public readonly string $public_key;
 
     /**
      * 決済情報に適用する加盟店自由項目 (client_field_1に適用される)
      * 加盟店が自由に設定できる項目として使用する
      */
-    public ?string $client_field_1;
+    public readonly ?string $client_field_1;
 
     /**
      * 決済情報に適用する加盟店自由紅毛 (client_field_3に適用される)
      * 決済経路を示すためにシステム利用する
      */
-    public ?string $client_field_3;
+    public readonly ?string $client_field_3;
 
     /**
      * テナントのメインショップである場合に、ショップIDを参照できます
      */
-    public ?string $main_tenant_id;
+    public readonly ?string $main_tenant_id;
 
     /**
      * 顧客情報を共有しないプラットフォームのメインショップである場合、ショップIDを参照できます
      */
-    public ?string $private_shop_id;
+    public readonly ?string $private_shop_id;
 
-    public bool $debug;
+    public readonly bool $debug;
 
     /**
      * @param  FinShopToken  $token  接続先情報パック
      */
     protected function __construct(
-        protected FinShopToken $token,
+        readonly protected FinShopToken $token,
         ?bool $live = null,
         ?string $source = null,
         ?bool $debug = null,
