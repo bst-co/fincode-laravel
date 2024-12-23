@@ -17,11 +17,11 @@
     "require": {
         "php": "^8.0",
         "ext-curl": "*",
-        "fakerphp/faker": "^1.24",
         "laravel/framework": "^9.10.0|^10.10.1|^11.0",
         "ueno-bst/fincode-php-client": "~20241017.1.4"
     },
     "require-dev": {
+        "fakerphp/faker": "^1.24",
         "laravel/pint": "^1.10",
         "phpunit/phpunit": "^11.0.1"
     },
