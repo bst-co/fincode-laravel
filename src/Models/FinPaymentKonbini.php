@@ -3,6 +3,7 @@
 namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Eloquent\HasFinPaymentModels;
+use Fincode\OpenAPI;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,10 +44,10 @@ class FinPaymentKonbini extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'konbini_code' => Fincode\Model\KonbiniCode::class,
-        'result' => Fincode\Model\KonbiniPaymentProcessResult::class,
-        'overpayment_flag' => Fincode\Model\OverpaymentFlag::class,
-        'cancel_overpayment_flag' => Fincode\Model\CancelOverpaymentFlag::class,
+        'konbini_code' => OpenAPI\Model\KonbiniCode::class,
+        'result' => OpenAPI\Model\KonbiniPaymentProcessResult::class,
+        'overpayment_flag' => OpenAPI\Model\OverpaymentFlag::class,
+        'cancel_overpayment_flag' => OpenAPI\Model\CancelOverpaymentFlag::class,
         'created' => 'datetime',
         'updated' => 'datetime',
         'auth_max_date' => 'datetime',

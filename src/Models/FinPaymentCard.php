@@ -5,6 +5,7 @@ namespace Fincode\Laravel\Models;
 use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Database\Factories\FinPaymentCardFactory;
 use Fincode\Laravel\Eloquent\HasFinPaymentModels;
+use Fincode\OpenAPI;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,13 +54,13 @@ class FinPaymentCard extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'brand' => Fincode\Model\CardBrand::class,
+        'brand' => OpenAPI\Model\CardBrand::class,
         'expire' => AsCardExpireCast::class,
-        'method' => Fincode\Model\CardPayMethod::class,
-        'pay_times' => Fincode\Model\CardPayTimes::class,
-        'tds_type' => Fincode\Model\TdsType::class,
-        'tds2_type' => Fincode\Model\Tds2Type::class,
-        'tds2_status' => Fincode\Model\ThreeDSecure2Status::class,
+        'method' => OpenAPI\Model\CardPayMethod::class,
+        'pay_times' => OpenAPI\Model\CardPayTimes::class,
+        'tds_type' => OpenAPI\Model\TdsType::class,
+        'tds2_type' => OpenAPI\Model\Tds2Type::class,
+        'tds2_status' => OpenAPI\Model\ThreeDSecure2Status::class,
         'created' => 'datetime',
         'updated' => 'datetime',
         'auth_max_date' => 'datetime',

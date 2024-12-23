@@ -4,6 +4,7 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Database\Factories\FinPaymentFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,9 +50,9 @@ class FinPayment extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'pay_type' => Fincode\Model\PayType::class,
-        'job_code' => Fincode\Model\CardPaymentJobCode::class,
-        'status' => Fincode\Model\PaymentStatus::class,
+        'pay_type' => OpenAPI\Model\PayType::class,
+        'job_code' => OpenAPI\Model\CardPaymentJobCode::class,
+        'status' => OpenAPI\Model\PaymentStatus::class,
         'process_date' => 'datetime',
         'created' => 'datetime',
         'updated' => 'datetime',

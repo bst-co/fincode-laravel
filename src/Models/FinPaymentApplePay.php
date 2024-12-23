@@ -4,6 +4,7 @@ namespace Fincode\Laravel\Models;
 
 use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Eloquent\HasFinPaymentModels;
+use Fincode\OpenAPI;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,10 +37,10 @@ class FinPaymentApplePay extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'brand' => Fincode\Model\CardBrand::class,
+        'brand' => OpenAPI\Model\CardBrand::class,
         'expire' => AsCardExpireCast::class,
-        'method' => Fincode\Model\CardPayMethod::class,
-        'pay_times' => Fincode\Model\CardPayTimes::class,
+        'method' => OpenAPI\Model\CardPayMethod::class,
+        'pay_times' => OpenAPI\Model\CardPayTimes::class,
         'created' => 'datetime',
         'updated' => 'datetime',
         'auth_max_date' => 'datetime',

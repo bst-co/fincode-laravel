@@ -5,6 +5,7 @@ namespace Fincode\Laravel\Models;
 use Fincode\Laravel\Casts\AsCardExpireCast;
 use Fincode\Laravel\Database\Factories\FinCardFactory;
 use Fincode\Laravel\Eloquent\HasFinModels;
+use Fincode\OpenAPI;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,8 +44,8 @@ class FinCard extends Model
      * {@inheritdoc}
      */
     protected $casts = [
-        'type' => Fincode\Model\CardType::class,
-        'brand' => Fincode\Model\CardBrand::class,
+        'type' => OpenAPI\Model\CardType::class,
+        'brand' => OpenAPI\Model\CardBrand::class,
         'expire' => AsCardExpireCast::class,
         'default_flag' => 'boolean',
         'created' => 'datetime',
