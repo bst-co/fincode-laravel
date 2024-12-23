@@ -4,15 +4,15 @@ namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinPaymentCard;
+use Fincode\OpenAPI\Model\CardBrand;
+use Fincode\OpenAPI\Model\CardPayMethod;
+use Fincode\OpenAPI\Model\CardPayTimes;
+use Fincode\OpenAPI\Model\Tds2Type;
+use Fincode\OpenAPI\Model\TdsType;
+use Fincode\OpenAPI\Model\ThreeDSecure2Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\CardBrand;
-use OpenAPI\Fincode\Model\CardPayMethod;
-use OpenAPI\Fincode\Model\CardPayTimes;
-use OpenAPI\Fincode\Model\Tds2Type;
-use OpenAPI\Fincode\Model\TdsType;
-use OpenAPI\Fincode\Model\ThreeDSecure2Status;
 
 class FinPaymentCardFactory extends Factory
 {

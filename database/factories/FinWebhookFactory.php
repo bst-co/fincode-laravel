@@ -5,9 +5,9 @@ namespace Fincode\Laravel\Database\Factories;
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinShop;
 use Fincode\Laravel\Models\FinWebhook;
+use Fincode\OpenAPI\Model\FincodeEvent;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-use OpenAPI\Fincode\Model\FincodeEvent;
 
 class FinWebhookFactory extends Factory
 {

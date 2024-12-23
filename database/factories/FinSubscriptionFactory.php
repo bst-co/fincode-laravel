@@ -4,10 +4,10 @@ namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinSubscription;
+use Fincode\OpenAPI\Model\PayType;
+use Fincode\OpenAPI\Model\SubscriptionStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-use OpenAPI\Fincode\Model\PayType;
-use OpenAPI\Fincode\Model\SubscriptionStatus;
 
 class FinSubscriptionFactory extends Factory
 {

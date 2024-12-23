@@ -4,11 +4,11 @@ namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinPayment;
+use Fincode\OpenAPI\Model\CardPaymentJobCode;
+use Fincode\OpenAPI\Model\PaymentStatus;
+use Fincode\OpenAPI\Model\PayType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-use OpenAPI\Fincode\Model\CardPaymentJobCode;
-use OpenAPI\Fincode\Model\PaymentStatus;
-use OpenAPI\Fincode\Model\PayType;
 
 class FinPaymentFactory extends Factory
 {

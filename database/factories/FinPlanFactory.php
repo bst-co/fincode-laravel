@@ -5,9 +5,9 @@ namespace Fincode\Laravel\Database\Factories;
 use Carbon\Carbon;
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinPlan;
+use Fincode\OpenAPI\Model\IntervalCount;
+use Fincode\OpenAPI\Model\IntervalPattern;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use OpenAPI\Fincode\Model\IntervalCount;
-use OpenAPI\Fincode\Model\IntervalPattern;
 
 class FinPlanFactory extends Factory
 {

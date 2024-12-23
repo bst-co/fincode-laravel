@@ -5,9 +5,9 @@ namespace Fincode\Laravel\Database\Factories;
 use Carbon\Carbon;
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinCard;
+use Fincode\OpenAPI\Model\CardBrand;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\CardBrand;
 
 /**
  * @extends Factory<FinCard>

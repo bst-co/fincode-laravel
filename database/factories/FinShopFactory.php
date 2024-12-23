@@ -4,10 +4,10 @@ namespace Fincode\Laravel\Database\Factories;
 
 use Fincode\Laravel\Concerns\HasFactoryExtend;
 use Fincode\Laravel\Models\FinShop;
+use Fincode\OpenAPI\Model\ShopType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use OpenAPI\Fincode\Model\ShopType;
 
 class FinShopFactory extends Factory
 {
