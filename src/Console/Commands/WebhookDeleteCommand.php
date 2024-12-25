@@ -15,9 +15,9 @@ use Throwable;
 
 class WebhookDeleteCommand extends FincodeApiCommand
 {
-    protected $signature = 'fincode:webhook:delete {event : Webhook event}';
+    protected $signature = 'fincode:webhook:delete {event : Webhook event} {--force : Force delete}';
 
-    protected $description = 'Deleting0 Webhook information from Fincode.';
+    protected $description = 'Deleting Webhook information from Fincode.';
 
     protected $hidden = true;
 
@@ -53,7 +53,7 @@ class WebhookDeleteCommand extends FincodeApiCommand
                         $model = $request->delete($webhooks->get($event->value));
 
                         if ($this->isSave()) {
-                            $model->delete();
+                            $this->option('force') ? $model->forceDelete() : $model->delete();
                         }
 
                         $models->push($model);

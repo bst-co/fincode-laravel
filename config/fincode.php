@@ -54,6 +54,12 @@ return [
         'middleware' => env('FINCODE_MIDDLEWARE', 'api'),
     ],
 
+    // FinHistory モデルに関する挙動
+    'history' => [
+        // 元モデルが削除されるときに履歴も自動で削除する
+        'relay_delete' => env('FINCODE_HISTORY_RELAY_DELETE', true),
+    ],
+
     'dummies' => [
         'card' => [
             [

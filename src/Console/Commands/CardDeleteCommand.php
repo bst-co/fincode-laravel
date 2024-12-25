@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CardDeleteCommand extends FincodeApiCommand
 {
-    protected $signature = 'fincode:card:delete {customer_id : Customer ID} {card_id : Card ID}';
+    protected $signature = 'fincode:card:delete {customer_id : Customer ID} {card_id : Card ID} {--force : Force delete}';
 
     protected $description = 'Deleting Customer Card information from Fincode.';
 
@@ -33,7 +33,7 @@ class CardDeleteCommand extends FincodeApiCommand
 
         $this->comment('Deleting customer card request successful.', 'v');
 
-        if ($this->isSave() && $model->delete()) {
+        if ($this->isSave() && ($this->option('force') ? $model->forceDelete() : $model->delete())) {
             $this->comment("Deleted customer card ({$model->getTable()}.{$model->getKeyName()}={$model->getKey()}) successful.", 'v');
         }
 

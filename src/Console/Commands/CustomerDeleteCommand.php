@@ -13,7 +13,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 #[AsCommand(name: 'fincode:customer:delete', description: 'Delete customer information to Fincode.')]
 class CustomerDeleteCommand extends FincodeApiCommand
 {
-    protected $signature = 'fincode:customer:delete';
+    protected $signature = 'fincode:customer:delete {--force : Force delete}';
 
     protected $description = 'Delete customer information to Fincode.';
 
@@ -34,7 +34,7 @@ class CustomerDeleteCommand extends FincodeApiCommand
             function (?Model $model) {
                 $this->comment('Deleting customer request successful.', 'v');
 
-                if ($model && $model->delete()) {
+                if ($model && ($this->option('force') ? $model->forceDelete() : $model->delete())) {
                     $this->comment("Deleted customer ({$model->getTable()}.{$model->getKeyName()}={$model->getKey()}) successful.", 'v');
                 }
             }

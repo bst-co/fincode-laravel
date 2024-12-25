@@ -20,7 +20,6 @@ use Fincode\OpenAPI\Model\PayType;
 use Fincode\OpenAPI\Model\ShopType;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\ValidatedInput;
@@ -51,11 +50,11 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinCard::withTrashed()->findOrnew($attributes->input('id')),
+            FinCard::withTrashed()->findOrnew($attributes->id),
             function (FinCard $model) use ($attributes) {
                 $model
                     ->forceFill([
-                        'id' => $attributes->input('id'),
+                        'id' => $attributes->id,
                         ...$this->concat($model, $attributes),
                     ]);
             }
@@ -76,11 +75,11 @@ class FinModelBinding
         ]);
 
         return tap(
-            FinCustomer::withTrashed()->findOrNew($attributes->input('id')),
+            FinCustomer::withTrashed()->findOrNew($attributes->id),
             function (FinCustomer $model) use ($attributes) {
                 $model
                     ->forceFill([
-                        'id' => $attributes->input('id'),
+                        'id' => $attributes->id,
                         ...$this->concat($model, $attributes),
                     ]);
             });
@@ -108,11 +107,11 @@ class FinModelBinding
          * モデルを取得、または新規作成
          */
         return tap(
-            FinShop::withTrashed()->findOrNew($attributes->input('id')),
+            FinShop::withTrashed()->findOrNew($attributes->id),
             function (FinShop $model) use ($attributes) {
                 $model
                     ->forceFill([
-                        'id' => $attributes->input('id'),
+                        'id' => $attributes->id,
                         ...$this->concat($model, $attributes),
                     ]);
             }
@@ -135,13 +134,13 @@ class FinModelBinding
             'pay_type' => ['required', new Enum(PayType::class)],
         ]);
 
-        $id = $attributes->input('id');
+        $id = $attributes->id;
 
         /*
          * モデルを取得、または新規作成
          */
         return tap(
-            FinPayment::withTrashed()->findOrNew($attributes->input('id')),
+            FinPayment::withTrashed()->findOrNew($attributes->id),
             function (FinPayment $model) use ($attributes, $id) {
                 $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
                     PayType::CARD => $this->paymentCard($model, $attributes->toArray()),
@@ -237,10 +236,10 @@ class FinModelBinding
         ]);
 
         return tap(
-            FinWebhook::withTrashed()->findOrNew($attributes->input('id')),
+            FinWebhook::withTrashed()->findOrNew($attributes->id),
             fn (FinWebhook $model) => $model
                 ->forceFill([
-                    'id' => $attributes->input('id'),
+                    'id' => $attributes->id,
                     ...$this->concat($model, $attributes),
                     'shop_id' => $shop_id,
                 ])
@@ -274,7 +273,7 @@ class FinModelBinding
         }
 
         // キー名をスネーク型に変更
-        $values = Arr::mapWithKeys($values, fn ($value, $key) => [Str::snake($key) => $value]);
+        $values = collect($values)->mapWithKeys(fn ($value, $key) => [Str::snake($key) => $value])->toArray();
 
         // Validationを実行、エラーがある場合は例外
         Validator::make($values, $rules)->validated();
@@ -291,7 +290,7 @@ class FinModelBinding
 
         foreach ($columns as $column) {
             if ($input->has($column)) {
-                $values[$column] = $input->input($column);
+                $values[$column] = $input->$column;
             } else {
                 $values[$column] = $model->getAttribute($column);
             }
@@ -318,6 +317,6 @@ class FinModelBinding
 
         $model = is_array($model) ? $model : [];
 
-        return Arr::mapWithKeys($model, fn ($value, $key) => [$camel ? Str::camel($key) : $key => $value]);
+        return collect($model)->mapWithKeys(fn ($value, $key) => [$camel ? Str::camel($key) : $key => $value])->toArray();
     }
 }
