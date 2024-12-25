@@ -3,7 +3,6 @@
 namespace Fincode\Laravel\Clients;
 
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinCustomer;
 
 abstract class FincodeCustomerAbstract extends FincodeAbstract

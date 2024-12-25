@@ -6,7 +6,7 @@ use Closure;
 use Fincode\Laravel\Eloquent\FinModelBinding;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\FincodeRequestToken;
+use Fincode\Laravel\Models\FinShop;
 use Fincode\OpenAPI\ApiException;
 use Fincode\OpenAPI\Model\ModelInterface;
 use GuzzleHttp\Exception\GuzzleException;

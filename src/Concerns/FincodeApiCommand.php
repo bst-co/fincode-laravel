@@ -2,9 +2,9 @@
 
 namespace Fincode\Laravel\Concerns;
 
+use Fincode\Laravel\Clients\FincodeRequestToken;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeRequestException;
-use Fincode\Laravel\Http\FincodeRequestToken;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

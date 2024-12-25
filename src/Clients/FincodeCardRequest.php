@@ -35,7 +35,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
         $response = $this->dispatch(
             CustomerCardCreatingResponse::class,
-            fn () => $this->token->default()->createCustomerCard($this->customer->id, $this->token->private_shop_id, $body),
+            fn () => $this->token->default()->createCustomerCard($this->customer->id, $this->token->private_tenant_id, $body),
         );
 
         return $this->binding->card($response);
@@ -50,7 +50,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
     {
         $response = $this->dispatch(
             CustomerCardListRetrievingResponse::class,
-            fn () => $this->token->default()->retrieveCustomerCardList($this->customer->id, $this->token->private_shop_id),
+            fn () => $this->token->default()->retrieveCustomerCardList($this->customer->id, $this->token->private_tenant_id),
         );
 
         $models = Collection::make();
@@ -73,7 +73,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
         $response = $this->dispatch(
             CustomerCardRetrievingResponse::class,
-            fn () => $this->token->default()->retrieveCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+            fn () => $this->token->default()->retrieveCustomerCard($this->customer->id, $card_id, $this->token->private_tenant_id),
         );
 
         return $this->binding->card($response);
@@ -101,7 +101,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
         $response = $this->dispatch(
             CustomerCardUpdatingResponse::class,
-            fn () => $this->token->default()->updateCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+            fn () => $this->token->default()->updateCustomerCard($this->customer->id, $card_id, $this->token->private_tenant_id),
         );
 
         return $this->binding->card($response);
@@ -116,7 +116,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
         $response = $this->dispatch(
             CustomerCardDeletingResponse::class,
-            fn () => $this->token->default()->deleteCustomerCard($this->customer->id, $card_id, $this->token->private_shop_id),
+            fn () => $this->token->default()->deleteCustomerCard($this->customer->id, $card_id, $this->token->private_tenant_id),
         );
 
         return FinCard::find($response->getId());

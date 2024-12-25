@@ -29,7 +29,7 @@ class FincodeCustomerRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CustomerRetrievingResponse::class,
-            fn () => $this->token->default()->retrieveCustomer($customer_id, $this->token->private_shop_id)
+            fn () => $this->token->default()->retrieveCustomer($customer_id, $this->token->private_tenant_id)
         );
 
         return $this->binding->customer($response);
@@ -46,7 +46,7 @@ class FincodeCustomerRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CustomerCreatingRequest::class,
-            fn () => $this->token->default()->createCustomer($this->token->private_shop_id, $body)
+            fn () => $this->token->default()->createCustomer($this->token->private_tenant_id, $body)
         );
 
         return $this->binding->customer($response);
@@ -63,7 +63,7 @@ class FincodeCustomerRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CustomerUpdatingResponse::class,
-            fn () => $this->token->default()->updateCustomer($customer->id, $this->token->private_shop_id, $body)
+            fn () => $this->token->default()->updateCustomer($customer->id, $this->token->private_tenant_id, $body)
         );
 
         return $this->binding->customer($response);
@@ -82,7 +82,7 @@ class FincodeCustomerRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CustomerDeletingResponse::class,
-            fn () => $this->token->default()->deleteCustomer($customer_id, $this->token->private_shop_id)
+            fn () => $this->token->default()->deleteCustomer($customer_id, $this->token->private_tenant_id)
         );
 
         if ($response->getDeleteFlag() === DeleteFlag::_1) {

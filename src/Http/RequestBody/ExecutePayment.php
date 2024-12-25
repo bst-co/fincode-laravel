@@ -4,9 +4,9 @@ namespace Fincode\Laravel\Http\RequestBody;
 
 use Carbon\Carbon;
 use DateTimeInterface;
+use Fincode\Laravel\Clients\FincodeRequestToken;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
-use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinCard;
 use Fincode\Laravel\Models\FinPayment;
 use Fincode\OpenAPI\ApiException;

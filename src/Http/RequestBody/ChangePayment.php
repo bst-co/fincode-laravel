@@ -2,9 +2,9 @@
 
 namespace Fincode\Laravel\Http\RequestBody;
 
+use Fincode\Laravel\Clients\FincodeRequestToken;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
-use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\Laravel\Models\FinPayment;
 use Fincode\OpenAPI\ApiException;
 use Fincode\OpenAPI\Model\CardPaymentJobCode;

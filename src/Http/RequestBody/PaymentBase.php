@@ -2,8 +2,8 @@
 
 namespace Fincode\Laravel\Http\RequestBody;
 
+use Fincode\Laravel\Clients\FincodeRequestToken;
 use Fincode\Laravel\Eloquent\FinModelBinding;
-use Fincode\Laravel\Http\FincodeRequestToken;
 use Fincode\OpenAPI\Model\ModelInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
