@@ -155,7 +155,7 @@ class ExecutePayment extends PaymentBase
     {
         try {
             $response = $this->token->default()
-                ->executePayment($this->model->id, $this->token->shop_id, $body);
+                ->executePayment($this->model->id, $this->token->tenant_id, $body);
         } catch (GuzzleException|ApiException $e) {
             throw new FincodeApiException($e);
         }

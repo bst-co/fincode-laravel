@@ -118,7 +118,7 @@ class CreatePayment extends PaymentBase
     {
         try {
             $response = $this->token->default()
-                ->createPayment($this->token->shop_id, $body);
+                ->createPayment($this->token->tenant_id, $body);
         } catch (GuzzleException|ApiException $e) {
             throw new FincodeApiException($e);
         }
