@@ -2,7 +2,7 @@
 
 namespace Fincode\Laravel\Test\Unit;
 
-use Illuminate\Foundation\Testing\TestCase;
+use Fincode\Laravel\Test\TestCase;
 
 class MigrationTest extends TestCase
 {
