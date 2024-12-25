@@ -21,15 +21,17 @@ abstract class FincodeAbstract
     protected readonly FinModelBinding $binding;
 
     /**
-     * @param  FincodeRequestToken|null  $token  Fincodeとの通信に使用するテナントトークン情報、空の場合はデフォルト値が適用される
+     * @param  FincodeRequestToken|string|null  $token  Fincodeとの通信に使用するテナントトークン情報、空の場合はデフォルト値が適用される
      *
      * @throws FincodeRequestException
      */
     public function __construct(
-        ?FincodeRequestToken $token = null
+        FincodeRequestToken|string|null $token = null,
+        FinShop|string|null $tenant = null,
+        ?bool $live = null,
     ) {
         $this->binding = new FinModelBinding;
-        $this->token = $token ?? FincodeRequestToken::make();
+        $this->token = $token instanceof FincodeRequestToken ? $token : FincodeRequestToken::make($token, $tenant, $live);
     }
 
     /**
