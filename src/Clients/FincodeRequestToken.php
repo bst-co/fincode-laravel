@@ -60,7 +60,7 @@ class FincodeRequestToken
     ) {
         $this->main_tenant_id = null;
 
-        $this->private_tenant_id = $this->shared_customer ? $this->tenant_id : null;
+        $this->private_tenant_id = $this->shared_customer ? null : $this->tenant_id;
     }
 
     /**
