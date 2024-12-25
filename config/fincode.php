@@ -15,17 +15,22 @@ return [
      */
     'platforms' => [
         'default' => [
-            // Fincodeに登録されているテナントIDを指定してください (必須)
-            'shop_id' => env('FINCODE_TENANT_ID', ''),
-            // このテナントで3Dセキュアを行う際に表示される、店舗名
-            // デフォルトでは、テナントIDが表示されます
-            'tenant_name' => env('FINCODE_TENANT_NAME', null),
+            // 動作モードの指定 standard, platform, tenant のいずれかを入力
+            'mode' => env('FINCODE_MODE', 'standard'),
+            // standard, platform モードの場合、それぞれのショップIDを指定
+            'shop_id' => env('FINCODE_SHOP_ID', ''),
+            // tenant モードで動作する場合、テナントのショップIDを指定
+            'tenant_id' => env('FINCODE_TENANT_ID', ''),
+            // このテナントで3Dセキュアを行う際に表示される加盟店名、半角英数/記号/スペースのみ使用可能
+            'tenant_name' => env('FINCODE_TENANT_NAME'),
             // Fincodeにてテナントに割り当てられている公開APIキーを適用 (必須)
             'public_key' => env('FINCODE_PUBLIC_KEY', ''),
             // Fincodeにてテナントに割り当てられている秘密APIキーを適用 (必須)
             'secret_key' => env('FINCODE_SECRET_KEY', ''),
             // 決済時に送信される、クライアント自由項目, client_field_1 に適用される
             'client_field' => env('FINCODE_CLIENT_FIELD'),
+            // platform, tenant モードの場合、対象ショップが顧客を共有する場合に true
+            'shared_customer' => env('FINCODE_SHARED_CUSTOMER', false),
             // Fincodeの本番環境利用フラグ / デフォルト設定のままにするには null にしてください
             'live' => null,
         ],
