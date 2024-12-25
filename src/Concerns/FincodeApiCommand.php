@@ -40,7 +40,7 @@ abstract class FincodeApiCommand extends Command
     /**
      * コマンドを実行し、正常な応答がある場合はJSONデータを返却します
      */
-    final public function handle(): void
+    final public function handle(): int
     {
         $begin = now();
 
@@ -69,13 +69,18 @@ abstract class FincodeApiCommand extends Command
 
                 $this->line(json_encode($data, $option));
             }
+
         } catch (FincodeApiException $e) {
             if ($this->output->isDebug()) {
                 throw $e;
             }
 
             $this->error('['.$e->getStatusCode().'] '.$e->getMessage());
+
+            return 1;
         }
+
+        return 0;
     }
 
     /**
@@ -86,7 +91,7 @@ abstract class FincodeApiCommand extends Command
     public function getToken(): FincodeRequestToken
     {
         $token = $this->option('shop');
-        $token = FincodeRequestToken::make($token, null, $this->output->isDebug());
+        $token = FincodeRequestToken::make($token, debug: $this->output->isDebug());
 
         $this->info("Using connection fincode to {$token->host()} by {$token->shop_id}", 'v');
 
