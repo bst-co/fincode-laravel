@@ -5,6 +5,7 @@ namespace Fincode\Laravel\Clients;
 use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Models\FinCustomer;
 use Fincode\OpenAPI\Model\CustomerCreatingRequest;
+use Fincode\OpenAPI\Model\CustomerCreatingResponse;
 use Fincode\OpenAPI\Model\CustomerDeletingResponse;
 use Fincode\OpenAPI\Model\CustomerRetrievingResponse;
 use Fincode\OpenAPI\Model\CustomerUpdatingRequest;
@@ -45,7 +46,7 @@ class FincodeCustomerRequest extends FincodeAbstract
         $body = (new CustomerCreatingRequest($this->binding->castArray($customer)));
 
         $response = $this->dispatch(
-            CustomerCreatingRequest::class,
+            CustomerCreatingResponse::class,
             fn () => $this->token->default()->createCustomer($this->token->private_tenant_id, $body)
         );
 

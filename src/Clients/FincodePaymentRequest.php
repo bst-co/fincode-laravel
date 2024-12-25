@@ -100,7 +100,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CreatePayment200Response::class,
-            fn () => $this->token->default()->createPayment($this->token->shop_id, $body),
+            fn () => $this->token->default()->createPayment($this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
@@ -138,7 +138,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             ExecutePayment200Response::class,
-            fn () => $this->token->default()->executePayment($payment->id, $this->token->shop_id, $body),
+            fn () => $this->token->default()->executePayment($payment->id, $this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
@@ -163,7 +163,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             RetrievePayment200Response::class,
-            fn () => $this->token->default()->retrievePayment($payment_id, $query, $this->token->shop_id),
+            fn () => $this->token->default()->retrievePayment($payment_id, $query, $this->token->tenant_id),
         );
 
         return $this->binding->payment($response);
@@ -197,7 +197,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CapturePayment200Response::class,
-            fn () => $this->token->default()->capturePayment($payment->id, $this->token->shop_id, $body),
+            fn () => $this->token->default()->capturePayment($payment->id, $this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
@@ -231,7 +231,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             CancelPayment200Response::class,
-            fn () => $this->token->default()->cancelPayment($payment->id, $this->token->shop_id, $body),
+            fn () => $this->token->default()->cancelPayment($payment->id, $this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
@@ -267,7 +267,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             PaymentCardReauthorizingRequest::class,
-            fn () => $this->token->default()->authorizePayment($payment->id, null, $body),
+            fn () => $this->token->default()->authorizePayment($payment->id, $this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
@@ -302,7 +302,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $response = $this->dispatch(
             PaymentCardReauthorizingRequest::class,
-            fn () => $this->token->default()->changeAmountOfPayment($payment->id, null, $body),
+            fn () => $this->token->default()->changeAmountOfPayment($payment->id, $this->token->tenant_id, $body),
         );
 
         return $this->binding->payment($response);
