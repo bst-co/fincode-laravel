@@ -15,7 +15,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-curl": "*",
         "laravel/framework": "^9.10.0|^10.10.1|^11.0",
         "ueno-bst/fincode-php-client": "^20241017.1.4"
