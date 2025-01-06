@@ -9,12 +9,24 @@ use Illuminate\Support\Carbon;
 
 class AsCardExpireCast implements CastsAttributes
 {
-    public function get(Model $model, string $key, mixed $value, array $attributes): ?Carbon
+    /**
+     * {@inheritdoc}
+     *
+     * @return Carbon|null
+     */
+    public function get($model, string $key, $value, array $attributes)
     {
         return ($value instanceof DateTimeInterface || is_string($value)) ? Carbon::parse($value) : null;
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): array
+    /**
+     * {@inheritdoc}
+     *
+     * @param  Model  $model
+     * @param  mixed  $value
+     * @return array|null[]
+     */
+    public function set($model, string $key, $value, array $attributes)
     {
         if (is_string($value)) {
             $value = match (strlen($value)) {
