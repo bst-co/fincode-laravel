@@ -89,7 +89,9 @@ class FinCustomer extends Model
      */
     public function cards(): HasMany|FinCard
     {
-        return $this->hasMany(FinCard::class, 'customer_id', 'id');
+        return $this->hasMany(FinCard::class, 'customer_id', 'id')
+            ->latest('default_flag')
+            ->oldest('created');
     }
 
     /**
@@ -97,6 +99,7 @@ class FinCustomer extends Model
      */
     public function subscriptions(): HasMany|FinSubscription
     {
-        return $this->hasMany(FinSubscription::class, 'plan_id', 'id');
+        return $this->hasMany(FinSubscription::class, 'plan_id', 'id')
+            ->oldest('created');
     }
 }
