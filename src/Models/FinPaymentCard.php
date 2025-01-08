@@ -46,6 +46,8 @@ class FinPaymentCard extends Model
         'approve',
         'auth_max_date',
         'item_code',
+        'acs_url',
+        'redirect_url',
         'created',
         'updated',
     ];
