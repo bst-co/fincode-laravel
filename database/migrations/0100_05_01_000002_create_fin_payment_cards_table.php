@@ -111,6 +111,14 @@ return new class extends Migration
                 ->nullable()
                 ->comment('商品コード');
 
+            $table->text('acs_url')
+                ->nullable()
+                ->comment('3Dセキュア認証初期化URL');
+
+            $table->text('redirect_url')
+                ->nullable()
+                ->comment('リダイレクトURL');
+
             $table->dateTime('created', 3)
                 ->comment('プラットフォーム上の作成日時');
 
