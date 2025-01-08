@@ -102,4 +102,13 @@ class FinCustomer extends Model
         return $this->hasMany(FinSubscription::class, 'plan_id', 'id')
             ->oldest('created');
     }
+
+    /**
+     * 取引情報との連携
+     */
+    public function payments(): HasMany|FinPayment
+    {
+        return $this->hasMany(FinPayment::class, 'customer_id', 'id')
+            ->oldest('created');
+    }
 }
