@@ -99,7 +99,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
             $body
                 ->setDefaultFlag($card->default_flag ? DefaultFlag::_1 : DefaultFlag::_0)
                 ->setHolderName($card->holder_name)
-                ->setExpire($card->expire->format('Ym'));
+                ->setExpire($card->expire?->format('ym'));
         }
 
         $response = $this->dispatch(
