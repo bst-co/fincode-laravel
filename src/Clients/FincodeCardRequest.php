@@ -83,18 +83,21 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      * カード情報の更新
      *
      * @param  FinCard|string  $card  更新対象となるFinCardオブジェクト、またはカードID。カード名義人名や有効期限を変更する場合は FinCardオブジェクトの各値を変更してください。
-     * @param  string  $token  FincodeJSで取得したカード利用トークン
+     * @param  string|null  $token  FincodeJSで取得したカード利用トークン
      */
-    public function update(FinCard|string $card, string $token): FinCard
+    public function update(FinCard|string $card, ?string $token = null): FinCard
     {
         $card_id = $card instanceof FinCard ? $card->id : $card;
 
-        $body = (new CustomerCardUpdatingRequest)
-            ->setToken($token)
-            ->setDefaultFlag($card->default_flag ? DefaultFlag::_1 : DefaultFlag::_0);
+        $body = (new CustomerCardUpdatingRequest);
+
+        if ($token !== null) {
+            $body->setToken($token);
+        }
 
         if ($card instanceof FinCard) {
             $body
+                ->setDefaultFlag($card->default_flag ? DefaultFlag::_1 : DefaultFlag::_0)
                 ->setHolderName($card->holder_name)
                 ->setExpire($card->expire->format('Ym'));
         }
