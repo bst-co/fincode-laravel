@@ -142,7 +142,9 @@ class FinModelBinding
         return tap(
             FinPayment::withTrashed()->findOrNew($attributes->id),
             function (FinPayment $model) use ($attributes, $id) {
-                $pay_method = match ($attributes->enum('pay_type', PayType::class)) {
+                $pay_type = $attributes['pay_type'] instanceof PayType ? $attributes['pay_type'] : PayType::tryFrom($attributes['pay_type']);
+
+                $pay_method = match ($pay_type) {
                     PayType::CARD => $this->paymentCard($model, $attributes->toArray()),
                     PayType::KONBINI => $this->paymentKonbini($model, $attributes->toArray()),
                     PayType::APPLEPAY => $this->paymentApplePay($model, $attributes->toArray()),
@@ -157,6 +159,7 @@ class FinModelBinding
                     ])
                     ->pay_method()->associate($pay_method);
 
+                $model->push();
                 dump($model->toArray());
             });
     }

@@ -3,6 +3,7 @@
 namespace Fincode\Laravel\Clients;
 
 use ErrorException;
+use Exception;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinPayment;
 use Fincode\OpenAPI\Model\CancelPayment200Response;
@@ -122,7 +123,6 @@ class FincodePaymentRequest extends FincodeAbstract
             ...$attributes,
             'pay_type' => $payment->pay_type->value,
             'access_id' => $payment->access_id,
-            'customer_id' => $payment->customer_id,
         ];
 
         $values = $this->binding->castArray($attributes);
@@ -134,6 +134,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::PAYPAY => new PaymentPayPayExecutingRequest($values),
             PayType::DIRECTDEBIT => new PaymentDirectDebitExecutingRequest($values),
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountExecutingRequest($values),
+            default => throw new Exception('To be implemented'),
         };
 
         $response = $this->dispatch(

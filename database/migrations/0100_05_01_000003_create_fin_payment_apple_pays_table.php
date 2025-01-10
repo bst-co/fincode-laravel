@@ -41,6 +41,7 @@ return new class extends Migration
                 ->comment('カードハッシュ値');
 
             $table->char('method', 1)
+                ->nullable()
                 ->comment('支払方法');
 
             $table->integer('pay_times')
