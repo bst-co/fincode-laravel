@@ -160,7 +160,6 @@ class FinModelBinding
                     ->pay_method()->associate($pay_method);
 
                 $model->push();
-                dump($model->toArray());
             });
     }
 
