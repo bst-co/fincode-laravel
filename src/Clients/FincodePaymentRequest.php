@@ -9,6 +9,7 @@ use Fincode\Laravel\Models\FinPayment;
 use Fincode\OpenAPI\Model\CancelPayment200Response;
 use Fincode\OpenAPI\Model\CapturePayment200Response;
 use Fincode\OpenAPI\Model\CardPayMethod;
+use Fincode\OpenAPI\Model\ChangeAmountOfPayment200Response;
 use Fincode\OpenAPI\Model\CreatePayment200Response;
 use Fincode\OpenAPI\Model\ExecutePayment200Response;
 use Fincode\OpenAPI\Model\PaymentApplePayCancelingRequest;
@@ -288,6 +289,7 @@ class FincodePaymentRequest extends FincodeAbstract
         $attributes = [
             ...$attributes,
             'pay_type' => $payment->pay_type->value,
+            'access_id' => $payment->access_id,
             'amount' => sprintf('%d', $amount),
             'tax' => $tax ? sprintf('%d', $tax) : null,
         ];
@@ -302,7 +304,7 @@ class FincodePaymentRequest extends FincodeAbstract
         };
 
         $response = $this->dispatch(
-            PaymentCardReauthorizingRequest::class,
+            ChangeAmountOfPayment200Response::class,
             fn () => $this->token->default()->changeAmountOfPayment($payment->id, $this->token->tenant_id, $body),
         );
 
