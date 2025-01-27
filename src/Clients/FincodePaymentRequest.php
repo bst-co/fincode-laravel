@@ -20,6 +20,7 @@ use Fincode\OpenAPI\Model\PaymentCardChangingAmountRequest;
 use Fincode\OpenAPI\Model\PaymentCardCreatingRequest;
 use Fincode\OpenAPI\Model\PaymentCardExecutingRequest;
 use Fincode\OpenAPI\Model\PaymentCardReauthorizingRequest;
+use Fincode\OpenAPI\Model\PaymentCardReauthorizingResponse;
 use Fincode\OpenAPI\Model\PaymentDirectDebitCancelingRequest;
 use Fincode\OpenAPI\Model\PaymentDirectDebitChangingAmountRequest;
 use Fincode\OpenAPI\Model\PaymentDirectDebitCreatingRequest;
@@ -268,7 +269,7 @@ class FincodePaymentRequest extends FincodeAbstract
         };
 
         $response = $this->dispatch(
-            PaymentCardReauthorizingRequest::class,
+            PaymentCardReauthorizingResponse::class,
             fn () => $this->token->default()->authorizePayment($payment->id, $this->token->tenant_id, $body),
         );
 
