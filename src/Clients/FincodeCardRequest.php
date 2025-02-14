@@ -104,7 +104,7 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
         $response = $this->dispatch(
             CustomerCardUpdatingResponse::class,
-            fn () => $this->token->default()->updateCustomerCard($this->customer->id, $card_id, $this->token->private_tenant_id),
+            fn () => $this->token->default()->updateCustomerCard($this->customer->id, $card_id, $this->token->private_tenant_id, $body),
         );
 
         return $this->binding->card($response);
