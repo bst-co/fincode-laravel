@@ -29,8 +29,12 @@ class AsCardExpireCast implements CastsAttributes
     public function set($model, string $key, $value, array $attributes)
     {
         if (is_string($value)) {
+            // 4桁の 'ym'フォーマットと思しき場合、前方に西暦の前2桁を追加して'Ym'フォーマットに修正する
+            if (strlen($value) === 4) {
+                $value = substr(now()->format('Y'), 0, 2).$value;
+            }
+
             $value = match (strlen($value)) {
-                4 => Carbon::createFromFormat('ym', $value),
                 6 => Carbon::createFromFormat('Ym', $value),
                 default => Carbon::parse($value),
             };
