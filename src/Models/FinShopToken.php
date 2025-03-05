@@ -26,6 +26,11 @@ class FinShopToken extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'tenant_name',
         'public_key',

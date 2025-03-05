@@ -25,6 +25,11 @@ class FinWebhook extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $casts = [
         'event' => FincodeEvent::class,
         'signature' => 'encrypted',

@@ -25,6 +25,11 @@ class FinShop extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'shop_name',
         'shop_type',

@@ -27,6 +27,11 @@ class FinPlan extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'plan_name',
         'description',

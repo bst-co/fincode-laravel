@@ -26,6 +26,11 @@ class FinCustomer extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'name',
         'email',

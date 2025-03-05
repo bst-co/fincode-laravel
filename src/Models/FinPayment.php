@@ -26,6 +26,11 @@ class FinPayment extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'shop_id',
         'pay_type',

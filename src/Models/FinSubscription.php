@@ -26,6 +26,11 @@ class FinSubscription extends Model
     /**
      * {@inheritdoc}
      */
+    public $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'shop_id',
         'plan_id',

@@ -27,6 +27,11 @@ class FinCard extends Model
     /**
      * {@inheritdoc}
      */
+    protected $keyType = 'string';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $fillable = [
         'customer_id',
         'default_flag',
