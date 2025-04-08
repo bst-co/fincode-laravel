@@ -45,8 +45,6 @@ class FincodeLaravelServiceProvider extends ServiceProvider
     {
         $this->configurePublishes();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
         Event::listen(
             FincodeWebhookEvent::class,
             FincodeWebhookListener::class,
@@ -113,11 +111,11 @@ class FincodeLaravelServiceProvider extends ServiceProvider
         if (app()->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], ['fincode', 'fincode-migrations']);
+            ], ['laravel-fincode', 'laravel-fincode-migrations']);
 
             $this->publishes([
                 __DIR__.'/../config/fincode.php' => config_path('fincode.php'),
-            ], ['fincode', 'fincode-config']);
+            ], ['laravel-fincode', 'laravel-fincode-config']);
         }
     }
 
@@ -127,7 +125,7 @@ class FincodeLaravelServiceProvider extends ServiceProvider
     public function provides(): array
     {
         return [
-            PublishCommand::class,
+            Commands\PublishCommand::class,
         ];
     }
 }
