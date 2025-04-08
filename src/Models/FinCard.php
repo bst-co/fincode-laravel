@@ -41,6 +41,7 @@ class FinCard extends Model
         'type',
         'brand',
         'card_no_hash',
+        'status',
         'created',
         'updated',
     ];
@@ -53,6 +54,7 @@ class FinCard extends Model
         'brand' => OpenAPI\Model\CardBrand::class,
         'expire' => AsCardExpireCast::class,
         'default_flag' => 'boolean',
+        'status' => OpenAPI\Model\PaymentMethodStatus::class,
         'created' => 'datetime',
         'updated' => 'datetime',
     ];
