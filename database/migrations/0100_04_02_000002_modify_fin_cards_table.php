@@ -9,17 +9,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('fin_cards', function (Blueprint $table) {
-            $table->boolean('authorized')
-                ->default(false)
+            $table->string('status', 32)
                 ->after('card_no_hash')
-                ->comment('3Dセキュア認証済み');
+                ->nullable()
+                ->comment('決済手段ステータス');
         });
     }
 
     public function down(): void
     {
         Schema::table('fin_cards', function (Blueprint $table) {
-            $table->dropColumn('authorized');
+            $table->dropColumn('status');
         });
     }
 };
