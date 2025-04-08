@@ -15,6 +15,7 @@ use Fincode\OpenAPI\Model\CardPaymentJobCode;
 use Fincode\OpenAPI\Model\CardPayMethod;
 use Fincode\OpenAPI\Model\FincodeEvent;
 use Fincode\OpenAPI\Model\ModelInterface;
+use Fincode\OpenAPI\Model\PaymentMethodStatus;
 use Fincode\OpenAPI\Model\PaymentStatus;
 use Fincode\OpenAPI\Model\PayType;
 use Fincode\OpenAPI\Model\ShopType;
@@ -44,6 +45,7 @@ class FinModelBinding
             'holder_name' => ['nullable', 'string', 'max:50'],
             'brand' => ['nullable', new Enum(CardBrand::class)],
             'card_no_hash' => ['required', 'string', 'max:64'],
+            'status' => ['nullable', new Enum(PaymentMethodStatus::class)],
         ]);
 
         /*
