@@ -108,8 +108,10 @@ class FinPayment extends Model
     /**
      * 保持する決済方法モデルが、指定の型と一致するか検証する
      *
-     * @param  class-string<MethodModel>  $model
-     * @return MethodModel|null
+     * @template T
+     *
+     * @param  class-string<T>  $model
+     * @return ($model is class-string<MethodModel> ? T : null)
      */
     public function getPayMethodBy(string $model): ?Model
     {

@@ -149,7 +149,7 @@ class FincodeRequestToken
             secret_key: data_get($platform, 'secret_key'),
             public_key: data_get($platform, 'public_key'),
             shared_customer: $shared_customer,
-            client_field_1: data_get($platform, 'client_field_1'),
+            client_field_1: data_get($platform, 'client_field'),
             client_field_3: "config:fincode.platforms.{$token}",
             live: $live,
             debug: $debug,
