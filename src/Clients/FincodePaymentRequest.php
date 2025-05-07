@@ -4,6 +4,7 @@ namespace Fincode\Laravel\Clients;
 
 use ErrorException;
 use Exception;
+use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Exceptions\FincodeUnknownResponseException;
 use Fincode\Laravel\Models\FinPayment;
 use Fincode\OpenAPI\Model\CancelPayment200Response;
@@ -65,6 +66,8 @@ class FincodePaymentRequest extends FincodeAbstract
      * @param  ?string  $id  注文ID(任意のIDを発行する場合)
      * @param  string[]  $attributes  追加パラメータ
      *
+     * @throws FincodeApiException|Exception
+     *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/createPayment
      */
     public function create(
@@ -99,6 +102,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::PAYPAY => new PaymentPaypayCreatingRequest($values),
             PayType::DIRECTDEBIT => new PaymentDirectDebitCreatingRequest($values),
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountCreatingRequest($values),
+            default => throw new Exception("{$pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -114,6 +118,8 @@ class FincodePaymentRequest extends FincodeAbstract
      *
      * @param  FinPayment  $payment  決済モデル
      * @param  array<string, string>  $attributes  追加パラメータ
+     *
+     * @throws FincodeApiException|Exception
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/executePayment
      */
@@ -136,7 +142,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::PAYPAY => new PaymentPayPayExecutingRequest($values),
             PayType::DIRECTDEBIT => new PaymentDirectDebitExecutingRequest($values),
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountExecutingRequest($values),
-            default => throw new Exception('To be implemented'),
+            default => throw new Exception("{$payment->pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -149,6 +155,8 @@ class FincodePaymentRequest extends FincodeAbstract
 
     /**
      * 決済 取得API
+     *
+     * @throws FincodeApiException|Exception
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/retrievePayment
      */
@@ -177,7 +185,7 @@ class FincodePaymentRequest extends FincodeAbstract
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/capturePayment
      *
-     * @throws ErrorException
+     * @throws FincodeApiException|Exception
      */
     public function capture(
         FinPayment $payment,
@@ -195,7 +203,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::CARD => new PaymentCardExecutingRequest($values),
             PayType::APPLEPAY => new PaymentApplePayExecutingRequest($values),
             PayType::PAYPAY => new PaymentPayPayExecutingRequest($values),
-            default => throw new ErrorException("{$payment->pay_type} is not supported."),
+            default => throw new Exception("{$payment->pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -208,6 +216,8 @@ class FincodePaymentRequest extends FincodeAbstract
 
     /**
      * 決済キャンセル処理を実行
+     *
+     * @throws FincodeApiException|Exception
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/cancelPayment
      */
@@ -230,6 +240,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::KONBINI => new PaymentKonbiniCancelingRequest($values),
             PayType::DIRECTDEBIT => new PaymentDirectDebitCancelingRequest($values),
             PayType::VIRTUALACCOUNT => new PaymentVirtualAccountCancelingRequest($values),
+            default => throw new Exception("{$payment->pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -245,7 +256,7 @@ class FincodePaymentRequest extends FincodeAbstract
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/authorizePayment
      *
-     * @throws ErrorException
+     * @throws FincodeApiException|Exception
      */
     public function authorize(
         FinPayment $payment,
@@ -265,7 +276,7 @@ class FincodePaymentRequest extends FincodeAbstract
 
         $body = match ($payment->pay_type) {
             PayType::CARD => new PaymentCardReauthorizingRequest($values),
-            default => throw new ErrorException("{$payment->pay_type} is not supported."),
+            default => throw new ErrorException("{$payment->pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -279,7 +290,7 @@ class FincodePaymentRequest extends FincodeAbstract
     /**
      * 決済 金額変更
      *
-     * @throws ErrorException
+     * @throws FincodeApiException|Exception
      */
     public function change(
         FinPayment $payment,
@@ -301,7 +312,7 @@ class FincodePaymentRequest extends FincodeAbstract
             PayType::CARD => new PaymentCardChangingAmountRequest($values),
             PayType::PAYPAY => new PaymentPayPayChangingAmountRequest($values),
             PayType::DIRECTDEBIT => new PaymentDirectDebitChangingAmountRequest($values),
-            default => throw new ErrorException("{$payment->pay_type} is not supported."),
+            default => throw new ErrorException("{$payment->pay_type->value} is not supported."),
         };
 
         $response = $this->dispatch(
@@ -315,6 +326,8 @@ class FincodePaymentRequest extends FincodeAbstract
     /**
      * 決済 認証後決済実行
      *
+     * @throws FincodeUnknownResponseException
+     *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/executePaymentAfterThreeDSecureecure
      */
     public function secure()
@@ -325,6 +338,8 @@ class FincodePaymentRequest extends FincodeAbstract
 
     /**
      * 決済 バーコード発行
+     *
+     * @throws FincodeUnknownResponseException
      *
      * @see https://docs.fincode.jp/api#tag/%E6%B1%BA%E6%B8%88/operation/generateBarcodeOfPayment
      */

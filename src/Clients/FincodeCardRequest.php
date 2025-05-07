@@ -2,6 +2,7 @@
 
 namespace Fincode\Laravel\Clients;
 
+use Fincode\Laravel\Exceptions\FincodeApiException;
 use Fincode\Laravel\Models\FinCard;
 use Fincode\OpenAPI\Model\CustomerCardCreatingRequest;
 use Fincode\OpenAPI\Model\CustomerCardCreatingResponse;
@@ -26,6 +27,8 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @param  string  $token  FincodeJSで取得したカード利用トークン
      * @param  bool  $default  デフォルトフラグ
+     *
+     * @throws FincodeApiException
      */
     public function create(string $token, bool $default = true): FinCard
     {
@@ -45,6 +48,8 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      * カード 一覧取得
      *
      * @return Collection<FinCard>
+     *
+     * @throws FincodeApiException
      */
     public function list(): Collection
     {
@@ -66,6 +71,8 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      * カード情報の最新情報を取得する
      *
      * @param  FinCard|string  $card  取得対象のFinCardオブジェクトまたは、カードID
+     *
+     * @throws FincodeApiException
      */
     public function retrieve(FinCard|string $card): FinCard
     {
@@ -84,6 +91,8 @@ class FincodeCardRequest extends FincodeCustomerAbstract
      *
      * @param  FinCard|string  $card  更新対象となるFinCardオブジェクト、またはカードID。カード名義人名や有効期限を変更する場合は FinCardオブジェクトの各値を変更してください。
      * @param  string|null  $token  FincodeJSで取得したカード利用トークン
+     *
+     * @throws FincodeApiException
      */
     public function update(FinCard|string $card, ?string $token = null): FinCard
     {
@@ -112,6 +121,8 @@ class FincodeCardRequest extends FincodeCustomerAbstract
 
     /**
      * カード情報を削除する
+     *
+     * @throws FincodeApiException
      */
     public function delete(FinCard|string $card): Builder|FinCard
     {
