@@ -15,6 +15,15 @@ trait HasHistories
     public static function bootHasHistories(): void
     {
         // 変更履歴処理をフックする
+        if (method_exists(static::class, 'whenBooted')) {
+            static::whenBooted(fn () => static::bindHasHistoriesObserver());
+        } else {
+            static::bindHasHistoriesObserver();
+        }
+    }
+
+    private static function bindHasHistoriesObserver(): void
+    {
         static::observe(HasHistoriesObserver::class);
     }
 
