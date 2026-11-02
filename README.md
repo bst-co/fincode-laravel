@@ -30,3 +30,7 @@ php ./artisan vendor:publish --tag=laravel-fincode-migrations
 | fin_payment_apple_pays | FinPaymentApplePay | FinCustomer, FinHistory, FinPayment |
 | fin_webhooks           | FinWebhook         |                                     |
 
+
+# 互換性の検証
+
+Laravel 9 / 13 の決済応答に関する検証範囲と再実行方法は [互換性検証](docs/compatibility.md) を参照してください。
