@@ -1,0 +1,53 @@
+name: FinModelBinding compatibility
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  binding:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.1'
+            laravel: '9.52.*'
+            testbench: '^7.0'
+            phpunit: '^9.6'
+          - php: '8.3'
+            laravel: '9.52.*'
+            testbench: '^7.0'
+            phpunit: '^9.6'
+          - php: '8.5'
+            laravel: '13.38.*'
+            testbench: '^11.0'
+            phpunit: '^13.0'
+    name: Laravel ${{ matrix.laravel }} / PHP ${{ matrix.php }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, mbstring, pdo_sqlite, dom, xml, xmlwriter
+          coverage: none
+          tools: composer:v2
+      - name: Use public SDK repository over HTTPS
+        run: composer config repositories.ueno-bst/fincode-php-client vcs https://github.com/ueno-bst/fincode-php-client.git
+      - name: Allow historical framework for compatibility tests
+        if: matrix.laravel == '9.52.*'
+        # This setting is confined to the disposable test job.
+        run: composer config audit.block-insecure false
+      - name: Install matching dependencies
+        run: >-
+          composer update
+          --with "laravel/framework:${{ matrix.laravel }}"
+          --with "orchestra/testbench:${{ matrix.testbench }}"
+          --with "phpunit/phpunit:${{ matrix.phpunit }}"
+          --with "ueno-bst/fincode-php-client:20241017.2.2"
+          --prefer-dist --no-interaction --no-progress
+      - name: Test response binding without external APIs
+        run: vendor/bin/phpunit --configuration phpunit.compatibility.xml

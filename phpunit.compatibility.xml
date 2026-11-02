@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="Fincode compatibility">
+            <file>tests/Feature/Eloquent/FinModelBindingTest.php</file>
+            <file>tests/Feature/Eloquent/FinCardHistoryTest.php</file>
+            <file>tests/Unit/Eloquent/HasHistoriesTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
