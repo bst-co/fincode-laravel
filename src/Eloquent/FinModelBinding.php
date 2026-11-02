@@ -22,6 +22,7 @@ use Fincode\OpenAPI\Model\ShopType;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\HigherOrderTapProxy;
 use Illuminate\Support\Str;
 use Illuminate\Support\ValidatedInput;
 use Illuminate\Validation\Rules\Enum;
@@ -167,8 +168,10 @@ class FinModelBinding
 
     /**
      * クレジットカード決済情報を結合する
+     *
+     * @return HigherOrderTapProxy<FinPaymentCard>|FinPaymentCard
      */
-    public function paymentCard(FinPayment $payment, Arrayable|array $values): FinPaymentCard
+    public function paymentCard(FinPayment $payment, Arrayable|array $values): HigherOrderTapProxy|FinPaymentCard
     {
         $attributes = $this->sanitize($values, [
             'card_id' => ['nullable', 'string', 'size:25'],
@@ -178,7 +181,7 @@ class FinModelBinding
             'brand' => ['nullable', new Enum(CardBrand::class)],
             'job_code' => ['required', new Enum(CardPaymentJobCode::class)],
             'card_no_hash' => ['nullable', 'string', 'size:64'],
-            'method' => ['required', new Enum(CardPayMethod::class)],
+            'method' => ['nullable', new Enum(CardPayMethod::class)],
         ]);
 
         return tap(
@@ -190,32 +193,40 @@ class FinModelBinding
     /**
      * PayPay決済情報を結合する
      */
-    public function paymentPayPay(FinPayment $payment, Arrayable|array $values) {}
+    public function paymentPayPay(FinPayment $payment, Arrayable|array $values)
+    {
+        return null;
+    }
 
     /**
      * ApplePay決済情報を結合する
+     *
+     * @return HigherOrderTapProxy<FinPaymentApplePay>|FinPaymentApplePay
      */
-    public function paymentApplePay(FinPayment $payment, Arrayable|array $values): FinPaymentApplePay
+    public function paymentApplePay(FinPayment $payment, Arrayable|array $values): HigherOrderTapProxy|FinPaymentApplePay
     {
         $attributes = $this->sanitize($values, [
-            'card_id' => ['required', 'string', 'size:25'],
-            'card_no' => ['required', 'string', 'max:16'],
-            'expire' => ['required', 'string', 'size:4'],
-            'holder_name' => ['required', 'string', 'max:50'],
-            'type' => ['required', new Enum(CardBrand::class)],
-            'card_no_hash' => ['required', 'string', 'size:64'],
+            'card_id' => ['nullable', 'string', 'size:25'],
+            'card_no' => ['nullable', 'string', 'max:16'],
+            'expire' => ['nullable', 'string', 'size:4'],
+            'holder_name' => ['nullable', 'string', 'max:50'],
+            'brand' => ['nullable', new Enum(CardBrand::class)],
+            'card_no_hash' => ['nullable', 'string', 'size:64'],
+            'method' => ['nullable', new Enum(CardPayMethod::class)],
         ]);
 
         return tap(
             $payment->getPayMethodBy(FinPaymentApplePay::class) ?? new FinPaymentApplePay,
-            fn (FinPaymentApplePay $model) => $model->fill($this->concat($model, $attributes))
+            fn (FinPaymentApplePay $model): FinPaymentApplePay => $model->fill($this->concat($model, $attributes))
         );
     }
 
     /**
      * コンビニ決済情報を結合する
+     *
+     * @return HigherOrderTapProxy<FinPaymentKonbini>|FinPaymentKonbini
      */
-    public function paymentKonbini(FinPayment $payment, Arrayable|array $values): FinPaymentKonbini
+    public function paymentKonbini(FinPayment $payment, Arrayable|array $values): HigherOrderTapProxy|FinPaymentKonbini
     {
         $attributes = $this->sanitize($values, [
         ]);
